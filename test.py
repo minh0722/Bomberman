@@ -73,7 +73,7 @@ while not gameExit:
 				player_left.play()
 				player_left.nextFrame()
 				current_direction = "left"
-				print("LEFT KEY PRESSED")
+				# print("LEFT KEY PRESSED")
 			if event.key == pygame.K_RIGHT:
 				x_change = 3
 				y_change = 0
@@ -81,7 +81,7 @@ while not gameExit:
 				player_right.play()
 				player_right.nextFrame()
 				current_direction = "right"
-				print("RIGHT KEY PRESSED")
+				# print("RIGHT KEY PRESSED")
 			if event.key == pygame.K_UP:
 				y_change = -3
 				x_change = 0
@@ -89,14 +89,14 @@ while not gameExit:
 				player_up.play()
 				player_up.nextFrame()
 				current_direction = "up"
-				print("UP KEY PRESSED")
+				# print("UP KEY PRESSED")
 			if event.key == pygame.K_DOWN:
 				y_change = 3
 				x_change = 0
 				player_down.play()
 				player_down.nextFrame()
 				current_direction = "down"
-				print("DOWN KEY PRESSED")
+				# print("DOWN KEY PRESSED")
 
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_LEFT:
@@ -104,25 +104,25 @@ while not gameExit:
 				y_change = 0
 				conductor.pause_reset()
 				# player_front.pause_reset()
-				print("LEFT KEY UP")
+				# print("LEFT KEY UP")
 			if event.key == pygame.K_RIGHT:
 				x_change = 0
 				y_change = 0
 				conductor.pause_reset()
 				# player_front.pause_reset()
-				print("RIGHT KEY UP")
+				# print("RIGHT KEY UP")
 			if event.key == pygame.K_UP:
 				y_change = 0
 				x_change = 0
 				conductor.pause_reset()
 				# player_front.pause_reset()
-				print("UP KEY UP")
+				# print("UP KEY UP")
 			if event.key == pygame.K_DOWN:
 				y_change = 0
 				x_change = 0
 				conductor.pause_reset()
 				# player_front.pause_reset()
-				print("DOWN KEY UP")
+				# print("DOWN KEY UP")
 
 	# TODO: remove
 	if x_move > 650: x_move = 650
@@ -141,6 +141,20 @@ while not gameExit:
 
 	x_move += x_change
 	y_move += y_change
+
+	###############################
+
+	keys = pygame.key.get_pressed()
+	if keys[pygame.K_LEFT]:
+		print("LEFT PRESSED")
+	if keys[pygame.K_RIGHT]:
+		print("RIGHT PRESSED")
+	if keys[pygame.K_DOWN]:
+		print("DOWN PRESSED")
+	if keys[pygame.K_UP]:
+		print("UP PRESSED")
+
+	###############################
 
 	# img = pygame.image.load('resources/characters/bomber_bazooka.gif').convert()
 
