@@ -2,12 +2,13 @@ import pygame
 from pyganim import PygAnimation
 from pygame.sprite import Sprite
 from util import Drawable
+from object import Object
 
-class Player(Drawable):
+class Player(Drawable, Object):
 	def __init__(self, position, player_id=0):
 		Drawable.__init__(self)
+		Object.__init__(self, position)
 
-		self._current_position = position
 		self._bomb_capacity = 1
 		self._bomb_range = 2
 		self._movement_speed = 1
@@ -15,9 +16,6 @@ class Player(Drawable):
 		self._state = 'ALIVE'
 
 	def draw(self, sprite):
-		pass
-
-	def move(self, position):
 		pass
 
 	def die(self):
