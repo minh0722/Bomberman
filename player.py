@@ -21,5 +21,8 @@ class Player(Drawable, Object):
 	def die(self):
 		pass
 
-	def place_bomb(self, bomb_position):
+	def place_bomb(self):
+		pass
+
+	def trigger_bomb(self):
 		pass
