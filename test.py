@@ -67,32 +67,32 @@ while not gameExit:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                x_change = -3
-                y_change = 0
-                player_left.play()
+                # x_change = -3
+                # y_change = 0
+                # player_left.play()
                 player_left.nextFrame()
-                current_direction = "left"
+                # current_direction = "left"
                 # print("LEFT KEY PRESSED")
             if event.key == pygame.K_RIGHT:
-                x_change = 3
-                y_change = 0
-                player_right.play()
+                # x_change = 3
+                # y_change = 0
+                # player_right.play()
                 player_right.nextFrame()
-                current_direction = "right"
+                # current_direction = "right"
                 # print("RIGHT KEY PRESSED")
             if event.key == pygame.K_UP:
-                y_change = -3
-                x_change = 0
-                player_up.play()
+                # y_change = -3
+                # x_change = 0
+                # player_up.play()
                 player_up.nextFrame()
-                current_direction = "up"
+                # current_direction = "up"
                 # print("UP KEY PRESSED")
             if event.key == pygame.K_DOWN:
-                y_change = 3
-                x_change = 0
-                player_down.play()
+                # y_change = 3
+                # x_change = 0
+                # player_down.play()
                 player_down.nextFrame()
-                current_direction = "down"
+                # current_direction = "down"
                 # print("DOWN KEY PRESSED")
 
         if event.type == pygame.KEYUP:
@@ -131,26 +131,26 @@ while not gameExit:
     wall_nodes_x = (22, 112)
     wall_nodes_y = (0, 90)
 
-    for row in range(0, 6):
-        for column in range(0, 7):
-            if x_move > 22 + row * 90 and x_move < 112 + row * 90 and \
-               y_move > 0 + column * 90 and y_move < 90 + column * 90:
-                    x_move = 22 + row * 90
-                    y_move = 6 + column * 90
-                    print(x_move)
-            print("Pos ( ", x_move, " , ", y_move, ")")
+    # for row in range(0, 6):
+    #     for column in range(0, 7):
+    #         if x_move > 22 + row * 90 and x_move < 112 + row * 90 and \
+    #            y_move > 0 + column * 90 and y_move < 90 + column * 90:
+    #                 x_move = 22 + row * 90
+    #                 y_move = 6 + column * 90
+    #                 print(x_move)
+            # print("Pos ( ", x_move, " , ", y_move, ")")
 
     if current_direction is "down":
-        print("( ", x_move, " , ", y_move, ")")
+        # print("( ", x_move, " , ", y_move, ")")
         player_down.blit(gameDisplay, (x_move, y_move))
     elif current_direction is "up":
-        print("( ", x_move, " , ", y_move, ")")
+        # print("( ", x_move, " , ", y_move, ")")
         player_up.blit(gameDisplay, (x_move, y_move))
     elif current_direction is "left":
-        print("( ", x_move, " , ", y_move, ")")
+        # print("( ", x_move, " , ", y_move, ")")
         player_left.blit(gameDisplay, (x_move, y_move))
     elif current_direction is "right":
-        print("( ", x_move, " , ", y_move, ")")
+        # print("( ", x_move, " , ", y_move, ")")
         player_right.blit(gameDisplay, (x_move, y_move))
 
     x_move += x_change
@@ -159,18 +159,35 @@ while not gameExit:
     ##############################
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        pass
-        # print("LEFT PRESSED")
-    if keys[pygame.K_RIGHT]:
-        pass
-        # print("RIGHT PRESSED")
-    if keys[pygame.K_DOWN]:
-        pass
-        # print("DOWN PRESSED")
     if keys[pygame.K_UP]:
-        pass
-        # print("UP PRESSED")
+        y_change = -3
+        x_change = 0
+        current_direction = "up"
+        player_up.play()
+        # pass
+        print("UP PRESSED")
+    if keys[pygame.K_RIGHT]:
+        x_change = 3
+        y_change = 0
+        current_direction = "right"
+        player_right.play()
+        # pass
+        print("RIGHT PRESSED")
+    if keys[pygame.K_DOWN]:
+        y_change = 3
+        x_change = 0
+        current_direction = "down"
+        player_down.play()
+        # pass
+        print("DOWN PRESSED")
+    if keys[pygame.K_LEFT]:
+        x_change = -3
+        y_change = 0
+        current_direction = "left"
+        player_left.play()
+        # pass
+        print("LEFT PRESSED")
+
 
     ###############################
 
