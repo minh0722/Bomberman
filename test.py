@@ -141,16 +141,16 @@ while not gameExit:
             # print("Pos ( ", x_move, " , ", y_move, ")")
 
     if current_direction is "down":
-        # print("( ", x_move, " , ", y_move, ")")
+        print("( ", x_move, " , ", y_move, ")")
         player_down.blit(gameDisplay, (x_move, y_move))
     elif current_direction is "up":
-        # print("( ", x_move, " , ", y_move, ")")
+        print("( ", x_move, " , ", y_move, ")")
         player_up.blit(gameDisplay, (x_move, y_move))
     elif current_direction is "left":
-        # print("( ", x_move, " , ", y_move, ")")
+        print("( ", x_move, " , ", y_move, ")")
         player_left.blit(gameDisplay, (x_move, y_move))
     elif current_direction is "right":
-        # print("( ", x_move, " , ", y_move, ")")
+        print("( ", x_move, " , ", y_move, ")")
         player_right.blit(gameDisplay, (x_move, y_move))
 
     x_move += x_change
@@ -165,28 +165,28 @@ while not gameExit:
         current_direction = "up"
         player_up.play()
         # pass
-        print("UP PRESSED")
+        # print("UP PRESSED")
     if keys[pygame.K_RIGHT]:
         x_change = 3
         y_change = 0
         current_direction = "right"
         player_right.play()
         # pass
-        print("RIGHT PRESSED")
+        # print("RIGHT PRESSED")
     if keys[pygame.K_DOWN]:
         y_change = 3
         x_change = 0
         current_direction = "down"
         player_down.play()
         # pass
-        print("DOWN PRESSED")
+        # print("DOWN PRESSED")
     if keys[pygame.K_LEFT]:
         x_change = -3
         y_change = 0
         current_direction = "left"
         player_left.play()
         # pass
-        print("LEFT PRESSED")
+        # print("LEFT PRESSED")
 
 
     ###############################
