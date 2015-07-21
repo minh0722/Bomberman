@@ -124,7 +124,7 @@ while not gameExit:
     # TODO: remove
     if x_move > 652: x_move = 652
     if x_move < 22: x_move = 22
-    if y_move > 545: y_move = 545
+    if y_move > 540: y_move = 540
     if y_move < 0: y_move = 0
 
 
