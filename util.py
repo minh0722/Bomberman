@@ -21,14 +21,6 @@ def load_images(*files):
     return imgs
 
 
-class Drawable:
-    def __init__(self):
-        pass
-
-    def draw(self, sprite):
-        pass
-
-
 class dummysound:
     def play(self):
         pass

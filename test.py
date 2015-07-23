@@ -4,6 +4,7 @@ from tiles import *
 from pygame import Surface
 from pygame.sprite import Sprite
 from pyganim import *
+from physics import Physics
 
 pygame.init()
 
@@ -57,6 +58,8 @@ conductor = PygConductor(player_down, player_up, player_left, player_right)
 conductor.pause()
 
 current_direction = "down"
+
+p = Physics()
 
 while not gameExit:
     gameDisplay.blit(arena, (0,0))
@@ -141,18 +144,20 @@ while not gameExit:
             # print("Pos ( ", x_move, " , ", y_move, ")")
 
     if current_direction is "down":
-        print("( ", x_move, " , ", y_move, ")")
+        x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
         player_down.blit(gameDisplay, (x_move, y_move))
     elif current_direction is "up":
-        print("( ", x_move, " , ", y_move, ")")
+        x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
         player_up.blit(gameDisplay, (x_move, y_move))
     elif current_direction is "left":
-        print("( ", x_move, " , ", y_move, ")")
+        x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
         player_left.blit(gameDisplay, (x_move, y_move))
     elif current_direction is "right":
-        print("( ", x_move, " , ", y_move, ")")
+        x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
         player_right.blit(gameDisplay, (x_move, y_move))
 
+    print("( ", x_move, " , ", y_move, ")")
+    
     x_move += x_change
     y_move += y_change
 

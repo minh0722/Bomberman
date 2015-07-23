@@ -1,5 +1,8 @@
-class Object:
+from drawable import Drawable
+
+class Object(Drawable):
 	def __init__(self, x, y):
+		Drawable.__init__(self)
 		self.x = x
 		self.y = y
 
@@ -27,3 +30,4 @@ class Object:
 
 	def position(self):
 		return (self.x, self.y)
+
