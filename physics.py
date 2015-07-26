@@ -28,8 +28,8 @@ class Physics:
 			self.corner_y.append((up_corner, down_corner))
 
 	def resolve_player_collision(self, x, y, direction):
-		if x in self.column_x and y in self.row_y:
-			return x, y
+		# if x in self.column_x and y in self.row_y:
+		# 	return x, y
 		if direction is "up":
 			if y in self.row_y:
 				return x, y
@@ -59,3 +59,6 @@ class Physics:
 				x = self.column_x[(x - LEFT_BORDER_X) // CELL_WIDTH + 1]
 
 		return x, y
+
+	def __resolve_corner_slide(self, x, y, direction):
+		pass

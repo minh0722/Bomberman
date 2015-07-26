@@ -173,8 +173,9 @@ while not gameExit:
             # print("RIGHT PRESSED")
     if keys[pygame.K_DOWN] and \
         not keys[pygame.K_UP] and \
-        not keys[pygame.K_RIGHT and \
-        not keys[pygame.K_LEFT]]:
+        not keys[pygame.K_RIGHT] and \
+        not keys[pygame.K_LEFT]:
+            print("DOWN")
             y_change = 3
             x_change = 0
             current_direction = "down"
