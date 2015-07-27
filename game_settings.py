@@ -1,5 +1,13 @@
 FPS = 60
 
+SCREEN_WIDTH = 765
+SCREEN_HEIGHT = 675
+
+ARENA_WIDTH = 17
+ARENA_HEIGHT = 15
+
+TILE_SIZE = 45
+
 #-----------------defines-----------------
 LEFT_BORDER_X = 22
 RIGHT_BORDER_X = 652

@@ -1,4 +1,5 @@
 from util import *
+from game_settings import *
 import pygame
 
 def create_tile(type):
@@ -12,7 +13,7 @@ def create_tile(type):
 		return load_image('battle_tiles/battle_stage_1/border_tile.png').convert()
 
 def create_arena():
-	arena = pygame.Surface((765,675))
+	arena = pygame.Surface((SCREEN_WIDTH,SCREEN_HEIGHT))
 	for x in range(0, 17):
 		for y in range(0, 15):
 			if x == 0 or x == 16 or y == 0 or y == 14:

@@ -6,10 +6,11 @@ from pygame.sprite import Sprite
 from pyganim import *
 from physics import Physics
 from game_settings import *
+from arena import Arena
 
 pygame.init()
 
-gameDisplay = pygame.display.set_mode((765,675))
+game_display = pygame.display.set_mode((765,675))
 pygame.display.set_caption('Bomberman')
 
 pygame.display.update()
@@ -23,8 +24,6 @@ y_move = 0
 
 x_change = 0
 y_change = 0
-
-arena = create_arena()
 
 frame_duration = 0.2
 player_down = PygAnimation([
@@ -62,8 +61,10 @@ current_direction = "down"
 
 p = Physics()
 
+arena = Arena()
+
 while not gameExit:
-    gameDisplay.blit(arena, (0,0))
+    arena.draw(game_display)
     for event in pygame.event.get():
         #exitting game
         if event.type == pygame.QUIT:
@@ -134,16 +135,17 @@ while not gameExit:
 
     if current_direction is "down":
         x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
-        player_down.blit(gameDisplay, (x_move, y_move))
+        player_down.blit(game_display, (x_move, y_move))
     elif current_direction is "up":
-        x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
-        player_up.blit(gameDisplay, (x_move, y_move))
+        if pygame.key.get_pressed()[pygame.K_UP]:
+            x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
+        player_up.blit(game_display, (x_move, y_move))
     elif current_direction is "left":
         x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
-        player_left.blit(gameDisplay, (x_move, y_move))
+        player_left.blit(game_display, (x_move, y_move))
     elif current_direction is "right":
         x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
-        player_right.blit(gameDisplay, (x_move, y_move))
+        player_right.blit(game_display, (x_move, y_move))
 
     print("( ", x_move, " , ", y_move, ")")
     
@@ -175,7 +177,6 @@ while not gameExit:
         not keys[pygame.K_UP] and \
         not keys[pygame.K_RIGHT] and \
         not keys[pygame.K_LEFT]:
-            print("DOWN")
             y_change = 3
             x_change = 0
             current_direction = "down"

@@ -2,5 +2,5 @@ class Drawable:
     def __init__(self):
         pass
 
-    def draw(self, sprite):
+    def draw(self, game_display):
         pass
