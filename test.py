@@ -102,29 +102,23 @@ while not gameExit:
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                x_change = 0
-                y_change = 0
                 conductor.pause_reset()
                 # player_front.pause_reset()
                 # print("LEFT KEY UP")
             if event.key == pygame.K_RIGHT:
-                x_change = 0
-                y_change = 0
                 conductor.pause_reset()
                 # player_front.pause_reset()
                 # print("RIGHT KEY UP")
             if event.key == pygame.K_UP:
-                y_change = 0
-                x_change = 0
                 conductor.pause_reset()
                 # player_front.pause_reset()
                 # print("UP KEY UP")
             if event.key == pygame.K_DOWN:
-                y_change = 0
-                x_change = 0
                 conductor.pause_reset()
                 # player_front.pause_reset()
                 # print("DOWN KEY UP")
+            y_change = 0
+            x_change = 0
 
     # TODO: remove
     if x_move > RIGHT_BORDER_X: x_move = RIGHT_BORDER_X

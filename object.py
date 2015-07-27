@@ -31,3 +31,5 @@ class Object(Drawable):
 	def position(self):
 		return (self.x, self.y)
 
+	def normalize_position(self):
+		pass
