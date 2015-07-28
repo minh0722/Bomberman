@@ -33,3 +33,4 @@ class MoveCommand:
 			player.move_left()
 		elif direction is "right":
 			player.move_right()
+

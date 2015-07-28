@@ -99,6 +99,9 @@ while not gameExit:
                 player_down.nextFrame()
                 # current_direction = "down"
                 # print("DOWN KEY PRESSED")
+            if event.key == pygame.K_SPACE:
+                arena.place_bomb(int(y_move) // 45 + 1, (int(x_move) - 22) // 45 + 1)
+                print("x: ", int(y_move) // 45 + 1, " y: ", (int(x_move) - 22) // 45 + 1)
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
@@ -141,7 +144,7 @@ while not gameExit:
         x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
         player_right.blit(game_display, (x_move, y_move))
 
-    print("( ", x_move, " , ", y_move, ")")
+    # print("( ", x_move, " , ", y_move, ")")
     
     x_move += x_change
     y_move += y_change
