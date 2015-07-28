@@ -13,7 +13,7 @@ from pyganim import *
 class Arena(Drawable):
     def __init__(self):
         Drawable.__init__(self)
-        self.arena_surface_matrix = [
+        self.arena_matrix = [
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
             [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
             [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
@@ -44,22 +44,22 @@ class Arena(Drawable):
         if x == 0 or y == 0:
             return
         if self._can_place_bomb(x, y):
-            self.arena_surface_matrix[x][y] = 2
+            self.arena_matrix[x][y] = 2
         self.bomb_sprites.append((self._create_bomb(), (x, y)))
 
 
     def _can_place_bomb(self, x, y):
-        return self.arena_surface_matrix[x][y] == 0
+        return self.arena_matrix[x][y] == 0
 
     def _load_arena_surface(self):
         arena = pygame.Surface((SCREEN_WIDTH,SCREEN_HEIGHT))
         for x in range(0, ARENA_HEIGHT):
             for y in range(0, ARENA_WIDTH):
-                if self.arena_surface_matrix[x][y] == 0:
+                if self.arena_matrix[x][y] == 0:
                     arena.blit(self._create_tile('grass'), (y * TILE_SIZE, x * TILE_SIZE))
-                elif self.arena_surface_matrix[x][y] == 1:
+                elif self.arena_matrix[x][y] == 1:
                     arena.blit(self._create_tile('non_destructible'), (y * TILE_SIZE, x * TILE_SIZE))
-                elif self.arena_surface_matrix[x][y] == 4:
+                elif self.arena_matrix[x][y] == 4:
                     arena.blit(self._create_tile('border'), (y * TILE_SIZE, x * TILE_SIZE))
         return arena
 
@@ -75,8 +75,9 @@ class Arena(Drawable):
 
     def _create_bomb(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_1.png", 0.3),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_2.png", 0.3),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_3.png", 0.3),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_4.png", 0.3)
+            ("resources/battle_tiles/battle_stage_1/normal_bomb_1.png", 0.25),
+            ("resources/battle_tiles/battle_stage_1/normal_bomb_2.png", 0.25),
+            ("resources/battle_tiles/battle_stage_1/normal_bomb_3.png", 0.25),
+            ("resources/battle_tiles/battle_stage_1/normal_bomb_4.png", 0.25)
             ])
+

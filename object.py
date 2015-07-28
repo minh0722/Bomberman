@@ -1,4 +1,5 @@
 from drawable import Drawable
+from game_settings import *
 
 class Object(Drawable):
 	def __init__(self, x, y):
@@ -32,4 +33,6 @@ class Object(Drawable):
 		return (self.x, self.y)
 
 	def normalize_position(self):
-		pass
+		return (self.y // 45 + 1, (self.x - LEFT_BORDER_X) // 45 + 1)
+
+
