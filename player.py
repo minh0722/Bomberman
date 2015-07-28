@@ -5,18 +5,18 @@ from object import Object
 from game_settings import *
 
 class Player(Object):
-    def __init__(self, position, player_id=0):
-        Object.__init__(self, position)
+    def __init__(self, x, y, player_id=0):
+        Object.__init__(self, x, y)
 
         self.bomb_capacity = 1
         self.placed_bomb = 0
         self.bomb_range = 2
-        self.movement_speed = 1
+        self.movement_speed = 3
         self.current_face_direction = 'DOWN'
         self.state = 'ALIVE'
 
         self.player_down_sprite = PygAnimation([
-            ("resources/characters/bbm_front1.png", PLAYER_PLAYER_FRAME_DURATION),
+            ("resources/characters/bbm_front1.png", PLAYER_FRAME_DURATION),
             ("resources/characters/bbm_front2.png", PLAYER_FRAME_DURATION),
             ("resources/characters/bbm_front1.png", PLAYER_FRAME_DURATION),
             ("resources/characters/bbm_front3.png", PLAYER_FRAME_DURATION)
@@ -57,24 +57,24 @@ class Player(Object):
         self.sprite_conductor.pause_reset()
 
     def draw(self, game_display):
-        if self.state is 'DEAD':
-            if player_die_sprite.isFinished():
-                pass
-            player_die_sprite.blit(game_display, self.position())
+        if self.state is 'DYING':
+            if self.player_die_sprite.isFinished():
+                self.state = 'DEAD'
+            self.player_die_sprite.blit(game_display, self.position())
         elif self.state is 'ALIVE':
             if self.current_face_direction is 'DOWN':
-                player_down_sprite.blit(game_display, self.position())
+                self.player_down_sprite.blit(game_display, self.position())
             if self.current_face_direction is 'UP':
-                player_up_sprite.blit(game_display, self.position())
+                self.player_up_sprite.blit(game_display, self.position())
             if self.current_face_direction is 'LEFT':
-                player_left_sprite.blit(game_display, self.position())
+                self.player_left_sprite.blit(game_display, self.position())
             if self.current_face_direction is 'RIGHT':
-                player_right_sprite.blit(game_display, self.position())
+                self.player_right_sprite.blit(game_display, self.position())
 
     def die(self):
-        self.state = 'DEAD'
+        self.state = 'DYING'
         self.player_die_sprite.play()
 
     def place_bomb(self, arena):
-        arena.place_bomb(self.position()[0], self.position()[1])
+        arena.place_bomb(self.normalize_position()[0], self.normalize_position()[1])
 

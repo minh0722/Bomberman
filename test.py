@@ -7,6 +7,7 @@ from pyganim import *
 from physics import Physics
 from game_settings import *
 from arena import Arena
+from player import Player
 
 pygame.init()
 
@@ -62,9 +63,11 @@ current_direction = "down"
 p = Physics()
 
 arena = Arena()
+p1 = Player(22, 0)
 
 while not gameExit:
     arena.draw(game_display)
+    p1.draw(game_display)
     for event in pygame.event.get():
         #exitting game
         if event.type == pygame.QUIT:
@@ -102,6 +105,7 @@ while not gameExit:
             if event.key == pygame.K_SPACE:
                 arena.place_bomb(int(y_move) // 45 + 1, (int(x_move) - 22) // 45 + 1)
                 print("x: ", int(y_move) // 45 + 1, " y: ", (int(x_move) - 22) // 45 + 1)
+                p1.die()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
