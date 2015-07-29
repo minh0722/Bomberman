@@ -5,7 +5,7 @@ from object import Object
 from game_settings import *
 
 class Player(Object):
-    def __init__(self, x, y, player_id=0):
+    def __init__(self, x, y, arena):
         Object.__init__(self, x, y)
 
         self.bomb_capacity = 1
@@ -14,6 +14,7 @@ class Player(Object):
         self.movement_speed = 3
         self.current_face_direction = 'DOWN'
         self.state = 'ALIVE'
+        self.arena = arena
 
         self.player_down_sprite = PygAnimation([
             ("resources/characters/bbm_front1.png", PLAYER_FRAME_DURATION),
@@ -44,7 +45,6 @@ class Player(Object):
             ])
 
         self.sprite_conductor = PygConductor(self.player_down_sprite, self.player_up_sprite, self.player_left_sprite, self.player_right_sprite)
-
         self.sprite_conductor.pause()
 
         self.player_die_sprite = PygAnimation([
@@ -73,6 +73,16 @@ class Player(Object):
         self.current_face_direction = 'RIGHT'
         self.player_right_sprite.play()
 
+    def is_alive(self):
+        return self.state is 'ALIVE'
+
+    def die(self):
+        self.state = 'DYING'
+        self.player_die_sprite.play()
+
+    def place_bomb(self):
+        self.arena.place_bomb(self.normalize_position()[0], self.normalize_position()[1])
+
     def pause_reset_sprite(self):
         self.sprite_conductor.pause_reset()
 
@@ -90,11 +100,4 @@ class Player(Object):
                 self.player_left_sprite.blit(game_display, self.position())
             if self.current_face_direction is 'RIGHT':
                 self.player_right_sprite.blit(game_display, self.position())
-
-    def die(self):
-        self.state = 'DYING'
-        self.player_die_sprite.play()
-
-    def place_bomb(self, arena):
-        arena.place_bomb(self.normalize_position()[0], self.normalize_position()[1])
 

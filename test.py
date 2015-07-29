@@ -64,7 +64,7 @@ current_direction = "down"
 p = Physics()
 
 arena = Arena()
-p1 = Player(22, 0)
+p1 = Player(22, 0, arena)
 input_handler = InputHandler(p1)
 
 while not gameExit:

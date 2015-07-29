@@ -22,6 +22,9 @@ class InputHandler:
             pygame.quit()
             quit()
 
+        if not self.player.is_alive():
+            return None
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 self.player.player_left_sprite.nextFrame()
@@ -31,6 +34,12 @@ class InputHandler:
                 self.player.player_up_sprite.nextFrame()
             if event.key == pygame.K_DOWN:
                 self.player.player_down_sprite.nextFrame()
+            if event.key == pygame.K_SPACE:
+                self.player.place_bomb()
+
+            #TODO: remove...
+            if event.key == pygame.K_d:
+                self.player.die()
 
         if event.type == pygame.KEYUP:
             if (event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or
