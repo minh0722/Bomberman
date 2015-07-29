@@ -45,6 +45,7 @@ class Arena(Drawable):
             return
         if self._can_place_bomb(x, y):
             self.arena_matrix[x][y] = 2
+
         self.bomb_sprites.append((self._create_bomb(), (x, y)))
 
 

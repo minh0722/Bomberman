@@ -8,6 +8,7 @@ from physics import Physics
 from game_settings import *
 from arena import Arena
 from player import Player
+from input_handler import InputHandler
 
 pygame.init()
 
@@ -64,136 +65,17 @@ p = Physics()
 
 arena = Arena()
 p1 = Player(22, 0)
+input_handler = InputHandler(p1)
 
 while not gameExit:
     arena.draw(game_display)
     p1.draw(game_display)
-    for event in pygame.event.get():
-        #exitting game
-        if event.type == pygame.QUIT:
-            gameExit = True
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                # x_change = -3
-                # y_change = 0
-                # player_left.play()
-                player_left.nextFrame()
-                # current_direction = "left"
-                # print("LEFT KEY PRESSED")
-            if event.key == pygame.K_RIGHT:
-                # x_change = 3
-                # y_change = 0
-                # player_right.play()
-                player_right.nextFrame()
-                # current_direction = "right"
-                # print("RIGHT KEY PRESSED")
-            if event.key == pygame.K_UP:
-                # y_change = -3
-                # x_change = 0
-                # player_up.play()
-                player_up.nextFrame()
-                # current_direction = "up"
-                # print("UP KEY PRESSED")
-            if event.key == pygame.K_DOWN:
-                # y_change = 3
-                # x_change = 0
-                # player_down.play()
-                player_down.nextFrame()
-                # current_direction = "down"
-                # print("DOWN KEY PRESSED")
-            if event.key == pygame.K_SPACE:
-                arena.place_bomb(int(y_move) // 45 + 1, (int(x_move) - 22) // 45 + 1)
-                print("x: ", int(y_move) // 45 + 1, " y: ", (int(x_move) - 22) // 45 + 1)
-                p1.die()
+    # for event in pygame.event.get():
+    #     if event.type == pygame.QUIT:
+    #         gameExit = True
 
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
-                conductor.pause_reset()
-                # player_front.pause_reset()
-                # print("LEFT KEY UP")
-            if event.key == pygame.K_RIGHT:
-                conductor.pause_reset()
-                # player_front.pause_reset()
-                # print("RIGHT KEY UP")
-            if event.key == pygame.K_UP:
-                conductor.pause_reset()
-                # player_front.pause_reset()
-                # print("UP KEY UP")
-            if event.key == pygame.K_DOWN:
-                conductor.pause_reset()
-                # player_front.pause_reset()
-                # print("DOWN KEY UP")
-            y_change = 0
-            x_change = 0
-
-    # TODO: remove
-    if x_move > RIGHT_BORDER_X: x_move = RIGHT_BORDER_X
-    if x_move < LEFT_BORDER_X: x_move = LEFT_BORDER_X
-    if y_move > DOWN_BORDER_Y: y_move = DOWN_BORDER_Y
-    if y_move < UP_BORDER_Y: y_move = UP_BORDER_Y
-
-
-    if current_direction is "down":
-        x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
-        player_down.blit(game_display, (x_move, y_move))
-    elif current_direction is "up":
-        if pygame.key.get_pressed()[pygame.K_UP]:
-            x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
-        player_up.blit(game_display, (x_move, y_move))
-    elif current_direction is "left":
-        x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
-        player_left.blit(game_display, (x_move, y_move))
-    elif current_direction is "right":
-        x_move, y_move = p.resolve_player_collision(x_move, y_move, current_direction)
-        player_right.blit(game_display, (x_move, y_move))
-
-    # print("( ", x_move, " , ", y_move, ")")
-    
-    x_move += x_change
-    y_move += y_change
-
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_UP] and \
-        not keys[pygame.K_DOWN] and \
-        not keys[pygame.K_LEFT] and \
-        not keys[pygame.K_RIGHT]:
-            y_change = -3
-            x_change = 0
-            current_direction = "up"
-            player_up.play()
-            # pass
-            # print("UP PRESSED")
-    if keys[pygame.K_RIGHT] and \
-        not keys[pygame.K_UP] and \
-        not keys[pygame.K_LEFT] and \
-        not keys[pygame.K_DOWN]:
-            x_change = 3
-            y_change = 0
-            current_direction = "right"
-            player_right.play()
-            # pass
-            # print("RIGHT PRESSED")
-    if keys[pygame.K_DOWN] and \
-        not keys[pygame.K_UP] and \
-        not keys[pygame.K_RIGHT] and \
-        not keys[pygame.K_LEFT]:
-            y_change = 3
-            x_change = 0
-            current_direction = "down"
-            player_down.play()
-            # pass
-            # print("DOWN PRESSED")
-    if keys[pygame.K_LEFT] and \
-        not keys[pygame.K_UP] and \
-        not keys[pygame.K_RIGHT] and \
-        not keys[pygame.K_DOWN]:
-            x_change = -3
-            y_change = 0
-            current_direction = "left"
-            player_left.play()
-            # pass
-            # print("LEFT PRESSED")
+    input_handler.handle_input()
 
     pygame.display.update()
 
