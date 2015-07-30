@@ -1,19 +1,13 @@
 import pygame
 from game_settings import *
 
+
 class InputHandler:
     def __init__(self, player):
         self.player = player
-        # self.x_pos = 0
-        # self.y_pos = 0
-        # self.x_change = 0
-        # self.y_change = 0
 
     def handle_input(self):
         event = pygame.event.poll()
-
-        # for event in pygame.event.get():
-        #     print("event")
 
         if event.type == pygame.NOEVENT:
             pass
@@ -37,19 +31,14 @@ class InputHandler:
             if event.key == pygame.K_SPACE:
                 self.player.place_bomb()
 
-            #TODO: remove...
+            # TODO: remove...
             if event.key == pygame.K_d:
                 self.player.die()
 
         if event.type == pygame.KEYUP:
             if (event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or
                     event.key == pygame.K_UP or event.key == pygame.K_DOWN):
-               self.player.pause_reset_sprite()
-
-        # if self.x_pos > RIGHT_BORDER_X: x_pos = RIGHT_BORDER_X
-        # if x_pos < LEFT_BORDER_X: x_pos = LEFT_BORDER_X
-        # if y_pos > DOWN_BORDER_Y: y_pos = DOWN_BORDER_Y
-        # if y_pos < UP_BORDER_Y: y_pos = UP_BORDER_Y
+                self.player.pause_reset_sprite()
 
         keys = pygame.key.get_pressed()
         if (keys[pygame.K_UP] and not keys[pygame.K_DOWN] and
