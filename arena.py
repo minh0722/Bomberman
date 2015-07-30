@@ -3,6 +3,7 @@ from drawable import Drawable
 from util import *
 from game_settings import *
 from pyganim import *
+from object import Object
 
 # 0 - grass
 # 1 - non destructible wall
@@ -43,7 +44,12 @@ class Arena(Drawable):
                 (bomb[1][1] * TILE_SIZE, bomb[1][0] * TILE_SIZE))
             bomb[0].play()
 
-    def place_bomb(self, x, y):
+    def place_bomb(self, position):
+        normalized_position = Object.get_normalized_position(position)
+
+        x = normalized_position[0]
+        y = normalized_position[1]
+
         if x == 0 or y == 0:
             return
         if self._can_place_bomb(x, y):

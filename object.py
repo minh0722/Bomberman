@@ -3,10 +3,10 @@ from game_settings import *
 
 
 class Object(Drawable):
-    def __init__(self, x, y):
+    def __init__(self, position):
         Drawable.__init__(self)
-        self.x = x
-        self.y = y
+        self.x = position[0]
+        self.y = position[1]
 
     def set_x(self, x):
         self.x = x
@@ -35,3 +35,7 @@ class Object(Drawable):
 
     def normalize_position(self):
         return (self.y // 45 + 1, (self.x - LEFT_BORDER_X) // 45 + 1)
+
+    @staticmethod
+    def get_normalized_position(position):
+        return (position[1] // 45 + 1, (position[0] - LEFT_BORDER_X) // 45 + 1)

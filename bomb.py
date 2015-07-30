@@ -3,8 +3,8 @@ from game_settings import *
 
 
 class Bomb(Object):
-    def __init__(self, x, y, bomb_range):
-        Object.__init__(self, x, y)
+    def __init__(self, position, bomb_range, arena):
+        Object.__init__(self, position)
 
         self.range = bomb_range
         self.state = 'TICKING'

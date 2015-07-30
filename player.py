@@ -6,8 +6,8 @@ from game_settings import *
 
 
 class Player(Object):
-    def __init__(self, x, y, arena):
-        Object.__init__(self, x, y)
+    def __init__(self, position, arena):
+        Object.__init__(self, position)
 
         self.bomb_capacity = 1
         self.placed_bomb = 0
@@ -88,9 +88,7 @@ class Player(Object):
         self.player_die_sprite.play()
 
     def place_bomb(self):
-        self.arena.place_bomb(
-            self.normalize_position()[0],
-            self.normalize_position()[1])
+        self.arena.place_bomb(self.position())
 
     def pause_reset_sprite(self):
         self.sprite_conductor.pause_reset()

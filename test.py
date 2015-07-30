@@ -22,7 +22,7 @@ gameExit = False
 clock = pygame.time.Clock()
 
 arena = Arena()
-p1 = Player(22, 0, arena)
+p1 = Player((22, 0), arena)
 input_handler = InputHandler(p1)
 
 while not gameExit:
