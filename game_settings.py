@@ -6,9 +6,11 @@ SCREEN_HEIGHT = 675
 ARENA_WIDTH = 17
 ARENA_HEIGHT = 15
 
-TILE_SIZE = 45
+EXPLOSION_DURATION = 0.1
 
 # -----------------defines-----------------
+TILE_SIZE = 45
+
 LEFT_BORDER_X = 22
 RIGHT_BORDER_X = 652
 

@@ -52,6 +52,7 @@ class Arena(Drawable):
 
         if x == 0 or y == 0:
             return
+
         if self._can_place_bomb(x, y):
             self.arena_matrix[x][y] = 2
 
