@@ -8,7 +8,7 @@ ARENA_HEIGHT = 15
 
 EXPLOSION_DURATION = 0.1
 
-# -----------------defines-----------------
+# -----------------internal defines-----------------
 TILE_SIZE = 45
 
 LEFT_BORDER_X = 22
