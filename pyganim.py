@@ -93,6 +93,8 @@ class PygAnimation(object):
             startTimes.append(startTimes[-1] + self._durations[i])
         return startTimes
 
+    def getFramesCount(self):
+        return self.numFrames
 
     def reverse(self):
         # Reverses the order of the animations.
@@ -255,7 +257,6 @@ class PygAnimation(object):
             # if animation was paused, start playing from where it was paused
             self._playingStartTime = startTime - (self._pausedStartTime - self._playingStartTime)
         self._state = PLAYING
-
 
     def pause(self, startTime=None):
         # Stop having the animation progress, and keep it at the current frame.

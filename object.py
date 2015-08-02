@@ -34,7 +34,7 @@ class Object(Drawable):
         return (self.x, self.y)
 
     def normalize_position(self):
-        return (self.y // 45 + 1, (self.x - LEFT_BORDER_X) // 45 + 1)
+        return (self.y // 45, (self.x - LEFT_BORDER_X) // 45 + 1)
 
     @staticmethod
     def get_normalized_position(position):
