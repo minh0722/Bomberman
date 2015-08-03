@@ -36,6 +36,16 @@ class Object(Drawable):
     def normalize_position(self):
         return (self.y // 45, (self.x - LEFT_BORDER_X) // 45 + 1)
 
+    def normalize_position_for_explosion(self):
+        if self.x in range(LEFT_BORDER_X, 43) and self.y in range(0, 24):
+            return (1, 1)
+        elif self.x not in range(LEFT_BORDER_X, 43) and self.y not in range(0, 24):
+            return ((self.y - 24) // 45 + 2, (self.x - 43) // 45 + 2)
+        elif self.x in range(LEFT_BORDER_X, 43) and self.y not in range(0, 24):
+            return ((self.y - 24) // 45 + 2 ,1)
+        elif self.x not in range(LEFT_BORDER_X, 43) and self.y in range(0, 24):
+            return (1, (self.x - 43) // 45 + 2)
+
     @staticmethod
     def get_normalized_position(position):
         return (position[1] // 45 + 1, (position[0] - LEFT_BORDER_X) // 45 + 1)

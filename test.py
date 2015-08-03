@@ -23,16 +23,16 @@ clock = pygame.time.Clock()
 
 arena = Arena()
 p1 = Player((22, 0), arena)
-p2 = Player((112, 0), arena)
+# p2 = Player((112, 0), arena)
 input_handler = InputHandler(p1)
 
 arena.add_player(p1)
-arena.add_player(p2)
+# arena.add_player(p2)
 
 while not gameExit:
     arena.draw(game_display)
     p1.draw(game_display)
-    p2.draw(game_display)
+    # p2.draw(game_display)
 
     input_handler.handle_input()
 

@@ -66,6 +66,7 @@ class Player(Object):
         self.sprite_conductor.pause_reset()
 
     def draw(self, game_display):
+        print("Position: ", self.position())
         if self.state is 'DEAD':
             return None
         if self.state is 'DYING':
