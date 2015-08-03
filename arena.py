@@ -57,8 +57,7 @@ class Arena(Drawable):
                 x = player.normalize_position_for_explosion()[0]
                 y = player.normalize_position_for_explosion()[1]
 
-                print("Player explosion position: ", player.normalize_position_for_explosion()[0], 
-                    " ", player.normalize_position_for_explosion()[1])
+                print("Player explosion position: ", x, " ", y)
 
                 if self.arena_matrix[x][y] == TileType.FLAME:
                     player.die()

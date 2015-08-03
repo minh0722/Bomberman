@@ -13,7 +13,7 @@ from input_handler import InputHandler
 pygame.init()
 
 game_display = pygame.display.set_mode((765,675))
-pygame.display.set_caption('Bomberman')
+pygame.display.set_caption('BomberMin')
 
 pygame.display.update()
 
