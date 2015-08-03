@@ -37,6 +37,7 @@ class Arena(Drawable):
 
         self.arena_surface = self._load_arena_surface()
         self.bombs = list()
+        self.players = list()
 
     def draw(self, game_display):
         game_display.blit(self.arena_surface, (0, 0))
@@ -49,9 +50,25 @@ class Arena(Drawable):
             
             bomb.draw(game_display)
 
+        for player in self.players:
+            print(player.normalize_position())
+            if not player.is_alive():
+                self.players.remove(player)
+            else:
+                x = player.normalize_position()[0] + 1
+                y = player.normalize_position()[1]
+
+                if self.arena_matrix[x][y] == TileType.FLAME:
+                    player.die()
+
         # for row in range(0, len(self.arena_matrix)):
         #     print(self.arena_matrix[row])
         # print("\n")
+
+    def add_player(self, new_player):
+        if len(self.players) >= MAX_PLAYERS:
+            return None
+        self.players.append(new_player)
 
     def place_bomb(self, position, bomb_range):
         normalized_position = Object.get_normalized_position(position)
