@@ -6,18 +6,13 @@ from pyganim import *
 from object import Object
 from bomb import Bomb, BombState
 
-# 0 - grass
-# 1 - non destructible wall
-# 2 - bomb
-# 3 - destructible wall
-# 4 - border
-
 class TileType:
     GRASS = 0
     NON_DESTRUCTIBLE = 1
     BOMB = 2
     DESTRUCTIBLE = 3
     BORDER = 4
+    FLAME = 5
 
 
 class Arena(Drawable):
@@ -47,10 +42,16 @@ class Arena(Drawable):
         game_display.blit(self.arena_surface, (0, 0))
 
         for bomb in self.bombs:
+            self._update_explosion_in_matrix(bomb)
+
             if bomb.current_state() == BombState.EXPLODED:
                 self.bombs.remove(bomb)
-            else:
-                bomb.draw(game_display)
+            
+            bomb.draw(game_display)
+
+        # for row in range(0, len(self.arena_matrix)):
+        #     print(self.arena_matrix[row])
+        # print("\n")
 
     def place_bomb(self, position, bomb_range):
         normalized_position = Object.get_normalized_position(position)
@@ -119,19 +120,79 @@ class Arena(Drawable):
     def _can_place_bomb(self, x, y):
         return self.arena_matrix[x][y] == 0
 
+    def _update_explosion_in_matrix(self, bomb):
+        if bomb.current_state() == BombState.TICKING:
+            return None
+
+        bomb_state = bomb.current_state()
+
+        new_tile_type = (TileType.FLAME if bomb_state == BombState.EXPLODING
+                                        else TileType.GRASS)
+
+        self._update_matrix_explosion_center(bomb, new_tile_type)
+        self._update_matrix_explosion_left(bomb, new_tile_type)
+        self._update_matrix_explosion_right(bomb, new_tile_type)
+        self._update_matrix_explosion_up(bomb, new_tile_type)
+        self._update_matrix_explosion_down(bomb, new_tile_type)
+
+    def _update_matrix_explosion_center(self, bomb, new_tile_type):
+        normalized_position = bomb.normalize_position()
+
+        self.arena_matrix[normalized_position[0]][normalized_position[1]] = new_tile_type
+
+    def _update_matrix_explosion_left(self, bomb, new_tile_type):
+        normalized_position = bomb.normalize_position()
+        bomb_range = bomb.get_range()
+
+        can_explode_left = min(bomb_range,
+            self.tiles_can_be_exploded_to_the_left(normalized_position))
+
+        for row in range(0, can_explode_left):
+            self.arena_matrix[normalized_position[0]][normalized_position[1] - row - 1] = new_tile_type
+
+    def _update_matrix_explosion_right(self, bomb, new_tile_type):
+        normalized_position = bomb.normalize_position()
+        bomb_range = bomb.get_range()
+
+        can_explode_right = min(bomb_range,
+            self.tiles_can_be_exploded_to_the_right(normalized_position))
+
+        for row in range(0, can_explode_right):
+            self.arena_matrix[normalized_position[0]][normalized_position[1] + row  + 1] = new_tile_type
+
+    def _update_matrix_explosion_up(self, bomb, new_tile_type):
+        normalized_position = bomb.normalize_position()
+        bomb_range = bomb.get_range()
+
+        can_explode_up = min(bomb_range,
+            self.tiles_can_be_exploded_to_the_up(normalized_position))
+
+        for col in range(0, can_explode_up):
+            self.arena_matrix[normalized_position[0] - col - 1][normalized_position[1]] = new_tile_type
+
+    def _update_matrix_explosion_down(self, bomb, new_tile_type):
+        normalized_position = bomb.normalize_position()
+        bomb_range = bomb.get_range()
+
+        can_explode_down = min(bomb_range,
+            self.tiles_can_be_exploded_to_the_down(normalized_position))
+
+        for col in range(0, can_explode_down):
+            self.arena_matrix[normalized_position[0] + col + 1][normalized_position[1]] = new_tile_type
+
     def _load_arena_surface(self):
         arena = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         for x in range(0, ARENA_HEIGHT):
             for y in range(0, ARENA_WIDTH):
-                if self.arena_matrix[x][y] == 0:
+                if self.arena_matrix[x][y] == TileType.GRASS:
                     arena.blit(
                         self._create_tile('grass'),
                         (y * TILE_SIZE, x * TILE_SIZE))
-                elif self.arena_matrix[x][y] == 1:
+                elif self.arena_matrix[x][y] == TileType.NON_DESTRUCTIBLE:
                     arena.blit(
                         self._create_tile('non_destructible'),
                         (y * TILE_SIZE, x * TILE_SIZE))
-                elif self.arena_matrix[x][y] == 4:
+                elif self.arena_matrix[x][y] == TileType.BORDER:
                     arena.blit(
                         self._create_tile('border'),
                         (y * TILE_SIZE, x * TILE_SIZE))
