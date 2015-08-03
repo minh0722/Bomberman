@@ -11,7 +11,7 @@ class Player(Object):
 
         self.bomb_capacity = 1
         self.placed_bomb = 0
-        self.bomb_range = 2
+        self.bomb_range = 6
         self.movement_speed = 3
         self.current_face_direction = 'DOWN'
         self.state = 'ALIVE'
@@ -60,7 +60,7 @@ class Player(Object):
         self.player_die_sprite.play()
 
     def place_bomb(self):
-        self.arena.place_bomb(self.position())
+        self.arena.place_bomb(self.position(), self.bomb_range)
 
     def pause_reset_sprite(self):
         self.sprite_conductor.pause_reset()

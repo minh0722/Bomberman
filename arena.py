@@ -52,10 +52,14 @@ class Arena(Drawable):
             else:
                 bomb.draw(game_display)
 
-    def place_bomb(self, position):
-        correct_position = Object.get_normalized_position(position)
+    def place_bomb(self, position, bomb_range):
+        normalized_position = Object.get_normalized_position(position)
 
-        b = Bomb((correct_position[1] * TILE_SIZE, correct_position[0] * TILE_SIZE), 5, self)
+        correct_position = (
+            normalized_position[1] * TILE_SIZE,
+            normalized_position[0] * TILE_SIZE)
+
+        b = Bomb(correct_position, bomb_range, self)
         self.bombs.append(b)
 
     def tiles_can_be_exploded_to_the_left(self, normalized_position):
@@ -142,11 +146,3 @@ class Arena(Drawable):
             return load_image('battle_tiles/battle_stage_1/non_destructible_tile.png').convert()
         elif type is 'border':
             return load_image('battle_tiles/battle_stage_1/border_tile.png').convert()
-
-    def _create_bomb(self):
-        return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_1.png", 0.25),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_2.png", 0.25),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_3.png", 0.25),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_4.png", 0.25)
-            ])

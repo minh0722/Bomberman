@@ -41,27 +41,30 @@ class Bomb(Object):
         if self.ticking_timer > 0:
             self.ticking_timer = self.ticking_timer - 1
         else:
-            self.set_state(BombState.EXPLODING)
+            self._set_state(BombState.EXPLODING)
             if self.explosion_duration > 0:
                 self.explosion_duration = self.explosion_duration - 1
             else:
-                self.set_state(BombState.EXPLODED)
+                self._set_state(BombState.EXPLODED)
 
         if self._explosion_finished():
-            self.set_state(BombState.EXPLODED)
+            self._set_state(BombState.EXPLODED)
             return None
         if self.state is BombState.TICKING:
             self.bomb_sprite.blit(game_display, self.position())
         if self.state is BombState.EXPLODING:
             self._draw_explosions(game_display)
         if self._done_ticking():
-            self.set_state(BombState.EXPLODING)
+            self._set_state(BombState.EXPLODING)
 
-    def set_state(self, new_state):
-        self.state = new_state
-            
     def current_state(self):
         return self.state
+
+    def get_range(self):
+        return self.range
+
+    def _set_state(self, new_state):
+        self.state = new_state            
 
     def _done_ticking(self):
         return self.ticking_timer == 0
@@ -257,7 +260,3 @@ class Bomb(Object):
             ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_down_end.png", EXPLOSION_FRAME_DURATION),
             ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_down_end.png", EXPLOSION_FRAME_DURATION)],
             loop=False)
-
-# game_display = pygame.display.set_mode((765,675))
-# a = Arena()
-# b = Bomb((3,3), 2, a)
