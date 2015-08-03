@@ -8,6 +8,12 @@ class Object(Drawable):
         self.x = position[0]
         self.y = position[1]
 
+    def get_x(self):
+    	return self.x
+
+    def get_y(self):
+    	return self.y
+
     def set_x(self, x):
         self.x = x
 

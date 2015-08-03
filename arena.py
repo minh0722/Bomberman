@@ -6,6 +6,7 @@ from pyganim import *
 from object import Object
 from bomb import Bomb, BombState
 
+
 class TileType:
     GRASS = 0
     NON_DESTRUCTIBLE = 1
@@ -47,7 +48,7 @@ class Arena(Drawable):
 
             if bomb.current_state() == BombState.EXPLODED:
                 self.bombs.remove(bomb)
-            
+
             bomb.draw(game_display)
 
         for player in self.players:
@@ -84,60 +85,6 @@ class Arena(Drawable):
     def _can_place_bomb(self, x, y):
         return self.arena_matrix[x][y] == 0
 
-    def tiles_can_be_exploded_to_the_left(self, normalized_position):
-        x = normalized_position[0]
-        y = normalized_position[1]
-
-        if (y - 1 < 0 or self.arena_matrix[x][y - 1] == TileType.BORDER or
-                self.arena_matrix[x][y - 1] == TileType.NON_DESTRUCTIBLE):
-            return 0
-
-        for destructible_wall_index in range(y - 1, 0, -1):
-            if self.arena_matrix[x][destructible_wall_index] == TileType.DESTRUCTIBLE:
-                return y - destructible_wall_index
-        return y - 1
-        
-        # TODO: need to check if it's bomb?
-
-    def tiles_can_be_exploded_to_the_right(self, normalized_position):
-        x = normalized_position[0]
-        y = normalized_position[1]
-
-        if (y + 1 >= ARENA_WIDTH or self.arena_matrix[x][y + 1] == TileType.BORDER or
-                self.arena_matrix[x][y + 1] == TileType.NON_DESTRUCTIBLE):
-            return 0
-
-        for destructible_wall_index in range(y + 1, ARENA_WIDTH):
-            if self.arena_matrix[x][destructible_wall_index] == TileType.DESTRUCTIBLE:
-                return destructible_wall_index - y
-        return ARENA_WIDTH - 2 - y
-
-    def tiles_can_be_exploded_to_the_up(self, normalized_position):
-        x = normalized_position[0]
-        y = normalized_position[1]
-
-        if (x - 1 < 0 or self.arena_matrix[x - 1][y] == TileType.BORDER or
-                self.arena_matrix[x - 1][y] == TileType.NON_DESTRUCTIBLE):
-            return 0
-
-        for destructible_wall_index in range(x - 1, 0, -1):
-            if self.arena_matrix[destructible_wall_index][y] == TileType.DESTRUCTIBLE:
-                return x - destructible_wall_index
-        return x - 1
-
-    def tiles_can_be_exploded_to_the_down(self, normalized_position):
-        x = normalized_position[0]
-        y = normalized_position[1]
-
-        if (x + 1 >= ARENA_HEIGHT or self.arena_matrix[x + 1][y] == TileType.BORDER or
-                self.arena_matrix[x + 1][y] == TileType.NON_DESTRUCTIBLE):
-            return 0
-        
-        for destructible_wall_index in range(x + 1, ARENA_HEIGHT):
-            if self.arena_matrix[destructible_wall_index][y] == TileType.DESTRUCTIBLE:
-                return destructible_wall_index - x
-        return ARENA_HEIGHT - 2 - x
-
     def _update_explosion_in_matrix(self, bomb):
         if bomb.current_state() == BombState.TICKING:
             return None
@@ -145,7 +92,7 @@ class Arena(Drawable):
         bomb_state = bomb.current_state()
 
         new_tile_type = (TileType.FLAME if bomb_state == BombState.EXPLODING
-                                        else TileType.GRASS)
+                         else TileType.GRASS)
 
         self._update_matrix_explosion_center(bomb, new_tile_type)
         self._update_matrix_explosion_left(bomb, new_tile_type)
@@ -153,50 +100,119 @@ class Arena(Drawable):
         self._update_matrix_explosion_up(bomb, new_tile_type)
         self._update_matrix_explosion_down(bomb, new_tile_type)
 
-    def _update_matrix_explosion_center(self, bomb, new_tile_type):
-        normalized_position = bomb.normalize_position()
+    def left_tiles_can_be_exploded(self, normalized_position):
+        x = normalized_position[0]
+        y = normalized_position[1]
 
-        self.arena_matrix[normalized_position[0]][normalized_position[1]] = new_tile_type
+        if (y - 1 < 0 or self.arena_matrix[x][y - 1] == TileType.BORDER or
+                self.arena_matrix[x][y - 1] == TileType.NON_DESTRUCTIBLE):
+            return 0
+
+        for wall_index in range(y - 1, 0, -1):
+            if self.arena_matrix[x][wall_index] == TileType.DESTRUCTIBLE:
+                return y - wall_index
+        return y - 1
+
+        # TODO: need to check if it's bomb?
+
+    def right_tiles_can_be_exploded(self, normalized_position):
+        x = normalized_position[0]
+        y = normalized_position[1]
+
+        if (y + 1 >= ARENA_WIDTH or
+                self.arena_matrix[x][y + 1] == TileType.BORDER or
+                self.arena_matrix[x][y + 1] == TileType.NON_DESTRUCTIBLE):
+            return 0
+
+        for wall_index in range(y + 1, ARENA_WIDTH):
+            if self.arena_matrix[x][wall_index] == TileType.DESTRUCTIBLE:
+                return wall_index - y
+        return ARENA_WIDTH - 2 - y
+
+    def up_tiles_can_be_exploded(self, normalized_position):
+        x = normalized_position[0]
+        y = normalized_position[1]
+
+        if (x - 1 < 0 or self.arena_matrix[x - 1][y] == TileType.BORDER or
+                self.arena_matrix[x - 1][y] == TileType.NON_DESTRUCTIBLE):
+            return 0
+
+        for wall_index in range(x - 1, 0, -1):
+            if self.arena_matrix[wall_index][y] == TileType.DESTRUCTIBLE:
+                return x - wall_index
+        return x - 1
+
+    def down_tiles_can_be_exploded(self, normalized_position):
+        x = normalized_position[0]
+        y = normalized_position[1]
+
+        if (x + 1 >= ARENA_HEIGHT or
+                self.arena_matrix[x + 1][y] == TileType.BORDER or
+                self.arena_matrix[x + 1][y] == TileType.NON_DESTRUCTIBLE):
+            return 0
+
+        for wall_index in range(x + 1, ARENA_HEIGHT):
+            if self.arena_matrix[wall_index][y] == TileType.DESTRUCTIBLE:
+                return wall_index - x
+        return ARENA_HEIGHT - 2 - x
+
+    def _update_matrix_explosion_center(self, bomb, new_tile_type):
+        normalized_x = bomb.normalize_position()[0]
+        normalized_y = bomb.normalize_position()[1]
+
+        self.arena_matrix[normalized_x][normalized_y] = new_tile_type
 
     def _update_matrix_explosion_left(self, bomb, new_tile_type):
         normalized_position = bomb.normalize_position()
         bomb_range = bomb.get_range()
 
         can_explode_left = min(bomb_range,
-            self.tiles_can_be_exploded_to_the_left(normalized_position))
+                               self.left_tiles_can_be_exploded(
+                                    normalized_position))
 
         for row in range(0, can_explode_left):
-            self.arena_matrix[normalized_position[0]][normalized_position[1] - row - 1] = new_tile_type
+            x = normalized_position[0]
+            y = normalized_position[1] - row - 1
+            self.arena_matrix[x][y] = new_tile_type
 
     def _update_matrix_explosion_right(self, bomb, new_tile_type):
         normalized_position = bomb.normalize_position()
         bomb_range = bomb.get_range()
 
         can_explode_right = min(bomb_range,
-            self.tiles_can_be_exploded_to_the_right(normalized_position))
+                                self.right_tiles_can_be_exploded(
+                                    normalized_position))
 
         for row in range(0, can_explode_right):
-            self.arena_matrix[normalized_position[0]][normalized_position[1] + row  + 1] = new_tile_type
+            x = normalized_position[0]
+            y = normalized_position[1] + row + 1
+            self.arena_matrix[x][y] = new_tile_type
 
     def _update_matrix_explosion_up(self, bomb, new_tile_type):
         normalized_position = bomb.normalize_position()
         bomb_range = bomb.get_range()
 
         can_explode_up = min(bomb_range,
-            self.tiles_can_be_exploded_to_the_up(normalized_position))
+                             self.up_tiles_can_be_exploded(
+                                    normalized_position))
 
         for col in range(0, can_explode_up):
-            self.arena_matrix[normalized_position[0] - col - 1][normalized_position[1]] = new_tile_type
+            x = normalized_position[0] - col - 1
+            y = normalized_position[1]
+            self.arena_matrix[x][y] = new_tile_type
 
     def _update_matrix_explosion_down(self, bomb, new_tile_type):
         normalized_position = bomb.normalize_position()
         bomb_range = bomb.get_range()
 
         can_explode_down = min(bomb_range,
-            self.tiles_can_be_exploded_to_the_down(normalized_position))
+                               self.down_tiles_can_be_exploded(
+                                    normalized_position))
 
         for col in range(0, can_explode_down):
-            self.arena_matrix[normalized_position[0] + col + 1][normalized_position[1]] = new_tile_type
+            x = normalized_position[0] + col + 1
+            y = normalized_position[1]
+            self.arena_matrix[x][y] = new_tile_type
 
     def _load_arena_surface(self):
         arena = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))

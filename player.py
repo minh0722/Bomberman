@@ -34,21 +34,37 @@ class Player(Object):
 
     def move_up(self):
         Object.move_up(self, self.movement_speed)
+
+        if self.get_y() <= UP_BORDER_Y:
+            self.set_y(UP_BORDER_Y)
+
         self.current_face_direction = 'UP'
         self.player_up_sprite.play()
 
     def move_down(self):
         Object.move_down(self, self.movement_speed)
+
+        if self.get_y() >= DOWN_BORDER_Y:
+            self.set_y(DOWN_BORDER_Y)
+
         self.current_face_direction = 'DOWN'
         self.player_down_sprite.play()
 
     def move_left(self):
         Object.move_left(self, self.movement_speed)
+
+        if self.get_x() <= LEFT_BORDER_X:
+            self.set_x(LEFT_BORDER_X)
+
         self.current_face_direction = 'LEFT'
         self.player_left_sprite.play()
 
     def move_right(self):
         Object.move_right(self, self.movement_speed)
+
+        if self.get_x() >= RIGHT_BORDER_X:
+            self.set_x(RIGHT_BORDER_X)
+
         self.current_face_direction = 'RIGHT'
         self.player_right_sprite.play()
 
