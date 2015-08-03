@@ -51,7 +51,6 @@ class Arena(Drawable):
             bomb.draw(game_display)
 
         for player in self.players:
-            print(player.normalize_position())
             if not player.is_alive():
                 self.players.remove(player)
             else:
