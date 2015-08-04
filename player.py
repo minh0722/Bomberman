@@ -40,6 +40,8 @@ class Player(Object):
         self.player_left_sprite = self._create_player_left()
         self.player_right_sprite = self._create_player_right()
 
+        self.player_die_sprite = self._create_player_die()
+
         self.sprite_conductor = PygConductor(
             self.player_down_sprite,
             self.player_up_sprite,
@@ -48,41 +50,85 @@ class Player(Object):
 
         self.sprite_conductor.pause()
 
-        self.player_die_sprite = self._create_player_die()
         self.bombs = list()
+
+        self.tile_position = Object(
+            (45, 45),
+            PLAYER_RECTANGLE_WIDTH,
+            PLAYER_RECTANGLE_WIDTH)
 
     def move_up(self):
         Object.move_up(self, self.movement_speed)
+        self.tile_position.move_up(self.movement_speed)
 
         if self.get_y() <= UP_BORDER_Y:
             self.set_y(UP_BORDER_Y)
+            self.tile_position.set_y(45)
+
+        # walls = self.arena.get_non_destructible_walls()
+
+        # for wall in walls:
+        #     if self.tile_position.is_intersected_with(wall):
+        #         self.tile_position.set_y(wall.get_y() + wall.get_height())
+        #         self.set_y(self.tile_position.get_y() - TILE_SIZE)
+        #         break
 
         self.current_face_direction = Direction.UP
         self.player_up_sprite.play()
 
     def move_down(self):
         Object.move_down(self, self.movement_speed)
+        self.tile_position.move_down(self.movement_speed)
 
         if self.get_y() >= DOWN_BORDER_Y:
             self.set_y(DOWN_BORDER_Y)
+            self.tile_position.set_y(630)
+
+        # walls = self.arena.get_non_destructible_walls()
+
+        # for wall in walls:
+        #     if self.is_intersected_with(wall):
+        #         self.tile_position.set_y(wall.get_y())
+        #         self.set_y(self.tile_position.get_y() - TILE_SIZE)
+        #         break
 
         self.current_face_direction = Direction.DOWN
         self.player_down_sprite.play()
 
     def move_left(self):
         Object.move_left(self, self.movement_speed)
+        self.tile_position.move_left(self.movement_speed)
 
         if self.get_x() <= LEFT_BORDER_X:
             self.set_x(LEFT_BORDER_X)
+            self.tile_position.set_x(45)
+
+        # walls = self.arena.get_non_destructible_walls()
+
+        # for wall in walls:
+        #     if self.is_intersected_with(wall):
+        #         self.tile_position.set_x(wall.get_x() + wall.get_width())
+        #         self.set_y(self.tile_position.get_x() - 23)
+        #         break
 
         self.current_face_direction = Direction.LEFT
         self.player_left_sprite.play()
 
     def move_right(self):
         Object.move_right(self, self.movement_speed)
+        self.tile_position.move_right(self.movement_speed)
 
         if self.get_x() >= RIGHT_BORDER_X:
             self.set_x(RIGHT_BORDER_X)
+            self.tile_position.set_x(720)
+
+        # walls = self.arena.get_non_destructible_walls()
+
+        # for wall in walls:
+        #     if self.is_intersected_with(wall):
+        #         self.tile_position.set_x(wall.get_x())
+        #         self.set_y(self.tile_position.get_x() - 23)
+        #         break
 
         self.current_face_direction = Direction.RIGHT
         self.player_right_sprite.play()
@@ -109,10 +155,11 @@ class Player(Object):
         self.sprite_conductor.pause_reset()
 
     def draw(self, game_display):
-        print("Position: ", self.position())
-
         self._draw_bombs(game_display)
         self._draw_player(game_display)
+
+        print("Position: ", self.position())
+        print("tile_position: ",self.tile_position.position())
 
     def _draw_bombs(self, game_display):
         for bomb in self.bombs:

@@ -26,6 +26,12 @@ class Object(Drawable):
         return self.x <= point[0] and point[0] <= self.x + self.width \
                 and self.y <= point[1] and point[1] <= self.y + self.height
 
+    def get_width(self):
+        return self.width
+
+    def get_height(self):
+        return self.height
+
     def get_x(self):
     	return self.x
 

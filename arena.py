@@ -37,6 +37,7 @@ class Arena(Drawable):
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]]
 
         self.arena_surface = self._load_arena_surface()
+        self.non_destructible_walls = self._load_non_destructible_walls()
         self.players = list()
 
     def draw(self, game_display):
@@ -46,6 +47,9 @@ class Arena(Drawable):
         # for row in range(0, len(self.arena_matrix)):
         #     print(self.arena_matrix[row])
         # print("\n")
+
+    def get_non_destructible_walls(self):
+        return self.non_destructible_walls
 
     def add_player(self, new_player):
         if len(self.players) >= MAX_PLAYERS:
@@ -131,8 +135,6 @@ class Arena(Drawable):
                 x = player.normalize_position_for_explosion()[0]
                 y = player.normalize_position_for_explosion()[1]
 
-                print("Player normalize_position_for_explosion: ", x, " ", y)
-
                 if self.arena_matrix[x][y] == TileType.FLAME:
                     player.die()        
 
@@ -199,28 +201,50 @@ class Arena(Drawable):
 
     def _load_arena_surface(self):
         arena = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+
         for x in range(0, ARENA_HEIGHT):
             for y in range(0, ARENA_WIDTH):
                 if self.arena_matrix[x][y] == TileType.GRASS:
                     arena.blit(
-                        self._create_tile('grass'),
+                        self._create_tile(TileType.GRASS),
                         (y * TILE_SIZE, x * TILE_SIZE))
+
                 elif self.arena_matrix[x][y] == TileType.NON_DESTRUCTIBLE:
                     arena.blit(
-                        self._create_tile('non_destructible'),
+                        self._create_tile(TileType.NON_DESTRUCTIBLE),
                         (y * TILE_SIZE, x * TILE_SIZE))
+
                 elif self.arena_matrix[x][y] == TileType.BORDER:
                     arena.blit(
-                        self._create_tile('border'),
+                        self._create_tile(TileType.BORDER),
                         (y * TILE_SIZE, x * TILE_SIZE))
+
         return arena
 
+    def _load_non_destructible_walls(self):
+        walls = list()
+
+        for x in range(0, ARENA_HEIGHT):
+            for y in range(0, ARENA_HEIGHT):
+                if self.arena_matrix[x][y] == TileType.NON_DESTRUCTIBLE:
+                    wall = Object(
+                        (y * TILE_SIZE, x * TILE_SIZE),
+                        TILE_SIZE,
+                        TILE_SIZE)
+
+                    walls.append(wall)
+
+        return walls
+
     def _create_tile(self, type):
-        if type is 'grass':
+        if type is TileType.GRASS:
             return load_image('battle_tiles/battle_stage_1/grass_tile.png').convert()
-        elif type is 'destructible':
+
+        elif type is TileType.DESTRUCTIBLE:
             return load_image('battle_tiles/battle_stage_1/destructible_tile.png').convert()
-        elif type is 'non_destructible':
+
+        elif type is TileType.NON_DESTRUCTIBLE:
             return load_image('battle_tiles/battle_stage_1/non_destructible_tile.png').convert()
-        elif type is 'border':
+
+        elif type is TileType.BORDER:
             return load_image('battle_tiles/battle_stage_1/border_tile.png').convert()
