@@ -37,31 +37,11 @@ class Arena(Drawable):
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]]
 
         self.arena_surface = self._load_arena_surface()
-        self.bombs = list()
         self.players = list()
 
     def draw(self, game_display):
         game_display.blit(self.arena_surface, (0, 0))
-
-        for bomb in self.bombs:
-            self._update_explosion_in_matrix(bomb)
-
-            if bomb.current_state() == BombState.EXPLODED:
-                self.bombs.remove(bomb)
-
-            bomb.draw(game_display)
-
-        for player in self.players:
-            if not player.is_alive():
-                self.players.remove(player)
-            else:
-                x = player.normalize_position_for_explosion()[0]
-                y = player.normalize_position_for_explosion()[1]
-
-                print("Player normalize_position_for_explosion: ", x, " ", y)
-
-                if self.arena_matrix[x][y] == TileType.FLAME:
-                    player.die()
+        self._draw_players(game_display)
 
         # for row in range(0, len(self.arena_matrix)):
         #     print(self.arena_matrix[row])
@@ -72,20 +52,7 @@ class Arena(Drawable):
             return None
         self.players.append(new_player)
 
-    def place_bomb(self, position, bomb_range):
-        normalized_position = Object.get_normalized_position(position)
-
-        correct_position = (
-            normalized_position[1] * TILE_SIZE,
-            normalized_position[0] * TILE_SIZE)
-
-        b = Bomb(correct_position, bomb_range, self)
-        self.bombs.append(b)
-
-    def _can_place_bomb(self, x, y):
-        return self.arena_matrix[x][y] == 0
-
-    def _update_explosion_in_matrix(self, bomb):
+    def update_explosion_in_matrix(self, bomb):
         if bomb.current_state() == BombState.TICKING:
             return None
 
@@ -155,6 +122,22 @@ class Arena(Drawable):
             if self.arena_matrix[wall_index][y] == TileType.DESTRUCTIBLE:
                 return wall_index - x
         return ARENA_HEIGHT - 2 - x
+
+    def _draw_players(self, game_display):
+        for player in self.players:
+            if not player.is_alive():
+                self.players.remove(player)
+            else:
+                x = player.normalize_position_for_explosion()[0]
+                y = player.normalize_position_for_explosion()[1]
+
+                print("Player normalize_position_for_explosion: ", x, " ", y)
+
+                if self.arena_matrix[x][y] == TileType.FLAME:
+                    player.die()        
+
+    def _can_place_bomb(self, x, y):
+        return self.arena_matrix[x][y] == 0
 
     def _update_matrix_explosion_center(self, bomb, new_tile_type):
         normalized_x = bomb.normalize_position()[0]
