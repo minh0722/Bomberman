@@ -12,7 +12,11 @@ class BombState:
 
 class Bomb(Object):
     def __init__(self, position, bomb_range, arena):
-        Object.__init__(self, position)
+        Object.__init__(
+            self,
+            position,
+            TILE_SIZE,
+            TILE_SIZE)
 
         self.range = bomb_range
         self.state = BombState.TICKING

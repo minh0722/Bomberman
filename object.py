@@ -3,10 +3,28 @@ from game_settings import *
 
 
 class Object(Drawable):
-    def __init__(self, position):
+    def __init__(self, position, width, height):
         Drawable.__init__(self)
         self.x = position[0]
         self.y = position[1]
+        self.width = width
+        self.height = height
+
+    def is_intersected_with(self, _object):
+        top_left = (_object.x, _object.y)
+        bottom_right = (_object.x + _object.width, _object.y + _object.height)
+
+        this_object_top_left = (self.x, self.y)
+        this_object_bottom_right = (self.x + self.width, self.y + self.height)
+
+        return this_object_bottom_right[1] >= top_left[1] \
+           and this_object_bottom_right[0] >= top_left[0] \
+           and this_object_top_left[1] <= bottom_right[1] \
+           and this_object_top_left[0] <= bottom_right[0]
+
+    def contains_point(self, point):
+        return self.x <= point[0] and point[0] <= self.x + self.width \
+                and self.y <= point[1] and point[1] <= self.y + self.height
 
     def get_x(self):
     	return self.x

@@ -21,7 +21,11 @@ class Direction:
 
 class Player(Object):
     def __init__(self, position, arena):
-        Object.__init__(self, position)
+        Object.__init__(
+            self,
+            position,
+            PLAYER_RECTANGLE_WIDTH,
+            PLAYER_RECTANGLE_HEIGHT)
 
         self.bomb_capacity = 2
         self.placed_bomb = 0

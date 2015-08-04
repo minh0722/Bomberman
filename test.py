@@ -1,10 +1,8 @@
 import pygame
 from util import *
-from tiles import *
 from pygame import Surface
 from pygame.sprite import Sprite
 from pyganim import *
-from physics import Physics
 from game_settings import *
 from arena import Arena
 from player import Player
