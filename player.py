@@ -5,6 +5,19 @@ from object import Object
 from game_settings import *
 
 
+class PlayerState:
+    ALIVE = 1
+    DYING = 2
+    DEAD = 3
+
+
+class Direction:
+    UP = 1
+    DOWN = 2
+    LEFT = 3
+    RIGHT = 4
+
+
 class Player(Object):
     def __init__(self, position, arena):
         Object.__init__(self, position)
@@ -13,8 +26,8 @@ class Player(Object):
         self.placed_bomb = 0
         self.bomb_range = 6
         self.movement_speed = 3
-        self.current_face_direction = 'DOWN'
-        self.state = 'ALIVE'
+        self.current_face_direction = Direction.DOWN
+        self.state = PlayerState.ALIVE
         self.arena = arena
 
         self.player_down_sprite = self._create_player_down()
@@ -38,7 +51,7 @@ class Player(Object):
         if self.get_y() <= UP_BORDER_Y:
             self.set_y(UP_BORDER_Y)
 
-        self.current_face_direction = 'UP'
+        self.current_face_direction = Direction.UP
         self.player_up_sprite.play()
 
     def move_down(self):
@@ -47,7 +60,7 @@ class Player(Object):
         if self.get_y() >= DOWN_BORDER_Y:
             self.set_y(DOWN_BORDER_Y)
 
-        self.current_face_direction = 'DOWN'
+        self.current_face_direction = Direction.DOWN
         self.player_down_sprite.play()
 
     def move_left(self):
@@ -56,7 +69,7 @@ class Player(Object):
         if self.get_x() <= LEFT_BORDER_X:
             self.set_x(LEFT_BORDER_X)
 
-        self.current_face_direction = 'LEFT'
+        self.current_face_direction = Direction.LEFT
         self.player_left_sprite.play()
 
     def move_right(self):
@@ -65,14 +78,14 @@ class Player(Object):
         if self.get_x() >= RIGHT_BORDER_X:
             self.set_x(RIGHT_BORDER_X)
 
-        self.current_face_direction = 'RIGHT'
+        self.current_face_direction = Direction.RIGHT
         self.player_right_sprite.play()
 
     def is_alive(self):
-        return self.state is 'ALIVE'
+        return self.state is PlayerState.ALIVE
 
     def die(self):
-        self.state = 'DYING'
+        self.state = PlayerState.DYING
         self.player_die_sprite.play()
 
     def place_bomb(self):
@@ -83,20 +96,23 @@ class Player(Object):
 
     def draw(self, game_display):
         print("Position: ", self.position())
-        if self.state is 'DEAD':
+
+        if self.state is PlayerState.DEAD:
             return None
-        if self.state is 'DYING':
+
+        if self.state is PlayerState.DYING:
             if self.player_die_sprite.isFinished():
-                self.state = 'DEAD'
+                self.state = PlayerState.DEAD
             self.player_die_sprite.blit(game_display, self.position())
-        elif self.state is 'ALIVE':
-            if self.current_face_direction is 'DOWN':
+
+        elif self.state is PlayerState.ALIVE:
+            if self.current_face_direction is Direction.DOWN:
                 self.player_down_sprite.blit(game_display, self.position())
-            if self.current_face_direction is 'UP':
+            if self.current_face_direction is Direction.UP:
                 self.player_up_sprite.blit(game_display, self.position())
-            if self.current_face_direction is 'LEFT':
+            if self.current_face_direction is Direction.LEFT:
                 self.player_left_sprite.blit(game_display, self.position())
-            if self.current_face_direction is 'RIGHT':
+            if self.current_face_direction is Direction.RIGHT:
                 self.player_right_sprite.blit(game_display, self.position())
 
     def _create_player_down(self):

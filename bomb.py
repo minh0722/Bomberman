@@ -41,10 +41,10 @@ class Bomb(Object):
         self.tiles_can_explode_down = arena.down_tiles_can_be_exploded(
                                                 self.normalize_position())
 
-        print("CAN EXPLODE LEFT: ", self.tiles_can_explode_left)
-        print("CAN EXPLODE RIGHT: ", self.tiles_can_explode_right)
-        print("CAN EXPLODE UP: ", self.tiles_can_explode_up)
-        print("CAN EXPLODE DOWN: ", self.tiles_can_explode_down)
+        # print("CAN EXPLODE LEFT: ", self.tiles_can_explode_left)
+        # print("CAN EXPLODE RIGHT: ", self.tiles_can_explode_right)
+        # print("CAN EXPLODE UP: ", self.tiles_can_explode_up)
+        # print("CAN EXPLODE DOWN: ", self.tiles_can_explode_down)
 
         self.bomb_sprite.play()
         self.ticking_timer = BOMB_TIMER
