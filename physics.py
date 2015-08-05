@@ -24,7 +24,6 @@ class Physics:
                 elif direction == Direction.DOWN:
                     if y + TILE_SIZE >= wall.get_y():
                         y = wall.get_y() - TILE_SIZE
-                        print("Y: ", y)
 
                 elif direction == Direction.LEFT:
                     if x <= wall.get_x() + wall.get_width():
@@ -37,14 +36,17 @@ class Physics:
         return (x, y)
 
     def _resolve_border_collision(self, x, y, direction):
+        LAST_ROW_Y = 630
+        LAST_COLUMN_X = 720
+
         if direction == Direction.UP:
             if y < 45:
                 y = 45
                 return (x, y)
 
         elif direction == Direction.DOWN:
-            if y + TILE_SIZE > 630:
-                y = 630 - TILE_SIZE
+            if y + TILE_SIZE > LAST_ROW_Y:
+                y = LAST_ROW_Y - TILE_SIZE
                 return (x, y)
 
         elif direction == Direction.LEFT:
@@ -53,8 +55,8 @@ class Physics:
                 return (x, y)
 
         elif direction == Direction.RIGHT:
-            if x + TILE_SIZE > 720:
-                x = 720 - TILE_SIZE
+            if x + TILE_SIZE > LAST_COLUMN_X:
+                x = LAST_COLUMN_X - TILE_SIZE
                 return (x, y)
 
         return (-1, -1)
