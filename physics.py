@@ -24,6 +24,7 @@ class Physics:
                 elif direction == Direction.DOWN:
                     if y + TILE_SIZE >= wall.get_y():
                         y = wall.get_y() - TILE_SIZE
+                        print("Y: ", y)
 
                 elif direction == Direction.LEFT:
                     if x <= wall.get_x() + wall.get_width():
@@ -42,8 +43,8 @@ class Physics:
                 return (x, y)
 
         elif direction == Direction.DOWN:
-            if y + TILE_SIZE > 585:
-                y = 585 - TILE_SIZE
+            if y + TILE_SIZE > 630:
+                y = 630 - TILE_SIZE
                 return (x, y)
 
         elif direction == Direction.LEFT:
