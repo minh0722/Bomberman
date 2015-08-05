@@ -5,6 +5,7 @@ from game_settings import *
 from pyganim import *
 from object import Object
 from bomb import Bomb, BombState
+from physics import Physics
 
 
 class TileType:
@@ -39,6 +40,10 @@ class Arena(Drawable):
         self.arena_surface = self._load_arena_surface()
         self.non_destructible_walls = self._load_non_destructible_walls()
         self.players = list()
+        self.physics = Physics(self)
+
+        # for wall in self.non_destructible_walls:
+        #     print(wall.position())
 
     def draw(self, game_display):
         game_display.blit(self.arena_surface, (0, 0))

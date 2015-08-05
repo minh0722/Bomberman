@@ -17,10 +17,10 @@ class Object(Drawable):
         this_object_top_left = (self.x, self.y)
         this_object_bottom_right = (self.x + self.width, self.y + self.height)
 
-        return this_object_bottom_right[1] >= top_left[1] \
-           and this_object_bottom_right[0] >= top_left[0] \
-           and this_object_top_left[1] <= bottom_right[1] \
-           and this_object_top_left[0] <= bottom_right[0]
+        return this_object_bottom_right[1] > top_left[1] \
+           and this_object_bottom_right[0] > top_left[0] \
+           and this_object_top_left[1] < bottom_right[1] \
+           and this_object_top_left[0] < bottom_right[0]
 
     def contains_point(self, point):
         return self.x <= point[0] and point[0] <= self.x + self.width \
@@ -44,9 +44,9 @@ class Object(Drawable):
     def set_y(self, y):
         self.y = y
 
-    def set_xy(self, x, y):
-        self.x = x
-        self.y = y
+    def set_position(self, position):
+        self.x = position[0]
+        self.y = position[1]
 
     def move_up(self, y):
         self.y -= y

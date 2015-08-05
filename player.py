@@ -61,17 +61,12 @@ class Player(Object):
         Object.move_up(self, self.movement_speed)
         self.tile_position.move_up(self.movement_speed)
 
-        if self.get_y() <= UP_BORDER_Y:
-            self.set_y(UP_BORDER_Y)
-            self.tile_position.set_y(45)
+        resolved_tile_position = self.arena.physics.resolve_player_collision(
+            self.tile_position,
+            Direction.UP)
 
-        # walls = self.arena.get_non_destructible_walls()
-
-        # for wall in walls:
-        #     if self.tile_position.is_intersected_with(wall):
-        #         self.tile_position.set_y(wall.get_y() + wall.get_height())
-        #         self.set_y(self.tile_position.get_y() - TILE_SIZE)
-        #         break
+        self.tile_position.set_position(resolved_tile_position)
+        self.set_y(resolved_tile_position[1] - TILE_OFFSET_Y)
 
         self.current_face_direction = Direction.UP
         self.player_up_sprite.play()
@@ -80,17 +75,12 @@ class Player(Object):
         Object.move_down(self, self.movement_speed)
         self.tile_position.move_down(self.movement_speed)
 
-        if self.get_y() >= DOWN_BORDER_Y:
-            self.set_y(DOWN_BORDER_Y)
-            self.tile_position.set_y(630)
+        resolved_tile_position = self.arena.physics.resolve_player_collision(
+            self.tile_position,
+            Direction.DOWN)
 
-        # walls = self.arena.get_non_destructible_walls()
-
-        # for wall in walls:
-        #     if self.is_intersected_with(wall):
-        #         self.tile_position.set_y(wall.get_y())
-        #         self.set_y(self.tile_position.get_y() - TILE_SIZE)
-        #         break
+        self.tile_position.set_position(resolved_tile_position)
+        self.set_y(resolved_tile_position[1] - TILE_OFFSET_Y)
 
         self.current_face_direction = Direction.DOWN
         self.player_down_sprite.play()
@@ -99,17 +89,12 @@ class Player(Object):
         Object.move_left(self, self.movement_speed)
         self.tile_position.move_left(self.movement_speed)
 
-        if self.get_x() <= LEFT_BORDER_X:
-            self.set_x(LEFT_BORDER_X)
-            self.tile_position.set_x(45)
+        resolved_tile_position = self.arena.physics.resolve_player_collision(
+            self.tile_position,
+            Direction.LEFT)
 
-        # walls = self.arena.get_non_destructible_walls()
-
-        # for wall in walls:
-        #     if self.is_intersected_with(wall):
-        #         self.tile_position.set_x(wall.get_x() + wall.get_width())
-        #         self.set_y(self.tile_position.get_x() - 23)
-        #         break
+        self.tile_position.set_position(resolved_tile_position)
+        self.set_x(resolved_tile_position[0] - TILE_OFFSET_X)
 
         self.current_face_direction = Direction.LEFT
         self.player_left_sprite.play()
@@ -118,17 +103,12 @@ class Player(Object):
         Object.move_right(self, self.movement_speed)
         self.tile_position.move_right(self.movement_speed)
 
-        if self.get_x() >= RIGHT_BORDER_X:
-            self.set_x(RIGHT_BORDER_X)
-            self.tile_position.set_x(720)
+        resolved_tile_position = self.arena.physics.resolve_player_collision(
+            self.tile_position,
+            Direction.RIGHT)
 
-        # walls = self.arena.get_non_destructible_walls()
-
-        # for wall in walls:
-        #     if self.is_intersected_with(wall):
-        #         self.tile_position.set_x(wall.get_x())
-        #         self.set_y(self.tile_position.get_x() - 23)
-        #         break
+        self.tile_position.set_position(resolved_tile_position)
+        self.set_x(resolved_tile_position[0] - TILE_OFFSET_X)
 
         self.current_face_direction = Direction.RIGHT
         self.player_right_sprite.play()

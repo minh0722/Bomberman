@@ -56,11 +56,11 @@ class Bomb(Object):
 
     def draw(self, game_display):
         if self.ticking_timer > 0:
-            self.ticking_timer = self.ticking_timer - 1
+            self.ticking_timer -= 1
         else:
             self._set_state(BombState.EXPLODING)
             if self.explosion_duration > 0:
-                self.explosion_duration = self.explosion_duration - 1
+                self.explosion_duration -= 1
             else:
                 self._set_state(BombState.EXPLODED)
 
