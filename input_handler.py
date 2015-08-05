@@ -52,7 +52,7 @@ class InputHandler:
         if (keys[pygame.K_DOWN] and not keys[pygame.K_UP] and
                 not keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]):
             self.player.move_down()
-            
+
         if (keys[pygame.K_LEFT] and not keys[pygame.K_UP] and
                 not keys[pygame.K_RIGHT] and not keys[pygame.K_DOWN]):
             self.player.move_left()

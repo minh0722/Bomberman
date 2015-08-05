@@ -18,9 +18,9 @@ class Object(Drawable):
         this_object_bottom_right = (self.x + self.width, self.y + self.height)
 
         return this_object_bottom_right[1] > top_left[1] \
-           and this_object_bottom_right[0] > top_left[0] \
-           and this_object_top_left[1] < bottom_right[1] \
-           and this_object_top_left[0] < bottom_right[0]
+            and this_object_bottom_right[0] > top_left[0] \
+            and this_object_top_left[1] < bottom_right[1] \
+            and this_object_top_left[0] < bottom_right[0]
 
     def contains_point(self, point):
         return self.x <= point[0] and point[0] <= self.x + self.width \
@@ -33,10 +33,10 @@ class Object(Drawable):
         return self.height
 
     def get_x(self):
-    	return self.x
+        return self.x
 
     def get_y(self):
-    	return self.y
+        return self.y
 
     def set_x(self, x):
         self.x = x
@@ -70,18 +70,25 @@ class Object(Drawable):
         X_OFFSET = 43
         Y_OFFSET = 24
 
-        if self.x in range(LEFT_BORDER_X, 52) and self.y in range(0, Y_OFFSET):
+        if self._in_first_column() and self._in_first_row():
             return (1, 1)
 
-        elif self.x not in range(LEFT_BORDER_X, X_OFFSET) and self.y not in range(0, Y_OFFSET):
-            return ((self.y - Y_OFFSET) // 45 + 2, (self.x - X_OFFSET) // 45 + 2)
+        elif not self._in_first_column() and not self._in_first_row():
+            return ((self.y - Y_OFFSET) // 45 + 2,
+                    (self.x - X_OFFSET) // 45 + 2)
 
-        elif self.x in range(LEFT_BORDER_X, 52) and self.y not in range(0, Y_OFFSET):
-            return ((self.y - Y_OFFSET) // 45 + 2 ,1)
-            
-        elif self.x not in range(LEFT_BORDER_X, X_OFFSET) and self.y in range(0, Y_OFFSET):
+        elif self._in_first_column() and not self._in_first_row():
+            return ((self.y - Y_OFFSET) // 45 + 2, 1)
+
+        elif not self._in_first_column() and self._in_first_row():
             return (1, (self.x - X_OFFSET) // 45 + 2)
 
     @staticmethod
     def get_normalized_position(position):
         return (position[1] // 45 + 1, (position[0] - LEFT_BORDER_X) // 45 + 1)
+
+    def _in_first_column(self):
+        return self.x in range(LEFT_BORDER_X, 52)
+
+    def _in_first_row(self):
+        return self.y in range(0, 24)

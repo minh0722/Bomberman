@@ -122,13 +122,16 @@ class Player(Object):
 
     def place_bomb(self):
         if self.placed_bomb < self.bomb_capacity:
-            normalized_position = Object.get_normalized_position(self.position())
+            normalized_position = Object.get_normalized_position(
+                                    self.position())
 
             correct_position = (
                 normalized_position[1] * TILE_SIZE,
                 normalized_position[0] * TILE_SIZE)
 
-            self.bombs.append(Bomb(correct_position, self.bomb_range, self.arena))
+            self.bombs.append(
+                Bomb(correct_position, self.bomb_range, self.arena))
+
             self.placed_bomb += 1
 
     def pause_reset_sprite(self):
@@ -139,7 +142,7 @@ class Player(Object):
         self._draw_player(game_display)
 
         print("Position: ", self.position())
-        print("tile_position: ",self.tile_position.position())
+        print("tile_position: ", self.tile_position.position())
 
     def _draw_bombs(self, game_display):
         for bomb in self.bombs:

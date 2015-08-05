@@ -45,11 +45,6 @@ class Bomb(Object):
         self.tiles_can_explode_down = arena.down_tiles_can_be_exploded(
                                                 self.normalize_position())
 
-        # print("CAN EXPLODE LEFT: ", self.tiles_can_explode_left)
-        # print("CAN EXPLODE RIGHT: ", self.tiles_can_explode_right)
-        # print("CAN EXPLODE UP: ", self.tiles_can_explode_up)
-        # print("CAN EXPLODE DOWN: ", self.tiles_can_explode_down)
-
         self.bomb_sprite.play()
         self.ticking_timer = BOMB_TIMER
         self.explosion_duration = EXPLOSION_DURATION
@@ -67,10 +62,13 @@ class Bomb(Object):
         if self._explosion_finished():
             self._set_state(BombState.EXPLODED)
             return None
+
         if self.state is BombState.TICKING:
             self.bomb_sprite.blit(game_display, self.position())
+
         if self.state is BombState.EXPLODING:
             self._draw_explosions(game_display)
+
         if self._done_ticking():
             self._set_state(BombState.EXPLODING)
 
@@ -113,10 +111,10 @@ class Bomb(Object):
         x = self.normalize_position()[0]
         y = self.normalize_position()[1]
 
-        max_explosion_index = y - min(self.tiles_can_explode_left, self.range) - 1
+        max_index = y - min(self.tiles_can_explode_left, self.range) - 1
 
-        for explosion_x in range(y - 1, max_explosion_index, -1):
-            if explosion_x == max_explosion_index + 1:
+        for explosion_x in range(y - 1, max_index, -1):
+            if explosion_x == max_index + 1:
                 self.explosion_left_end.blit(
                     game_display,
                     (explosion_x * TILE_SIZE, x * TILE_SIZE))
@@ -135,10 +133,10 @@ class Bomb(Object):
         x = self.normalize_position()[0]
         y = self.normalize_position()[1]
 
-        max_explosion_index = y + min(self.tiles_can_explode_right, self.range) + 1
+        max_index = y + min(self.tiles_can_explode_right, self.range) + 1
 
-        for explosion_x in range(y + 1, max_explosion_index):
-            if explosion_x == max_explosion_index - 1:
+        for explosion_x in range(y + 1, max_index):
+            if explosion_x == max_index - 1:
                 self.explosion_right_end.blit(
                     game_display,
                     (explosion_x * TILE_SIZE, x * TILE_SIZE))
@@ -157,10 +155,10 @@ class Bomb(Object):
         x = self.normalize_position()[0]
         y = self.normalize_position()[1]
 
-        max_explosion_index = x - min(self.tiles_can_explode_up, self.range) - 1
+        max_index = x - min(self.tiles_can_explode_up, self.range) - 1
 
-        for explosion_y in range(x - 1, max_explosion_index, -1):
-            if explosion_y == max_explosion_index + 1:
+        for explosion_y in range(x - 1, max_index, -1):
+            if explosion_y == max_index + 1:
                 self.explosion_up_end.blit(
                     game_display,
                     (y * TILE_SIZE, explosion_y * TILE_SIZE))
@@ -179,10 +177,10 @@ class Bomb(Object):
         x = self.normalize_position()[0]
         y = self.normalize_position()[1]
 
-        max_explosion_index = x + min(self.tiles_can_explode_down, self.range) + 1
+        max_index = x + min(self.tiles_can_explode_down, self.range) + 1
 
-        for explosion_y in range(x + 1, max_explosion_index):
-            if explosion_y == max_explosion_index - 1:
+        for explosion_y in range(x + 1, max_index):
+            if explosion_y == max_index - 1:
                 self.explosion_down_end.blit(
                     game_display,
                     (y * TILE_SIZE, explosion_y * TILE_SIZE))
@@ -196,84 +194,147 @@ class Bomb(Object):
 
     def _create_bomb(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_1.png", BOMB_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_2.png", BOMB_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_3.png", BOMB_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_4.png", BOMB_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_1.png", BOMB_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_2.png", BOMB_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_3.png", BOMB_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/normal_bomb_4.png", BOMB_FRAME_DURATION)],
+            (TILE_RESOURCE_PATH + "normal_bomb_1.png", BOMB_FRAME_DURATION),
+            (TILE_RESOURCE_PATH + "normal_bomb_2.png", BOMB_FRAME_DURATION),
+            (TILE_RESOURCE_PATH + "normal_bomb_3.png", BOMB_FRAME_DURATION),
+            (TILE_RESOURCE_PATH + "normal_bomb_4.png", BOMB_FRAME_DURATION),
+            (TILE_RESOURCE_PATH + "normal_bomb_1.png", BOMB_FRAME_DURATION),
+            (TILE_RESOURCE_PATH + "normal_bomb_2.png", BOMB_FRAME_DURATION),
+            (TILE_RESOURCE_PATH + "normal_bomb_3.png", BOMB_FRAME_DURATION),
+            (TILE_RESOURCE_PATH + "normal_bomb_4.png", BOMB_FRAME_DURATION)],
             loop=False)
 
     def _create_center_explosion(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_center.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_center.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_center.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_center.png", EXPLOSION_FRAME_DURATION)],
+            (EXPLOSION1_RESOURCE_PATH + "explosion_center.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_center.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION1_RESOURCE_PATH + "explosion_center.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_center.png",
+                EXPLOSION_FRAME_DURATION)],
             loop=False)
 
     def _create_left_explosion(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_left.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_left.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_left.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_left.png", EXPLOSION_FRAME_DURATION)],
+            (EXPLOSION1_RESOURCE_PATH + "explosion_left.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_left.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION1_RESOURCE_PATH + "explosion_left.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_left.png",
+                EXPLOSION_FRAME_DURATION)],
             loop=False)
 
     def _create_right_explosion(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_right.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_right.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_right.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_right.png", EXPLOSION_FRAME_DURATION)],
+            (EXPLOSION1_RESOURCE_PATH + "explosion_right.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_right.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION1_RESOURCE_PATH + "explosion_right.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_right.png",
+                EXPLOSION_FRAME_DURATION)],
             loop=False)
 
     def _create_up_explosion(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_up.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_up.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_up.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_up.png", EXPLOSION_FRAME_DURATION)],
+            (EXPLOSION1_RESOURCE_PATH + "explosion_up.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_up.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION1_RESOURCE_PATH + "explosion_up.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_up.png",
+                EXPLOSION_FRAME_DURATION)],
             loop=False)
 
     def _create_down_explosion(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_down.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_down.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_down.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_down.png", EXPLOSION_FRAME_DURATION)],
+            (EXPLOSION1_RESOURCE_PATH + "explosion_down.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_down.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION1_RESOURCE_PATH + "explosion_down.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_down.png",
+                EXPLOSION_FRAME_DURATION)],
             loop=False)
 
     def _create_left_end_explosion(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_left_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_left_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_left_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_left_end.png", EXPLOSION_FRAME_DURATION)],
+            (EXPLOSION1_RESOURCE_PATH + "explosion_left_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_left_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION1_RESOURCE_PATH + "explosion_left_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_left_end.png",
+                EXPLOSION_FRAME_DURATION)],
             loop=False)
 
     def _create_right_end_explosion(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_right_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_right_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_right_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_right_end.png", EXPLOSION_FRAME_DURATION)],
+            (EXPLOSION1_RESOURCE_PATH + "explosion_right_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_right_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION1_RESOURCE_PATH + "explosion_right_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_right_end.png",
+                EXPLOSION_FRAME_DURATION)],
             loop=False)
 
     def _create_up_end_explosion(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_up_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_up_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_up_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_up_end.png", EXPLOSION_FRAME_DURATION)],
+            (EXPLOSION1_RESOURCE_PATH + "explosion_up_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_up_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION1_RESOURCE_PATH + "explosion_up_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_up_end.png",
+                EXPLOSION_FRAME_DURATION)],
             loop=False)
 
     def _create_down_end_explosion(self):
         return PygAnimation([
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_down_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_down_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_1/explosion_down_end.png", EXPLOSION_FRAME_DURATION),
-            ("resources/battle_tiles/battle_stage_1/explosion_2/explosion_down_end.png", EXPLOSION_FRAME_DURATION)],
+            (EXPLOSION1_RESOURCE_PATH + "explosion_down_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_down_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION1_RESOURCE_PATH + "explosion_down_end.png",
+                EXPLOSION_FRAME_DURATION),
+
+            (EXPLOSION2_RESOURCE_PATH + "explosion_down_end.png",
+                EXPLOSION_FRAME_DURATION)],
             loop=False)

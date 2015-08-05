@@ -34,3 +34,7 @@ PLAYER_RECTANGLE_HEIGHT = 45
 # DON'T CHANGE THIS!!!
 TILE_OFFSET_X = 23
 TILE_OFFSET_Y = 45
+
+TILE_RESOURCE_PATH = "resources/battle_tiles/battle_stage_1/"
+EXPLOSION1_RESOURCE_PATH = "resources/battle_tiles/battle_stage_1/explosion_1/"
+EXPLOSION2_RESOURCE_PATH = "resources/battle_tiles/battle_stage_1/explosion_2/"

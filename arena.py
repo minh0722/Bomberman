@@ -140,8 +140,10 @@ class Arena(Drawable):
                 x = player.normalize_position_for_explosion()[0]
                 y = player.normalize_position_for_explosion()[1]
 
+                print("normalized_position_for_explosion: ", (x, y))
+
                 if self.arena_matrix[x][y] == TileType.FLAME:
-                    player.die()        
+                    player.die()
 
     def _can_place_bomb(self, x, y):
         return self.arena_matrix[x][y] == 0
@@ -243,13 +245,17 @@ class Arena(Drawable):
 
     def _create_tile(self, type):
         if type is TileType.GRASS:
-            return load_image('battle_tiles/battle_stage_1/grass_tile.png').convert()
+            return load_image(
+                "battle_tiles/battle_stage_1/grass_tile.png").convert()
 
         elif type is TileType.DESTRUCTIBLE:
-            return load_image('battle_tiles/battle_stage_1/destructible_tile.png').convert()
+            return load_image(
+                "battle_tiles/battle_stage_1/destructible_tile.png").convert()
 
         elif type is TileType.NON_DESTRUCTIBLE:
-            return load_image('battle_tiles/battle_stage_1/non_destructible_tile.png').convert()
+            return load_image(
+                "battle_tiles/battle_stage_1/non_destruct_tile.png").convert()
 
         elif type is TileType.BORDER:
-            return load_image('battle_tiles/battle_stage_1/border_tile.png').convert()
+            return load_image(
+                "battle_tiles/battle_stage_1/border_tile.png").convert()
