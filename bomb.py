@@ -12,11 +12,7 @@ class BombState:
 
 class Bomb(Object):
     def __init__(self, position, bomb_range, arena):
-        Object.__init__(
-            self,
-            position,
-            TILE_SIZE,
-            TILE_SIZE)
+        Object.__init__(self, position, TILE_WIDTH, TILE_HEIGHT)
 
         self.range = bomb_range
         self.state = BombState.TICKING
@@ -100,7 +96,7 @@ class Bomb(Object):
 
         self.explosion_center.blit(
             game_display,
-            (y * TILE_SIZE, x * TILE_SIZE))
+            (y * TILE_HEIGHT, x * TILE_WIDTH))
 
         self.explosion_center.play()
 
@@ -117,11 +113,11 @@ class Bomb(Object):
             if explosion_x == max_index + 1:
                 self.explosion_left_end.blit(
                     game_display,
-                    (explosion_x * TILE_SIZE, x * TILE_SIZE))
+                    (explosion_x * TILE_WIDTH, x * TILE_WIDTH))
             else:
                 self.explosion_left.blit(
                     game_display,
-                    (explosion_x * TILE_SIZE, x * TILE_SIZE))
+                    (explosion_x * TILE_WIDTH, x * TILE_WIDTH))
 
         self.explosion_left.play()
         self.explosion_left_end.play()
@@ -139,11 +135,11 @@ class Bomb(Object):
             if explosion_x == max_index - 1:
                 self.explosion_right_end.blit(
                     game_display,
-                    (explosion_x * TILE_SIZE, x * TILE_SIZE))
+                    (explosion_x * TILE_WIDTH, x * TILE_WIDTH))
             else:
                 self.explosion_right.blit(
                     game_display,
-                    (explosion_x * TILE_SIZE, x * TILE_SIZE))
+                    (explosion_x * TILE_WIDTH, x * TILE_WIDTH))
 
         self.explosion_right.play()
         self.explosion_right_end.play()
@@ -161,11 +157,11 @@ class Bomb(Object):
             if explosion_y == max_index + 1:
                 self.explosion_up_end.blit(
                     game_display,
-                    (y * TILE_SIZE, explosion_y * TILE_SIZE))
+                    (y * TILE_HEIGHT, explosion_y * TILE_HEIGHT))
             else:
                 self.explosion_up.blit(
                     game_display,
-                    (y * TILE_SIZE, explosion_y * TILE_SIZE))
+                    (y * TILE_HEIGHT, explosion_y * TILE_HEIGHT))
 
         self.explosion_up.play()
         self.explosion_up_end.play()
@@ -183,11 +179,11 @@ class Bomb(Object):
             if explosion_y == max_index - 1:
                 self.explosion_down_end.blit(
                     game_display,
-                    (y * TILE_SIZE, explosion_y * TILE_SIZE))
+                    (y * TILE_HEIGHT, explosion_y * TILE_HEIGHT))
             else:
                 self.explosion_down.blit(
                     game_display,
-                    (y * TILE_SIZE, explosion_y * TILE_SIZE))
+                    (y * TILE_HEIGHT, explosion_y * TILE_HEIGHT))
 
         self.explosion_down.play()
         self.explosion_down_end.play()

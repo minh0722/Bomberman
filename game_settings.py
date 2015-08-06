@@ -12,7 +12,8 @@ BOMB_TIMER = 100
 EXPLOSION_DURATION = 30
 
 # -----------------internal defines-----------------
-TILE_SIZE = 45
+TILE_WIDTH = 45
+TILE_HEIGHT = 45
 
 LEFT_BORDER_X = 22
 RIGHT_BORDER_X = 652

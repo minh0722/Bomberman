@@ -214,17 +214,17 @@ class Arena(Drawable):
                 if self.arena_matrix[x][y] == TileType.GRASS:
                     arena.blit(
                         self._create_tile(TileType.GRASS),
-                        (y * TILE_SIZE, x * TILE_SIZE))
+                        (y * TILE_HEIGHT, x * TILE_WIDTH))
 
                 elif self.arena_matrix[x][y] == TileType.NON_DESTRUCTIBLE:
                     arena.blit(
                         self._create_tile(TileType.NON_DESTRUCTIBLE),
-                        (y * TILE_SIZE, x * TILE_SIZE))
+                        (y * TILE_HEIGHT, x * TILE_WIDTH))
 
                 elif self.arena_matrix[x][y] == TileType.BORDER:
                     arena.blit(
                         self._create_tile(TileType.BORDER),
-                        (y * TILE_SIZE, x * TILE_SIZE))
+                        (y * TILE_HEIGHT, x * TILE_WIDTH))
 
         return arena
 
@@ -235,9 +235,9 @@ class Arena(Drawable):
             for y in range(0, ARENA_HEIGHT):
                 if self.arena_matrix[x][y] == TileType.NON_DESTRUCTIBLE:
                     wall = Object(
-                        (y * TILE_SIZE, x * TILE_SIZE),
-                        TILE_SIZE,
-                        TILE_SIZE)
+                        (y * TILE_HEIGHT, x * TILE_WIDTH),
+                        TILE_WIDTH,
+                        TILE_HEIGHT)
 
                     walls.append(wall)
 

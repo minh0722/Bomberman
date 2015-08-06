@@ -114,8 +114,8 @@ class Player(Object):
                                     self.position())
 
             correct_position = (
-                normalized_position[1] * TILE_SIZE,
-                normalized_position[0] * TILE_SIZE)
+                normalized_position[1] * TILE_WIDTH,
+                normalized_position[0] * TILE_HEIGHT)
 
             self.bombs.append(
                 Bomb(correct_position, self.bomb_range, self.arena))

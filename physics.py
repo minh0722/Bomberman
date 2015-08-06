@@ -37,8 +37,8 @@ class Physics:
                 border_resolvement_is_done = True
 
         elif direction == Direction.DOWN:
-            if y + TILE_SIZE > LAST_ROW_Y:
-                y = LAST_ROW_Y - TILE_SIZE
+            if y + TILE_HEIGHT > LAST_ROW_Y:
+                y = LAST_ROW_Y - TILE_HEIGHT
                 border_resolvement_is_done = True
 
         elif direction == Direction.LEFT:
@@ -47,8 +47,8 @@ class Physics:
                 border_resolvement_is_done = True
 
         elif direction == Direction.RIGHT:
-            if x + TILE_SIZE > LAST_COLUMN_X:
-                x = LAST_COLUMN_X - TILE_SIZE
+            if x + TILE_WIDTH > LAST_COLUMN_X:
+                x = LAST_COLUMN_X - TILE_WIDTH
                 border_resolvement_is_done = True
 
         player.set_player_tile_position((x, y))
@@ -81,7 +81,7 @@ class Physics:
 
             else:
                 player.set_player_tile_position(
-                    (x, wall.get_y() - TILE_SIZE))
+                    (x, wall.get_y() - TILE_HEIGHT))
 
         elif direction == Direction.LEFT:
             if self._player_is_up_to_wall(player_tile, wall):
