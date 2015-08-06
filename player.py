@@ -57,16 +57,19 @@ class Player(Object):
             PLAYER_RECTANGLE_WIDTH,
             PLAYER_RECTANGLE_WIDTH)
 
+    def set_player_tile_position(self, position):
+        self.tile_position.set_position(position)
+        self.set_position(
+            (position[0] - TILE_OFFSET_X, position[1] - TILE_OFFSET_Y))
+
+    def get_player_tile(self):
+        return self.tile_position
+
     def move_up(self):
         Object.move_up(self, self.movement_speed)
         self.tile_position.move_up(self.movement_speed)
 
-        resolved_tile_position = self.arena.physics.resolve_player_collision(
-            self.tile_position,
-            Direction.UP)
-
-        self.tile_position.set_position(resolved_tile_position)
-        self.set_y(resolved_tile_position[1] - TILE_OFFSET_Y)
+        self.arena.physics.resolve_player_collision(self, Direction.UP)
 
         self.current_face_direction = Direction.UP
         self.player_up_sprite.play()
@@ -75,12 +78,7 @@ class Player(Object):
         Object.move_down(self, self.movement_speed)
         self.tile_position.move_down(self.movement_speed)
 
-        resolved_tile_position = self.arena.physics.resolve_player_collision(
-            self.tile_position,
-            Direction.DOWN)
-
-        self.tile_position.set_position(resolved_tile_position)
-        self.set_y(resolved_tile_position[1] - TILE_OFFSET_Y)
+        self.arena.physics.resolve_player_collision(self, Direction.DOWN)
 
         self.current_face_direction = Direction.DOWN
         self.player_down_sprite.play()
@@ -89,12 +87,7 @@ class Player(Object):
         Object.move_left(self, self.movement_speed)
         self.tile_position.move_left(self.movement_speed)
 
-        resolved_tile_position = self.arena.physics.resolve_player_collision(
-            self.tile_position,
-            Direction.LEFT)
-
-        self.tile_position.set_position(resolved_tile_position)
-        self.set_x(resolved_tile_position[0] - TILE_OFFSET_X)
+        self.arena.physics.resolve_player_collision(self, Direction.LEFT)
 
         self.current_face_direction = Direction.LEFT
         self.player_left_sprite.play()
@@ -103,12 +96,7 @@ class Player(Object):
         Object.move_right(self, self.movement_speed)
         self.tile_position.move_right(self.movement_speed)
 
-        resolved_tile_position = self.arena.physics.resolve_player_collision(
-            self.tile_position,
-            Direction.RIGHT)
-
-        self.tile_position.set_position(resolved_tile_position)
-        self.set_x(resolved_tile_position[0] - TILE_OFFSET_X)
+        self.arena.physics.resolve_player_collision(self, Direction.RIGHT)
 
         self.current_face_direction = Direction.RIGHT
         self.player_right_sprite.play()

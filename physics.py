@@ -6,86 +6,113 @@ class Physics:
     def __init__(self, arena):
         self.arena = arena
 
-    def resolve_player_collision(self, player_tile, direction):
-        x = player_tile.get_x()
-        y = player_tile.get_y()
+    def resolve_player_collision(self, player, direction):
+        if self._resolve_border_collision(player, direction):
+            return None
 
-        resolved_border_position = \
-            self._resolve_border_collision(x, y, direction)
-
-        if resolved_border_position != (-1, -1):
-            return resolved_border_position
+        player_tile = player.get_player_tile()
 
         for wall in self.arena.non_destructible_walls:
             if player_tile.is_intersected_with(wall):
-                return self._resolve_wall_collision(
-                    player_tile,
-                    wall,
-                    direction)
+                self._resolve_wall_collision(player, wall, direction)
+                return None
 
-        return player_tile.position()
+    def _resolve_border_collision(self, player, direction):
+        # returns True if border resolvement is done
+        # else return False
 
-    def _resolve_border_collision(self, x, y, direction):
         LAST_ROW_Y = 630
         LAST_COLUMN_X = 720
+
+        player_tile = player.get_player_tile()
+
+        x = player_tile.get_x()
+        y = player_tile.get_y()
+
+        border_resolvement_is_done = False
 
         if direction == Direction.UP:
             if y < 45:
                 y = 45
-                return (x, y)
+                border_resolvement_is_done = True
 
         elif direction == Direction.DOWN:
             if y + TILE_SIZE > LAST_ROW_Y:
                 y = LAST_ROW_Y - TILE_SIZE
-                return (x, y)
+                border_resolvement_is_done = True
 
         elif direction == Direction.LEFT:
             if x < 45:
                 x = 45
-                return (x, y)
+                border_resolvement_is_done = True
 
         elif direction == Direction.RIGHT:
             if x + TILE_SIZE > LAST_COLUMN_X:
                 x = LAST_COLUMN_X - TILE_SIZE
-                return (x, y)
+                border_resolvement_is_done = True
 
-        return (-1, -1)
+        player.set_player_tile_position((x, y))
 
-    def _resolve_wall_collision(self, player_tile, wall, direction):
+        return border_resolvement_is_done
+
+    def _resolve_wall_collision(self, player, wall, direction):
+        player_tile = player.get_player_tile()
+
         x = player_tile.get_x()
         y = player_tile.get_y()
 
         if direction == Direction.UP:
-            y = wall.get_y() + wall.get_height()
+            if self._player_is_left_to_wall(player_tile, wall):
+                player.move_left()
+
+            elif self._player_is_right_to_wall(player_tile, wall):
+                player.move_right()
+
+            else:
+                player.set_player_tile_position(
+                    (x, wall.get_y() + wall.get_height()))
 
         elif direction == Direction.DOWN:
-            y = wall.get_y() - TILE_SIZE
+            if self._player_is_left_to_wall(player_tile, wall):
+                player.move_left()
+
+            elif self._player_is_right_to_wall(player_tile, wall):
+                player.move_right()
+
+            else:
+                player.set_player_tile_position(
+                    (x, wall.get_y() - TILE_SIZE))
 
         elif direction == Direction.LEFT:
-            x = wall.get_x() + wall.get_width()
+            if self._player_is_up_to_wall(player_tile, wall):
+                player.move_up()
+
+            elif self._player_is_down_to_wall(player_tile, wall):
+                player.move_down()
+
+            else:
+                player.set_player_tile_position(
+                    (wall.get_x() + wall.get_width(), y))
 
         elif direction == Direction.RIGHT:
-            x = wall.get_x() - wall.get_width()
+            if self._player_is_up_to_wall(player_tile, wall):
+                player.move_up()
 
-        return (x, y)
+            elif self._player_is_down_to_wall(player_tile, wall):
+                player.move_down()
 
-    def _can_slide_wall(self, player_tile, wall, direction):
-        if direction == Direction.UP or direction == Direction.DOWN:
-            return self._player_is_left_to_wall(player_tile, wall) \
-                or self._player_is_right_to_wall(player_tile, wall)
-
-        elif direction == Direction.LEFT or direction == Direction.RIGHT:
-            return self._player_is_up_to_wall(player_tile, wall) \
-                or self._player_is_down_to_wall(player_tile, wall)
+            else:
+                player.set_player_tile_position(
+                    (wall.get_x() - wall.get_width(), y))
 
     def _player_is_left_to_wall(self, player_tile, wall):
-        return player_tile.get_x() <= wall.get_x() - 15
+        return player_tile.get_x() <= wall.get_x() - 10
 
     def _player_is_right_to_wall(self, player_tile, wall):
-        return player_tile.get_x() >= wall.get_x() + 20
+        return player_tile.get_x() >= wall.get_x() + 10
 
     def _player_is_up_to_wall(self, player_tile, wall):
-        return player_tile.get_y() <= wall.get_y() - 18
+        return player_tile.get_y() <= wall.get_y() - 10
 
     def _player_is_down_to_wall(self, player_tile, wall):
         return player_tile.get_y() >= wall.get_y() + 10
