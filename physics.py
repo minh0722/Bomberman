@@ -57,43 +57,29 @@ class Physics:
 
         if direction == Direction.UP:
             y = wall.get_y() + wall.get_height()
-            print("_player_is_left_to_wall: ", self._player_is_left_to_wall(player_tile, wall))
-            print("_player_is_right_to_wall: ", self._player_is_right_to_wall(player_tile, wall))
 
         elif direction == Direction.DOWN:
             y = wall.get_y() - TILE_SIZE
-            print("_player_is_left_to_wall: ", self._player_is_left_to_wall(player_tile, wall))
-            print("_player_is_right_to_wall: ", self._player_is_right_to_wall(player_tile, wall))
 
         elif direction == Direction.LEFT:
             x = wall.get_x() + wall.get_width()
-            print("_player_is_up_to_wall: ", self._player_is_up_to_wall(player_tile, wall))
-            print("_player_is_down_to_wall: ", self._player_is_down_to_wall(player_tile, wall))
 
         elif direction == Direction.RIGHT:
             x = wall.get_x() - wall.get_width()
-            print("_player_is_up_to_wall: ", self._player_is_up_to_wall(player_tile, wall))
-            print("_player_is_down_to_wall: ", self._player_is_down_to_wall(player_tile, wall))
 
         return (x, y)
 
     def _can_slide_wall(self, player_tile, wall, direction):
+        if direction == Direction.UP or direction == Direction.DOWN:
+            return self._player_is_left_to_wall(player_tile, wall) \
+                or self._player_is_right_to_wall(player_tile, wall)
 
-
-        if direction == Direction.UP:
-            pass
-
-        elif direction == Direction.DOWN:
-            pass
-
-        elif direction == Direction.LEFT:
-            pass
-
-        elif direction == Direction.RIGHT:
-            pass
+        elif direction == Direction.LEFT or direction == Direction.RIGHT:
+            return self._player_is_up_to_wall(player_tile, wall) \
+                or self._player_is_down_to_wall(player_tile, wall)
 
     def _player_is_left_to_wall(self, player_tile, wall):
-        return player_tile.get_x() <= wall.get_x() - 25
+        return player_tile.get_x() <= wall.get_x() - 15
 
     def _player_is_right_to_wall(self, player_tile, wall):
         return player_tile.get_x() >= wall.get_x() + 20
