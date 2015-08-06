@@ -34,16 +34,16 @@ class Bomb(Object):
         self.explosion_down_end = self._create_down_end_explosion()
 
         self.tiles_can_explode_left = arena.left_tiles_can_be_exploded(
-                                                self.normalize_position())
+                                        self.normalize_position())
 
         self.tiles_can_explode_right = arena.right_tiles_can_be_exploded(
-                                                self.normalize_position())
+                                        self.normalize_position())
 
         self.tiles_can_explode_up = arena.up_tiles_can_be_exploded(
-                                                self.normalize_position())
+                                        self.normalize_position())
 
         self.tiles_can_explode_down = arena.down_tiles_can_be_exploded(
-                                                self.normalize_position())
+                                        self.normalize_position())
 
         self.bomb_sprite.play()
         self.ticking_timer = BOMB_TIMER

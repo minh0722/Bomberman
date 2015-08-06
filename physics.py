@@ -56,19 +56,15 @@ class Physics:
         y = player_tile.get_y()
 
         if direction == Direction.UP:
-            if y <= wall.get_y() + wall.get_height():
-                y = wall.get_y() + wall.get_height()
+            y = wall.get_y() + wall.get_height()
 
         elif direction == Direction.DOWN:
-            if y + TILE_SIZE >= wall.get_y():
-                y = wall.get_y() - TILE_SIZE
+            y = wall.get_y() - TILE_SIZE
 
         elif direction == Direction.LEFT:
-            if x <= wall.get_x() + wall.get_width():
-                x = wall.get_x() + wall.get_width()
+            x = wall.get_x() + wall.get_width()
 
         elif direction == Direction.RIGHT:
-            if x + TILE_SIZE >= wall.get_x():
-                x = wall.get_x() - wall.get_width()
+            x = wall.get_x() - wall.get_width()
 
         return (x, y)

@@ -10,7 +10,7 @@ from input_handler import InputHandler
 
 pygame.init()
 
-game_display = pygame.display.set_mode((765,675))
+game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('BomberMin')
 
 pygame.display.update()
