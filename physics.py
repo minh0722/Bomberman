@@ -15,12 +15,12 @@ class Physics:
         for wall in self.arena.get_non_destructible_walls():
             if player_tile.is_intersected_with(wall):
                 self._resolve_wall_collision(player, wall, direction)
-                return None
+                break
 
         for wall in self.arena.get_destructible_walls():
             if player_tile.is_intersected_with(wall):
                 self._resolve_wall_collision(player, wall, direction)
-                return None
+                break
 
     def _resolve_border_collision(self, player, direction):
         # returns True if border resolvement is done
