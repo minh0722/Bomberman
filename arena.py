@@ -6,6 +6,7 @@ from pyganim import *
 from object import Object
 from bomb import Bomb, BombState
 from physics import Physics
+from destructible_wall import DestructibleWall
 
 
 class TileType:
@@ -22,7 +23,7 @@ class Arena(Drawable):
         Drawable.__init__(self)
         self.arena_matrix = [
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
             [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
             [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
             [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
@@ -39,15 +40,19 @@ class Arena(Drawable):
 
         self.arena_surface = self._load_arena_surface()
         self.non_destructible_walls = self._load_non_destructible_walls()
+        self.destructible_walls = self._load_destructible_walls()
         self.players = list()
         self.physics = Physics(self)
 
-        # for wall in self.non_destructible_walls:
+        # for wall in self.destructible_walls:
         #     print(wall.position())
 
     def draw(self, game_display):
         game_display.blit(self.arena_surface, (0, 0))
         self._draw_players(game_display)
+
+        for wall in self.destructible_walls:
+            wall.draw(game_display)
 
         # for row in range(0, len(self.arena_matrix)):
         #     print(self.arena_matrix[row])
@@ -55,6 +60,9 @@ class Arena(Drawable):
 
     def get_non_destructible_walls(self):
         return self.non_destructible_walls
+
+    def get_destructible_walls(self):
+        return self.destructible_walls
 
     def add_player(self, new_player):
         if len(self.players) >= MAX_PLAYERS:
@@ -231,13 +239,26 @@ class Arena(Drawable):
     def _load_non_destructible_walls(self):
         walls = list()
 
-        for x in range(0, ARENA_HEIGHT):
-            for y in range(0, ARENA_HEIGHT):
-                if self.arena_matrix[x][y] == TileType.NON_DESTRUCTIBLE:
+        for row in range(0, ARENA_HEIGHT):
+            for column in range(0, ARENA_HEIGHT):
+                if self.arena_matrix[row][column] == TileType.NON_DESTRUCTIBLE:
                     wall = Object(
-                        (y * TILE_HEIGHT, x * TILE_WIDTH),
+                        (column * TILE_HEIGHT, row * TILE_WIDTH),
                         TILE_WIDTH,
                         TILE_HEIGHT)
+
+                    walls.append(wall)
+
+        return walls
+
+    def _load_destructible_walls(self):
+        walls = list()
+
+        for row in range(0, ARENA_HEIGHT):
+            for column in range(0, ARENA_HEIGHT):
+                if self.arena_matrix[row][column] == TileType.DESTRUCTIBLE:
+                    wall = DestructibleWall(
+                            (column * TILE_HEIGHT, row * TILE_WIDTH))
 
                     walls.append(wall)
 

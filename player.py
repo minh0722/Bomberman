@@ -129,8 +129,8 @@ class Player(Object):
         self._draw_bombs(game_display)
         self._draw_player(game_display)
 
-        print("Position: ", self.position())
-        print("tile_position: ", self.tile_position.position())
+        # print("Position: ", self.position())
+        # print("tile_position: ", self.tile_position.position())
 
     def _draw_bombs(self, game_display):
         for bomb in self.bombs:

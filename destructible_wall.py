@@ -2,6 +2,7 @@ import pygame
 from object import Object
 from pyganim import PygAnimation, PygConductor
 from util import *
+from game_settings import *
 
 
 class WallState:
@@ -27,10 +28,13 @@ class DestructibleWall(Object):
 
         elif self.state == WallState.DESTROYING:
             self.destroying_wall_sprites.blit(game_display, self.position())
-            self.destroying_wall_sprites.play()
 
             if self.destroying_wall_sprites.isFinished():
                 self.state = WallState.DESTROYED
+
+    def destroy(self):
+        self.state = WallState.DESTROYING
+        self.destroying_wall_sprites.play()
 
     def _create_destroying_wall_sprites(self):
         return PygAnimation([
@@ -44,4 +48,4 @@ class DestructibleWall(Object):
 
     def _create_wall_image(self):
         return load_image(
-                TILE_RESOURCE_PATH +  "destructible_tile.png").convert()
+                "battle_tiles/battle_stage_1/destructible_tile.png").convert()

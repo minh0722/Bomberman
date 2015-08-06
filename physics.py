@@ -12,7 +12,12 @@ class Physics:
 
         player_tile = player.get_player_tile()
 
-        for wall in self.arena.non_destructible_walls:
+        for wall in self.arena.get_non_destructible_walls():
+            if player_tile.is_intersected_with(wall):
+                self._resolve_wall_collision(player, wall, direction)
+                return None
+
+        for wall in self.arena.get_destructible_walls():
             if player_tile.is_intersected_with(wall):
                 self._resolve_wall_collision(player, wall, direction)
                 return None
