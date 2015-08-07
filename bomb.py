@@ -41,6 +41,11 @@ class Bomb(Object):
         self.tiles_can_explode_down = arena.down_tiles_can_be_exploded(
                                         self.normalize_position())
 
+        print("CAN EXPLODE LEFT: ", self.tiles_can_explode_left)
+        print("CAN EXPLODE RIGHT: ", self.tiles_can_explode_right)
+        print("CAN EXPLODE UP: ", self.tiles_can_explode_up)
+        print("CAN EXPLODE DOWN: ", self.tiles_can_explode_down)
+
         self.bomb_sprite.play()
         self.ticking_timer = BOMB_TIMER
         self.explosion_duration = EXPLOSION_DURATION
@@ -49,7 +54,7 @@ class Bomb(Object):
         if self.ticking_timer > 0:
             self.ticking_timer -= 1
         else:
-            self._set_state(BombState.EXPLODING)
+            self.explode()
             if self.explosion_duration > 0:
                 self.explosion_duration -= 1
             else:
@@ -73,6 +78,18 @@ class Bomb(Object):
 
     def get_range(self):
         return self.range
+
+    def explode(self):
+        self._set_state(BombState.EXPLODING)
+        self.explosion_center.play()
+        self.explosion_left.play()
+        self.explosion_left_end.play()
+        self.explosion_right.play()
+        self.explosion_right_end.play()
+        self.explosion_up.play()
+        self.explosion_up_end.play()
+        self.explosion_down.play()
+        self.explosion_down_end.play()
 
     def _set_state(self, new_state):
         self.state = new_state
@@ -98,8 +115,6 @@ class Bomb(Object):
             game_display,
             (y * TILE_HEIGHT, x * TILE_WIDTH))
 
-        self.explosion_center.play()
-
     def _draw_explosion_left(self, game_display):
         if self.tiles_can_explode_left == 0:
             return None
@@ -118,9 +133,6 @@ class Bomb(Object):
                 self.explosion_left.blit(
                     game_display,
                     (explosion_x * TILE_WIDTH, x * TILE_WIDTH))
-
-        self.explosion_left.play()
-        self.explosion_left_end.play()
 
     def _draw_explosion_right(self, game_display):
         if self.tiles_can_explode_right == 0:
@@ -141,9 +153,6 @@ class Bomb(Object):
                     game_display,
                     (explosion_x * TILE_WIDTH, x * TILE_WIDTH))
 
-        self.explosion_right.play()
-        self.explosion_right_end.play()
-
     def _draw_explosion_up(self, game_display):
         if self.tiles_can_explode_up == 0:
             return None
@@ -163,9 +172,6 @@ class Bomb(Object):
                     game_display,
                     (y * TILE_HEIGHT, explosion_y * TILE_HEIGHT))
 
-        self.explosion_up.play()
-        self.explosion_up_end.play()
-
     def _draw_explosion_down(self, game_display):
         if self.tiles_can_explode_down == 0:
             return None
@@ -184,9 +190,6 @@ class Bomb(Object):
                 self.explosion_down.blit(
                     game_display,
                     (y * TILE_HEIGHT, explosion_y * TILE_HEIGHT))
-
-        self.explosion_down.play()
-        self.explosion_down_end.play()
 
     def _create_bomb(self):
         return PygAnimation([

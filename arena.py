@@ -54,9 +54,9 @@ class Arena(Drawable):
         for wall in self.destructible_walls:
             wall.draw(game_display)
 
-        # for row in range(0, len(self.arena_matrix)):
-        #     print(self.arena_matrix[row])
-        # print("\n")
+        for row in range(0, len(self.arena_matrix)):
+            print(self.arena_matrix[row])
+        print("\n")
 
     def get_non_destructible_walls(self):
         return self.non_destructible_walls
@@ -77,7 +77,7 @@ class Arena(Drawable):
 
         new_tile_type = (TileType.FLAME if bomb_state == BombState.EXPLODING
                          else TileType.GRASS)
-
+        print("new tile type = ", new_tile_type)
         self._update_matrix_explosion_center(bomb, new_tile_type)
         self._update_matrix_explosion_left(bomb, new_tile_type)
         self._update_matrix_explosion_right(bomb, new_tile_type)
@@ -93,7 +93,8 @@ class Arena(Drawable):
             return 0
 
         for wall_index in range(y - 1, 0, -1):
-            if self.arena_matrix[x][wall_index] == TileType.DESTRUCTIBLE:
+            if (self.arena_matrix[x][wall_index] == TileType.DESTRUCTIBLE or
+                    self.arena_matrix[x][wall_index] == TileType.FLAME):
                 return y - wall_index
         return y - 1
 
@@ -110,6 +111,8 @@ class Arena(Drawable):
 
         for wall_index in range(y + 1, ARENA_WIDTH):
             if self.arena_matrix[x][wall_index] == TileType.DESTRUCTIBLE:
+                print("wall at pos: ", x, wall_index)
+                print("can explode = ", wall_index - y)
                 return wall_index - y
         return ARENA_WIDTH - 2 - y
 
@@ -170,6 +173,7 @@ class Arena(Drawable):
                                self.left_tiles_can_be_exploded(
                                     normalized_position))
 
+        print("can_explode_left = ", can_explode_left)
         for row in range(0, can_explode_left):
             x = normalized_position[0]
             y = normalized_position[1] - row - 1
