@@ -29,8 +29,6 @@ arena.add_player(p1)
 
 while not gameExit:
     arena.draw(game_display)
-    p1.draw(game_display)
-    # p2.draw(game_display)
 
     input_handler.handle_input()
 

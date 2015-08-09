@@ -19,22 +19,26 @@ class DestructibleWall(Object):
         self.intact_wall_image = self._create_wall_image()
 
 
-    def draw(self, game_display):        
+    def draw(self, game_display):
         if self.state == WallState.DESTROYED:
             return None
+
+        elif self.state == WallState.DESTROYING:
+            if self.destroying_wall_sprites.isFinished():
+                self.state = WallState.DESTROYED
+
+            self.destroying_wall_sprites.blit(game_display, self.position())
 
         elif self.state == WallState.INTACT:
             game_display.blit(self.intact_wall_image, self.position())
 
-        elif self.state == WallState.DESTROYING:
-            self.destroying_wall_sprites.blit(game_display, self.position())
-
-            if self.destroying_wall_sprites.isFinished():
-                self.state = WallState.DESTROYED
 
     def destroy(self):
         self.state = WallState.DESTROYING
         self.destroying_wall_sprites.play()
+
+    def current_state(self):
+        return self.state
 
     def _create_destroying_wall_sprites(self):
         return PygAnimation([

@@ -104,6 +104,9 @@ class Player(Object):
     def is_alive(self):
         return self.state is PlayerState.ALIVE
 
+    def current_state(self):
+        return self.state
+
     def die(self):
         self.state = PlayerState.DYING
         self.player_die_sprite.play()
@@ -125,14 +128,7 @@ class Player(Object):
     def pause_reset_sprite(self):
         self.sprite_conductor.pause_reset()
 
-    def draw(self, game_display):
-        self._draw_bombs(game_display)
-        self._draw_player(game_display)
-
-        # print("Position: ", self.position())
-        # print("tile_position: ", self.tile_position.position())
-
-    def _draw_bombs(self, game_display):
+    def draw_bombs(self, game_display):
         for bomb in self.bombs:
             self.arena.update_explosion_in_matrix(bomb)
 
@@ -143,7 +139,7 @@ class Player(Object):
             bomb.draw(game_display)
             # self.arena.print_arena()
 
-    def _draw_player(self, game_display):
+    def draw_player(self, game_display):
         if self.state is PlayerState.DEAD:
             return None
 

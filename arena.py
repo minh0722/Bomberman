@@ -6,7 +6,7 @@ from pyganim import *
 from object import Object
 from bomb import Bomb, BombState
 from physics import Physics
-from destructible_wall import DestructibleWall
+from destructible_wall import DestructibleWall, WallState
 
 
 class TileType:
@@ -24,17 +24,17 @@ class Arena(Drawable):
         self.arena_matrix = [
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
             [4, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 3, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 3, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 3, 1, 0, 1, 3, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
             [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
             [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
-            [4, 0, 1, 0, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
-            [4, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 4],
-            [4, 0, 1, 0, 1, 0, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 4],
-            [4, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 4],
             [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
-            [4, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 4],
-            [4, 0, 1, 0, 1, 3, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 4],
-            [4, 0, 0, 3, 3, 3, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 4],
-            [4, 0, 1, 0, 1, 3, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 4],
             [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]]
 
@@ -52,10 +52,9 @@ class Arena(Drawable):
 
     def draw(self, game_display):
         game_display.blit(self.arena_surface, (0, 0))
-        self._draw_players(game_display)
 
-        for wall in self.destructible_walls:
-            wall.draw(game_display)
+        self._update_players_state()
+        self._draw_players_and_walls(game_display)
 
     def get_non_destructible_walls(self):
         return self.non_destructible_walls
@@ -96,8 +95,6 @@ class Arena(Drawable):
                     self.arena_matrix[x][wall_index] == TileType.FLAME):
                 return y - wall_index
         return y - 1
-
-        # TODO: need to check if it's bomb?
 
     def right_tiles_can_be_exploded(self, normalized_position):
         x = normalized_position[0]
@@ -142,18 +139,36 @@ class Arena(Drawable):
                 return wall_index - x
         return ARENA_HEIGHT - 2 - x
 
-    def _draw_players(self, game_display):
+    def _draw_players_and_walls(self, game_display):
         for player in self.players:
-            if not player.is_alive():
-                self.players.remove(player)
-            else:
-                x = player.normalize_position_for_explosion()[0]
-                y = player.normalize_position_for_explosion()[1]
+            player.draw_bombs(game_display)
 
-                # print("normalized_position_for_explosion: ", (x, y))
+        self._draw_destructible_walls(game_display)
 
-                if self.arena_matrix[x][y] == TileType.FLAME:
-                    player.die()
+        for player in self.players:
+            player.draw_player(game_display)
+
+    def _update_players_state(self):
+        for player in self.players:
+            x = player.normalize_position_for_explosion()[0]
+            y = player.normalize_position_for_explosion()[1]
+
+            if self.arena_matrix[x][y] == TileType.FLAME:
+                player.die()
+
+    def _draw_destructible_walls(self, game_display):
+        for wall in self.destructible_walls:
+            x = wall.normalize_position()[0]
+            y = wall.normalize_position()[1]
+
+            if wall.current_state() == WallState.DESTROYED:
+                self.destructible_walls.remove(wall)
+                continue
+
+            elif self.arena_matrix[x][y] == TileType.FLAME:
+                wall.destroy()
+
+            wall.draw(game_display)
 
     def _can_place_bomb(self, x, y):
         return self.arena_matrix[x][y] == 0
@@ -213,7 +228,8 @@ class Arena(Drawable):
 
         for x in range(0, ARENA_HEIGHT):
             for y in range(0, ARENA_WIDTH):
-                if self.arena_matrix[x][y] == TileType.GRASS:
+                if (self.arena_matrix[x][y] == TileType.GRASS or
+                    self.arena_matrix[x][y] == TileType.DESTRUCTIBLE):
                     arena.blit(
                         self._create_tile(TileType.GRASS),
                         (y * TILE_HEIGHT, x * TILE_WIDTH))
