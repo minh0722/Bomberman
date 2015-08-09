@@ -27,14 +27,14 @@ class Arena(Drawable):
             [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
             [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
             [4, 0, 1, 0, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
-            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 0, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 4],
             [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
-            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
-            [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
-            [4, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
-            [4, 0, 1, 0, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
-            [4, 0, 0, 3, 3, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 4],
-            [4, 0, 1, 0, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 3, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 3, 3, 3, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 3, 1, 3, 1, 0, 1, 0, 1, 0, 1, 0, 4],
             [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]]
 
@@ -44,8 +44,11 @@ class Arena(Drawable):
         self.players = list()
         self.physics = Physics(self)
 
-        # for wall in self.destructible_walls:
-        #     print(wall.position())
+    # TODO: remove this method
+    def print_arena(self):
+        for row in range(0, len(self.arena_matrix)):
+            print(self.arena_matrix[row])
+        print("\n")
 
     def draw(self, game_display):
         game_display.blit(self.arena_surface, (0, 0))
@@ -53,10 +56,6 @@ class Arena(Drawable):
 
         for wall in self.destructible_walls:
             wall.draw(game_display)
-
-        for row in range(0, len(self.arena_matrix)):
-            print(self.arena_matrix[row])
-        print("\n")
 
     def get_non_destructible_walls(self):
         return self.non_destructible_walls
@@ -77,7 +76,7 @@ class Arena(Drawable):
 
         new_tile_type = (TileType.FLAME if bomb_state == BombState.EXPLODING
                          else TileType.GRASS)
-        print("new tile type = ", new_tile_type)
+
         self._update_matrix_explosion_center(bomb, new_tile_type)
         self._update_matrix_explosion_left(bomb, new_tile_type)
         self._update_matrix_explosion_right(bomb, new_tile_type)
@@ -111,8 +110,8 @@ class Arena(Drawable):
 
         for wall_index in range(y + 1, ARENA_WIDTH):
             if self.arena_matrix[x][wall_index] == TileType.DESTRUCTIBLE:
-                print("wall at pos: ", x, wall_index)
-                print("can explode = ", wall_index - y)
+                # print("wall at pos: ", x, wall_index)
+                # print("can explode = ", wall_index - y)
                 return wall_index - y
         return ARENA_WIDTH - 2 - y
 
@@ -169,11 +168,8 @@ class Arena(Drawable):
         normalized_position = bomb.normalize_position()
         bomb_range = bomb.get_range()
 
-        can_explode_left = min(bomb_range,
-                               self.left_tiles_can_be_exploded(
-                                    normalized_position))
+        can_explode_left = min(bomb_range, bomb.tiles_can_explode_left)
 
-        print("can_explode_left = ", can_explode_left)
         for row in range(0, can_explode_left):
             x = normalized_position[0]
             y = normalized_position[1] - row - 1
@@ -183,9 +179,7 @@ class Arena(Drawable):
         normalized_position = bomb.normalize_position()
         bomb_range = bomb.get_range()
 
-        can_explode_right = min(bomb_range,
-                                self.right_tiles_can_be_exploded(
-                                    normalized_position))
+        can_explode_right = min(bomb_range, bomb.tiles_can_explode_right)
 
         for row in range(0, can_explode_right):
             x = normalized_position[0]
@@ -196,9 +190,7 @@ class Arena(Drawable):
         normalized_position = bomb.normalize_position()
         bomb_range = bomb.get_range()
 
-        can_explode_up = min(bomb_range,
-                             self.up_tiles_can_be_exploded(
-                                    normalized_position))
+        can_explode_up = min(bomb_range, bomb.tiles_can_explode_up)
 
         for col in range(0, can_explode_up):
             x = normalized_position[0] - col - 1
@@ -209,9 +201,7 @@ class Arena(Drawable):
         normalized_position = bomb.normalize_position()
         bomb_range = bomb.get_range()
 
-        can_explode_down = min(bomb_range,
-                               self.down_tiles_can_be_exploded(
-                                    normalized_position))
+        can_explode_down = min(bomb_range, bomb.tiles_can_explode_down)
 
         for col in range(0, can_explode_down):
             x = normalized_position[0] + col + 1

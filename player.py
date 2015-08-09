@@ -141,6 +141,7 @@ class Player(Object):
                 self.placed_bomb -= 1
 
             bomb.draw(game_display)
+            # self.arena.print_arena()
 
     def _draw_player(self, game_display):
         if self.state is PlayerState.DEAD:
