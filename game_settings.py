@@ -11,6 +11,12 @@ ARENA_HEIGHT = 15
 BOMB_TIMER = 100
 EXPLOSION_DURATION = 30
 
+PORT = 9004
+
+# -----------------server client defines-----------------
+MAX_CONNECTION = 1
+MAX_DATA_LEN = 64
+
 # -----------------internal defines-----------------
 TILE_WIDTH = 45
 TILE_HEIGHT = 45
