@@ -62,6 +62,9 @@ class Arena(Drawable):
     def get_destructible_walls(self):
         return self.destructible_walls
 
+    def get_arena(self):
+        return self.arena_matrix
+
     def add_player(self, new_player):
         if len(self.players) >= MAX_PLAYERS:
             return None
