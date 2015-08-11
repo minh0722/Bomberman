@@ -124,8 +124,11 @@ class Player(Object):
         return self.state
 
     def die(self):
-        self.state = PlayerState.DYING
-        self.player_die_sprite.play()
+        if self.state is not PlayerState.DYING:
+            self.state = PlayerState.DYING
+            self.player_die_sprite.play()
+
+            self.client.send_packet("die")
 
     def place_bomb(self):
         if self.placed_bomb < self.bomb_capacity:
