@@ -15,6 +15,7 @@ class Server:
         while True:
             print('waiting for a connection')
             connection_socket, client_address = self.socket.accept()
+            print("connection established with ", client_address[0])
 
             try:
                 # Receive data in small chunks and retransmit it
@@ -22,12 +23,14 @@ class Server:
                     data = connection_socket.recv(MAX_DATA_LEN)
                     print('received ', data)
 
-                    # if data:
-                    #     break
+                    if data.decode('utf-8') == 'exit':
+                        break
                     # if data:
                     #     connection_socket.sendall("a".encode('utf-8'))
                     # else:
                     #     break
+            except Exception as e:
+                print(e)
             finally:
                 connection_socket.close()
                 print("closing server connection socket")

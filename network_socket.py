@@ -8,6 +8,10 @@ class NetworkSocket():
         self.socket = socket(AF_INET, SOCK_STREAM)
         self.socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 
+    def __del__(self):
+        self.socket.close()
+        print("socket closed")
+
     def bind(self, server_address):
         self.socket.bind(server_address)
 

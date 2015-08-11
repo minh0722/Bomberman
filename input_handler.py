@@ -13,6 +13,7 @@ class InputHandler:
             pass
 
         if event.type == pygame.QUIT:
+            self.player.set_game_over(True)
             pygame.quit()
             quit()
 

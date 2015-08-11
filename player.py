@@ -60,6 +60,10 @@ class Player(Object):
 
         self.client = Client()
 
+    def set_game_over(self, is_game_over):
+        self.client.exclusive_send_packet("exit")
+        self.client.set_game_over(is_game_over)
+
     def set_player_tile_position(self, position):
         self.tile_position.set_position(position)
         self.set_position(
