@@ -1,5 +1,5 @@
 import sys
-import Queue
+import queue
 from socket import *
 from game_settings import *
 from network_socket import NetworkSocket
@@ -12,34 +12,24 @@ class Client:
     def __init__(self):
         self.socket = NetworkSocket()
         self.socket.connect(('localhost', PORT))
-        self.incoming_packets = Queue.Queue()
-        self.outgoing_packets = Queue.Queue()
+        self.incoming_packets = queue.Queue()
         self.game_over = False
 
         self.receive_packet_thread = Thread()
         self.receive_packet_thread.run = self._receive_packet_from_server
         self.receive_packet_thread.start()
 
-        self.get_packet_thread = Thread()
-        self.get_packet_thread.run = self._get_incoming_packet_from_queue
-        self.get_packet_thread.start()
+        # self.get_packet_thread = Thread()
+        # self.get_packet_thread.run = self._get_incoming_packet_from_queue
+        # self.get_packet_thread.start()
 
-        self.send_packet_thread = Thread()
-        self.send_packet_thread.run = self._send_outgoing_packet_from_queue
-        self.send_packet_thread.start()
-
-    # def __del__(self):
-    #     self.receive_packet_thread.join()
-    #     self.get_packet_thread.join()
-    #     self.send_packet_thread.join()
-    #     print("all joined")
-
-    def exclusive_send_packet(self, packet):
-        # send packet immediately without waiting in queue
-        self.socket.send_all(packet)
+    def __del__(self):
+        self.receive_packet_thread.join()
+        # self.get_packet_thread.join()
+        print("all threads joined")
 
     def send_packet(self, packet):
-        self.outgoing_packets.put(packet, block=False)
+        self.socket.send_all(encode(packet))
 
     def set_game_over(self, is_game_over):
         self.game_over = is_game_over
@@ -50,21 +40,12 @@ class Client:
             if packet:
                 self.incoming_packets.put(packet)
 
-    def _send_outgoing_packet_from_queue(self):
-        while True and not self.game_over:
-            try:
-                packet = self.outgoing_packets.get(block=False)
-                # time.sleep(0.0001)
-                self.socket.send_all(packet)
-            except Queue.Empty:
-                continue
-
     def _get_incoming_packet_from_queue(self):
         while True and not self.game_over:
             try:
                 packet = self.incoming_packets.get(block=False)
                 print("received packet: ", packet)
-            except Queue.Empty:
+            except queue.Empty:
                 continue
 
     # def run_client(self):

@@ -2,6 +2,7 @@ from socket import *
 import sys
 from game_settings import *
 from network_socket import NetworkSocket
+from util import decode
 
 
 class Server:
@@ -23,7 +24,7 @@ class Server:
                     data = connection_socket.recv(MAX_DATA_LEN)
                     print('received ', data)
 
-                    if data.decode('utf-8') == 'exit':
+                    if decode(data) == 'exit':
                         break
                     # if data:
                     #     connection_socket.sendall("a".encode('utf-8'))

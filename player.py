@@ -5,6 +5,7 @@ from object import Object
 from game_settings import *
 from bomb import Bomb, BombState
 from client import Client
+from util import encode
 
 
 class PlayerState:
@@ -61,7 +62,7 @@ class Player(Object):
         self.client = Client()
 
     def set_game_over(self, is_game_over):
-        self.client.exclusive_send_packet("exit")
+        self.client.send_packet("exit")
         self.client.set_game_over(is_game_over)
 
     def set_player_tile_position(self, position):
