@@ -37,6 +37,7 @@ class Client:
     def _receive_packet_from_server(self):
         while True and not self.game_over:
             packet = self.socket.recv()
+            print(packet)
             if packet:
                 self.incoming_packets.put(packet)
 

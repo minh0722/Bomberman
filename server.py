@@ -19,15 +19,18 @@ class Server:
             print("connection established with ", client_address[0])
 
             try:
-                # Receive data in small chunks and retransmit it
                 while True:
                     data = connection_socket.recv(MAX_DATA_LEN)
                     print('received ', data)
+                    new_data = decode(data)
+                    new_data = new_data.split(' ')
+                    print(new_data[0])
+
+                    connection_socket.sendall("asdaqwe".encode('utf-8'))
 
                     if decode(data) == 'exit':
                         break
                     # if data:
-                    #     connection_socket.sendall("a".encode('utf-8'))
                     # else:
                     #     break
             except Exception as e:

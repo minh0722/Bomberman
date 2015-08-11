@@ -82,7 +82,7 @@ class Player(Object):
         self.current_face_direction = Direction.UP
         self.player_up_sprite.play()
 
-        self.client.send_packet("up")
+        self.client.send_packet("p1 up")
 
     def move_down(self):
         Object.move_down(self, self.movement_speed)
@@ -93,7 +93,7 @@ class Player(Object):
         self.current_face_direction = Direction.DOWN
         self.player_down_sprite.play()
 
-        self.client.send_packet("down")
+        self.client.send_packet("p1 down")
 
     def move_left(self):
         Object.move_left(self, self.movement_speed)
@@ -104,7 +104,7 @@ class Player(Object):
         self.current_face_direction = Direction.LEFT
         self.player_left_sprite.play()
 
-        self.client.send_packet("left")
+        self.client.send_packet("p1 left")
 
     def move_right(self):
         Object.move_right(self, self.movement_speed)
@@ -115,7 +115,7 @@ class Player(Object):
         self.current_face_direction = Direction.RIGHT
         self.player_right_sprite.play()
 
-        self.client.send_packet("right")
+        self.client.send_packet("p1 right")
 
     def is_alive(self):
         return self.state is PlayerState.ALIVE
