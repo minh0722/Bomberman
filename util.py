@@ -22,6 +22,9 @@ def load_images(*files):
         imgs.append(load_image(file))
     return imgs
 
+def encode(data):
+    return data.encode('utf-8')
+
 
 class dummysound:
     def play(self):

@@ -3,13 +3,14 @@ import sys
 from game_settings import *
 from network_socket import NetworkSocket
 
+
 class Server:
     def __init__(self):
         self.socket = NetworkSocket()
         self.socket.bind(('localhost', PORT))
 
     def run(self):
-        self.socket.listen()
+        self.socket.listen(MAX_CONNECTION)
 
         while True:
             print('waiting for a connection')
@@ -19,14 +20,17 @@ class Server:
                 # Receive data in small chunks and retransmit it
                 while True:
                     data = connection_socket.recv(MAX_DATA_LEN)
-                    print('received "%s"' % data)
+                    print('received ', data)
 
-                    if data:
-                        connection_socket.sendall(data)
-                    else:
-                        break
+                    # if data:
+                    #     break
+                    # if data:
+                    #     connection_socket.sendall("a".encode('utf-8'))
+                    # else:
+                    #     break
             finally:
                 connection_socket.close()
+                print("closing server connection socket")
 
     def __del__(self):
         self.socket.close_socket()

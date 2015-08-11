@@ -4,6 +4,7 @@ from pygame.sprite import Sprite
 from object import Object
 from game_settings import *
 from bomb import Bomb, BombState
+from client import Client
 
 
 class PlayerState:
@@ -57,6 +58,8 @@ class Player(Object):
             PLAYER_RECTANGLE_WIDTH,
             PLAYER_RECTANGLE_WIDTH)
 
+        self.client = Client()
+
     def set_player_tile_position(self, position):
         self.tile_position.set_position(position)
         self.set_position(
@@ -74,6 +77,8 @@ class Player(Object):
         self.current_face_direction = Direction.UP
         self.player_up_sprite.play()
 
+        self.client.send_packet("up")
+
     def move_down(self):
         Object.move_down(self, self.movement_speed)
         self.tile_position.move_down(self.movement_speed)
@@ -82,6 +87,8 @@ class Player(Object):
 
         self.current_face_direction = Direction.DOWN
         self.player_down_sprite.play()
+
+        self.client.send_packet("down")
 
     def move_left(self):
         Object.move_left(self, self.movement_speed)
@@ -92,6 +99,8 @@ class Player(Object):
         self.current_face_direction = Direction.LEFT
         self.player_left_sprite.play()
 
+        self.client.send_packet("left")
+
     def move_right(self):
         Object.move_right(self, self.movement_speed)
         self.tile_position.move_right(self.movement_speed)
@@ -100,6 +109,8 @@ class Player(Object):
 
         self.current_face_direction = Direction.RIGHT
         self.player_right_sprite.play()
+
+        self.client.send_packet("right")
 
     def is_alive(self):
         return self.state is PlayerState.ALIVE

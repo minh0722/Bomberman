@@ -14,8 +14,8 @@ class NetworkSocket():
     def connect(self, server_address):
         self.socket.connect(server_address)
 
-    def listen(self):
-        self.socket.listen(1)
+    def listen(self, connection_count=1):
+        self.socket.listen(connection_count)
 
     def accept(self):
         return self.socket.accept()
@@ -23,11 +23,8 @@ class NetworkSocket():
     def close_socket(self):
         self.socket.close()
 
-    def receive(self):
-        return self.socket.recv(self.MAX_DATA_LEN)
-
     def send_all(self, message):
         self.socket.sendall(message)
 
-    def recv(self, len):
+    def recv(self, len=MAX_DATA_LEN):
         return self.socket.recv(len)
