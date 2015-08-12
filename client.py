@@ -23,10 +23,10 @@ class Client:
         # self.get_packet_thread.run = self._get_incoming_packet_from_queue
         # self.get_packet_thread.start()
 
-    def __del__(self):
-        self.receive_packet_thread.join()
+    # def __del__(self):
+        # self.receive_packet_thread.join()
         # self.get_packet_thread.join()
-        print("all threads joined")
+        # print("all threads joined")
 
     def send_packet(self, packet):
         self.socket.send_all(encode(packet))

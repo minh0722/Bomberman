@@ -125,7 +125,8 @@ class Player(Object):
         return self.state
 
     def die(self):
-        if self.state is not PlayerState.DYING:
+        if self.state is not PlayerState.DYING \
+                and self.state is not PlayerState.DEAD:
             self.state = PlayerState.DYING
             self.player_die_sprite.play()
 

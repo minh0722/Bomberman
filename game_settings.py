@@ -14,7 +14,7 @@ EXPLOSION_DURATION = 30
 PORT = 9004
 
 # -----------------server client defines-----------------
-MAX_CONNECTION = 1
+MAX_CONNECTION = 2
 MAX_DATA_LEN = 64
 
 # -----------------internal defines-----------------
