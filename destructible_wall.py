@@ -3,6 +3,8 @@ from object import Object
 from pyganim import PygAnimation, PygConductor
 from util import *
 from game_settings import *
+from sprite_create import *
+
 
 
 class WallState:
@@ -15,8 +17,8 @@ class DestructibleWall(Object):
         Object.__init__(self, position, TILE_WIDTH, TILE_HEIGHT)
 
         self.state = WallState.INTACT
-        self.destroying_wall_sprites = self._create_destroying_wall_sprites()
-        self.intact_wall_image = self._create_wall_image()
+        self.destroying_wall_sprites = create_destroying_wall_sprites()
+        self.intact_wall_image = create_destructible_wall_image()
 
 
     def draw(self, game_display):
@@ -40,16 +42,3 @@ class DestructibleWall(Object):
     def current_state(self):
         return self.state
 
-    def _create_destroying_wall_sprites(self):
-        return PygAnimation([
-            (TILE_RESOURCE_PATH + "tile_destroyed_1.png", WALL_DESTROYED_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "tile_destroyed_2.png", WALL_DESTROYED_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "tile_destroyed_3.png", WALL_DESTROYED_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "tile_destroyed_4.png", WALL_DESTROYED_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "tile_destroyed_5.png", WALL_DESTROYED_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "tile_destroyed_6.png", WALL_DESTROYED_FRAME_DURATION)],
-            loop=False)
-
-    def _create_wall_image(self):
-        return load_image(
-                "battle_tiles/battle_stage_1/destructible_tile.png").convert()

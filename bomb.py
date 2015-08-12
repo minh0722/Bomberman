@@ -2,6 +2,7 @@ import pygame
 from object import Object
 from game_settings import *
 from pyganim import PygAnimation, PygConductor
+from sprite_create import *
 import arena
 
 
@@ -19,12 +20,12 @@ class Bomb(Object):
         self.state = BombState.TICKING
         self.arena = arena
 
-        self.bomb_sprite = self._create_bomb()
-        self.explosion_center = self._create_center_explosion()
-        self.explosion_left = self._create_left_explosion()
-        self.explosion_right = self._create_right_explosion()
-        self.explosion_up = self._create_up_explosion()
-        self.explosion_down = self._create_down_explosion()
+        self.bomb_sprite = create_bomb()
+        self.explosion_center = create_center_explosion()
+        self.explosion_left = create_left_explosion()
+        self.explosion_right = create_right_explosion()
+        self.explosion_up = create_up_explosion()
+        self.explosion_down = create_down_explosion()
 
         self.tiles_can_explode_left = arena.left_tiles_can_be_exploded(
                                         self.normalize_position())
@@ -169,90 +170,3 @@ class Bomb(Object):
             self.explosion_down.blit(
                 game_display,
                 (y * TILE_HEIGHT, explosion_y * TILE_HEIGHT))
-
-    def _create_bomb(self):
-        return PygAnimation([
-            (TILE_RESOURCE_PATH + "normal_bomb_1.png", BOMB_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "normal_bomb_2.png", BOMB_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "normal_bomb_3.png", BOMB_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "normal_bomb_4.png", BOMB_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "normal_bomb_1.png", BOMB_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "normal_bomb_2.png", BOMB_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "normal_bomb_3.png", BOMB_FRAME_DURATION),
-            (TILE_RESOURCE_PATH + "normal_bomb_4.png", BOMB_FRAME_DURATION)],
-            loop=False)
-
-    def _create_center_explosion(self):
-        return PygAnimation([
-            (EXPLOSION1_RESOURCE_PATH + "explosion_center.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_center.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION1_RESOURCE_PATH + "explosion_center.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_center.png",
-                EXPLOSION_FRAME_DURATION)],
-            loop=False)
-
-    def _create_left_explosion(self):
-        return PygAnimation([
-            (EXPLOSION1_RESOURCE_PATH + "explosion_left.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_left.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION1_RESOURCE_PATH + "explosion_left.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_left.png",
-                EXPLOSION_FRAME_DURATION)],
-            loop=False)
-
-    def _create_right_explosion(self):
-        return PygAnimation([
-            (EXPLOSION1_RESOURCE_PATH + "explosion_right.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_right.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION1_RESOURCE_PATH + "explosion_right.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_right.png",
-                EXPLOSION_FRAME_DURATION)],
-            loop=False)
-
-    def _create_up_explosion(self):
-        return PygAnimation([
-            (EXPLOSION1_RESOURCE_PATH + "explosion_up.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_up.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION1_RESOURCE_PATH + "explosion_up.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_up.png",
-                EXPLOSION_FRAME_DURATION)],
-            loop=False)
-
-    def _create_down_explosion(self):
-        return PygAnimation([
-            (EXPLOSION1_RESOURCE_PATH + "explosion_down.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_down.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION1_RESOURCE_PATH + "explosion_down.png",
-                EXPLOSION_FRAME_DURATION),
-
-            (EXPLOSION2_RESOURCE_PATH + "explosion_down.png",
-                EXPLOSION_FRAME_DURATION)],
-            loop=False)

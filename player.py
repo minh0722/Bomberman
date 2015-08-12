@@ -6,6 +6,7 @@ from game_settings import *
 from bomb import Bomb, BombState
 from client import Client
 from util import encode
+from sprite_create import *
 
 
 class PlayerState:
@@ -37,12 +38,12 @@ class Player(Object):
         self.state = PlayerState.ALIVE
         self.arena = arena
 
-        self.player_down_sprite = self._create_player_down()
-        self.player_up_sprite = self._create_player_up()
-        self.player_left_sprite = self._create_player_left()
-        self.player_right_sprite = self._create_player_right()
+        self.player_down_sprite = create_player_down()
+        self.player_up_sprite = create_player_up()
+        self.player_left_sprite = create_player_left()
+        self.player_right_sprite = create_player_right()
 
-        self.player_die_sprite = self._create_player_die()
+        self.player_die_sprite = create_player_die()
 
         self.sprite_conductor = PygConductor(
             self.player_down_sprite,
@@ -180,43 +181,3 @@ class Player(Object):
 
             if self.current_face_direction is Direction.RIGHT:
                 self.player_right_sprite.blit(game_display, self.position())
-
-    def _create_player_down(self):
-        return PygAnimation([
-            ("resources/characters/bbm_front1.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_front2.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_front1.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_front3.png", PLAYER_FRAME_DURATION)
-            ])
-
-    def _create_player_up(self):
-        return PygAnimation([
-            ("resources/characters/bbm_back1.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_back2.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_back1.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_back3.png", PLAYER_FRAME_DURATION),
-            ])
-
-    def _create_player_left(self):
-        return PygAnimation([
-            ("resources/characters/bbm_left1.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_left2.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_left1.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_left3.png", PLAYER_FRAME_DURATION),
-            ])
-
-    def _create_player_right(self):
-        return PygAnimation([
-            ("resources/characters/bbm_right1.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_right2.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_right1.png", PLAYER_FRAME_DURATION),
-            ("resources/characters/bbm_right3.png", PLAYER_FRAME_DURATION),
-            ])
-
-    def _create_player_die(self):
-        return PygAnimation([
-            ("resources/characters/bbm_die1.png", PLAYER_DIE_FRAME_DURATION),
-            ("resources/characters/bbm_die2.png", PLAYER_DIE_FRAME_DURATION),
-            ("resources/characters/bbm_die3.png", PLAYER_DIE_FRAME_DURATION),
-            ("resources/characters/bbm_die4.png", PLAYER_DIE_FRAME_DURATION)],
-            loop=False)

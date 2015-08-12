@@ -70,7 +70,3 @@ class Client:
 
 
 # c = Client()
-
-# for i in range(20):
-#     c.send_packet("sd")
-
