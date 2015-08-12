@@ -67,6 +67,3 @@ class Client:
 
     #     finally:
     #         self.socket.close_socket()
-
-
-# c = Client()

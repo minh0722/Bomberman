@@ -32,3 +32,6 @@ class NetworkSocket():
 
     def recv(self, len=MAX_DATA_LEN):
         return self.socket.recv(len)
+
+    def set_blocking(self, flag):
+        self.socket.setblocking(flag)
