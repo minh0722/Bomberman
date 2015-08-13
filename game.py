@@ -29,8 +29,7 @@ class Game:
 
         player_action = self.input_handler.handle_input()
     
-        if player_action is not None:
-            self.send_player_action(player_action)
+        self.send_player_action(player_action)
 
         if not self.first_player.is_alive():
             self.send_player_action(Event.DIE)
@@ -41,8 +40,9 @@ class Game:
         self.clock.tick(FPS)
 
     def send_player_action(self, player_action):
-        self.client.send_packet(player_action)
+        if player_action is not None:
+            self.client.send_packet(player_action)
 
-        if player_action == Event.EXIT:
-            pygame.quit()
-            quit()
+            if player_action == Event.EXIT:
+                pygame.quit()
+                quit()
