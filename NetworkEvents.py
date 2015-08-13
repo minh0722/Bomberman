@@ -1,3 +1,3 @@
 class Event:
-	SERVER_FULL = 'full'
+	SERVER_FULL = "full"
 	EXIT = "exit"
