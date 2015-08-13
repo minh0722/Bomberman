@@ -7,7 +7,7 @@ from network_socket import NetworkSocket
 from threading import Thread
 from util import encode, decode
 import time
-from NetworkEvents import *
+from network_events import *
 
 
 class Client:
@@ -23,7 +23,9 @@ class Client:
         self.receive_thread.run = self._receive_packet_from_server
         self.receive_thread.start()
 
-        self.incoming_packets = queue.Queue()
+        self.send_packet(encode(Event.START))
+
+        # self.incoming_packets = queue.Queue()
 
     def __del__(self):
         print("joining thread")
@@ -31,7 +33,7 @@ class Client:
         self.socket.close_socket()
 
     def send_packet(self, packet):
-        self.socket.send_all(encode(packet))
+        self.socket.send_all(packet)
 
     def connected(self):
         return self.is_connected
@@ -54,4 +56,3 @@ class Client:
 
             except Exception as e:
                 pass
-

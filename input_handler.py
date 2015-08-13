@@ -1,6 +1,6 @@
 import pygame
 from game_settings import *
-from NetworkEvents import Event
+from network_events import Event
 
 
 class InputHandler:

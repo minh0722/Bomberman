@@ -3,7 +3,7 @@ import sys
 from game_settings import *
 from network_socket import NetworkSocket
 from util import decode, encode
-from NetworkEvents import Event
+from network_events import Event
 
 class Server:
     def __init__(self):
@@ -36,10 +36,10 @@ class Server:
             else:
                 try:
                     connection_socket.sendall(encode(Event.SERVER_FULL))
+                    print("SERVER_FULL sent successful...")
                 except error as e:
-                    print("failed to send full event. exception raised: ", e)
+                    print("Failed to send SERVER_FULL. exception raised: ", e)
 
-                print("sending server full event successful...")
 
     def _serve_players(self):
         for socket in self.connected_sockets:
@@ -49,17 +49,31 @@ class Server:
                 continue
 
             if decode(data) != '' and decode(data) != Event.EXIT:
-                print("received ", data)
-                try:
-                    socket.sendall(encode("asdqwe"))
-                except BrokenPipeError:
-                    self.connected_sockets.remove(socket)
-                    print("removed broken socket")
+                if decode(data) == Event.START:
+                    print("received ", data)
+                    try:
+                        socket.sendall(encode(self._start_message()))
+                    except BrokenPipeError:
+                        self.connected_sockets.remove(socket)
+                        print("removed broken socket in START")
+
+                else:
+                    print("received ", data)
+                    try:
+                        socket.sendall(encode("asdqwe"))
+                    except BrokenPipeError:
+                        self.connected_sockets.remove(socket)
+                        print("removed broken socket")
+
             else:
                 # send confirm to client
                 socket.sendall(encode(Event.EXIT))
                 self.connected_sockets.remove(socket)
                 print("removed socket")
+
+    def _start_message(self):
+        connected_sockets_size = len(self.connected_sockets)
+        return Event.START + " " + str(connected_sockets_size - 1)
 
     def __del__(self):
         self.socket.close_socket()

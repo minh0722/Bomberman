@@ -6,7 +6,8 @@ from pygame import Surface
 from pygame.sprite import Sprite
 from game_settings import *
 from client import Client
-from NetworkEvents import Event
+from network_events import Event
+from util import encode, decode
 
 
 class Game:
@@ -17,6 +18,15 @@ class Game:
         self.arena = Arena()
         self.first_player = Player((22, 0), self.arena)
         self.input_handler = InputHandler(self.first_player)
+
+        # for index in range(MAX_PLAYERS):
+        #     new_player = Player((22,0), self.arena)
+        #     self.players.append(new_player)
+
+        # for player in self.players:
+        #     self.arena.add_player(player)
+
+        # self.input_handler = InputHandler(self.players[0])
 
         self.arena.add_player(self.first_player)
 
@@ -41,7 +51,7 @@ class Game:
 
     def send_player_action(self, player_action):
         if player_action is not None:
-            self.client.send_packet(player_action)
+            self.client.send_packet(encode(player_action))
 
             if player_action == Event.EXIT:
                 pygame.quit()
