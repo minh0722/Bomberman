@@ -32,16 +32,23 @@ class Server:
                 connection_socket.setblocking(0)
                 self.connected_sockets.append(connection_socket)
 
-
     def _serve_players(self):
         for socket in self.connected_sockets:
             try:
                 data = socket.recv(MAX_DATA_LEN)
             except error:
                 continue
-            if data != '' and decode(data) != 'exit':
+
+            if decode(data) != '' and decode(data) != 'exit':
                 print("received ", data)
-                socket.sendall("asdqwe".encode('utf-8'))
+                try:
+                    socket.sendall("asdqwe".encode('utf-8'))
+                except BrokenPipeError:
+                    self.connected_sockets.remove(socket)
+                    print("removed broken socket")
+            else:
+                self.connected_sockets.remove(socket)
+                print("removed socket")
 
     def __del__(self):
         self.socket.close_socket()
