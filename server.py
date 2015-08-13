@@ -15,6 +15,8 @@ class Server:
 
         self.connected_sockets = list()
 
+        self.generated_id = 0
+
     def run(self):
         self.socket.listen(MAX_CONNECTION)
 
@@ -83,6 +85,14 @@ class Server:
         for sock in self.connected_sockets:
             if sock != socket:
                 sock.sendall(message)
+
+    def _next_available_id(self):
+        if self.generated_id + 1 > len(self.connection_socket):
+            self.generated_id = 1
+            return self.generated_id
+
+        self.generated_id += 1
+        return self.generated_id
 
     def __del__(self):
         self.socket.close_socket()
