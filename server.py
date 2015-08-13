@@ -3,8 +3,7 @@ import sys
 from game_settings import *
 from network_socket import NetworkSocket
 from util import decode, encode
-from NetworkEvents import *
-
+from NetworkEvents import Event
 
 class Server:
     def __init__(self):
@@ -49,7 +48,7 @@ class Server:
             except error:
                 continue
 
-            if decode(data) != '' and decode(data) != EVENT.EXIT:
+            if decode(data) != '' and decode(data) != Event.EXIT:
                 print("received ", data)
                 try:
                     socket.sendall(encode("asdqwe"))
