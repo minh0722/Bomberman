@@ -1,12 +1,10 @@
 import sys
-import queue
-import errno
+# import queue
 from socket import *
 from game_settings import *
 from network_socket import NetworkSocket
 from threading import Thread
 from util import encode, decode
-import time
 from network_events import *
 
 
@@ -24,6 +22,8 @@ class Client:
         self.receive_thread.start()
 
         self.send_packet(encode(Event.START))
+
+        # self.
 
         # self.incoming_packets = queue.Queue()
 

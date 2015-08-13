@@ -8,3 +8,4 @@ class Event:
 	PLACE_BOMB = "bomb"
 	DIE = "die"
 	START = "start"
+	OTHER_PLAYER_JOINED = "joined"

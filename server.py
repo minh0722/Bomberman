@@ -51,19 +51,22 @@ class Server:
             if decode(data) != '' and decode(data) != Event.EXIT:
                 if decode(data) == Event.START:
                     print("received ", data)
-                    try:
-                        socket.sendall(encode(self._start_message()))
-                    except BrokenPipeError:
-                        self.connected_sockets.remove(socket)
-                        print("removed broken socket in START")
+                    # try:
+                    socket.sendall(encode(self._start_message()))
+                    self._notify_other_sockets_except(
+                        encode(Event.OTHER_PLAYER_JOINED),
+                        socket)
+                    # except BrokenPipeError:
+                    #     self.connected_sockets.remove(socket)
+                    #     print("removed broken socket in START")
 
                 else:
                     print("received ", data)
-                    try:
-                        socket.sendall(encode("asdqwe"))
-                    except BrokenPipeError:
-                        self.connected_sockets.remove(socket)
-                        print("removed broken socket")
+                    # try:
+                    socket.sendall(encode("asdqwe"))
+                    # except BrokenPipeError:
+                    #     self.connected_sockets.remove(socket)
+                    #     print("removed broken socket")
 
             else:
                 # send confirm to client
@@ -74,6 +77,12 @@ class Server:
     def _start_message(self):
         connected_sockets_size = len(self.connected_sockets)
         return Event.START + " " + str(connected_sockets_size - 1)
+
+    def _notify_other_sockets_except(self, message, socket):
+        # send message to all sockets except the given one
+        for sock in self.connected_sockets:
+            if sock != socket:
+                sock.sendall(message)
 
     def __del__(self):
         self.socket.close_socket()
