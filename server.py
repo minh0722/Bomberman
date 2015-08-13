@@ -39,8 +39,9 @@ class Server:
                 data = socket.recv(MAX_DATA_LEN)
             except error:
                 continue
-            print("received ", data)
-            socket.sendall("asdqwe".encode('utf-8'))
+            if data != '' and decode(data) != 'exit':
+                print("received ", data)
+                socket.sendall("asdqwe".encode('utf-8'))
 
     def __del__(self):
         self.socket.close_socket()
