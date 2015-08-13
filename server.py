@@ -2,7 +2,8 @@ from socket import *
 import sys
 from game_settings import *
 from network_socket import NetworkSocket
-from util import decode
+from util import decode, encode
+from NetworkEvents import *
 
 
 class Server:
@@ -23,14 +24,23 @@ class Server:
         while True:
             self._serve_players()
 
+            try:
+                connection_socket, client_address = self.socket.accept()
+            except error:
+                continue
+
+            print("connection established with ", client_address[0])
+            
             if len(self.connected_sockets) < self.max_players:
-                try:
-                    connection_socket, client_address = self.socket.accept()
-                except error:
-                    continue
-                print("connection established with ", client_address[0])
                 connection_socket.setblocking(0)
                 self.connected_sockets.append(connection_socket)
+            else:
+                try:
+                    connection_socket.sendall(encode(Event.SERVER_FULL))
+                except error as e:
+                    print("failed to send full event. exception raised: ", e)
+
+                print("sending server full event successful...")
 
     def _serve_players(self):
         for socket in self.connected_sockets:
@@ -39,14 +49,16 @@ class Server:
             except error:
                 continue
 
-            if decode(data) != '' and decode(data) != 'exit':
+            if decode(data) != '' and decode(data) != EVENT.EXIT:
                 print("received ", data)
                 try:
-                    socket.sendall("asdqwe".encode('utf-8'))
+                    socket.sendall(encode("asdqwe"))
                 except BrokenPipeError:
                     self.connected_sockets.remove(socket)
                     print("removed broken socket")
             else:
+                # send confirm to client
+                socket.sendall(encode(Event.EXIT))
                 self.connected_sockets.remove(socket)
                 print("removed socket")
 
@@ -55,7 +67,7 @@ class Server:
 
         for socket in self.connected_sockets:
             socket.close()
-            print("closing server connection socket")
+            print("closing connected socket")
 
 s = Server()
 s.run()

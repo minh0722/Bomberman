@@ -19,8 +19,12 @@ class Game:
         self.arena.add_player(self.first_player)
 
     def run(self):
-        self.arena.draw(self.game_display)
+        if self.first_player.client_is_connected() is False:
+            pygame.quit()
+            quit()
+
         self.input_handler.handle_input()
+        self.arena.draw(self.game_display)
 
         pygame.display.update()
         self.clock.tick(FPS)
