@@ -5,6 +5,8 @@ from input_handler import InputHandler
 from pygame import Surface
 from pygame.sprite import Sprite
 from game_settings import *
+from client import Client
+from NetworkEvents import Event
 
 
 class Game:
@@ -18,13 +20,29 @@ class Game:
 
         self.arena.add_player(self.first_player)
 
+        self.client = Client()
+
     def run(self):
-        if self.first_player.client_is_connected() is False:
+        if self.client.connected() is False:
             pygame.quit()
             quit()
 
-        self.input_handler.handle_input()
+        player_action = self.input_handler.handle_input()
+    
+        if player_action is not None:
+            self.send_player_action(player_action)
+
+        if not self.first_player.is_alive():
+            self.send_player_action(Event.DIE)
+
         self.arena.draw(self.game_display)
 
         pygame.display.update()
         self.clock.tick(FPS)
+
+    def send_player_action(self, player_action):
+        self.client.send_packet(player_action)
+
+        if player_action == Event.EXIT:
+            pygame.quit()
+            quit()
