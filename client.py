@@ -1,6 +1,6 @@
 import sys
 import pygame
-# import queue
+from game_settings import *
 from socket import *
 from game_settings import *
 from network_socket import NetworkSocket
@@ -16,7 +16,7 @@ class Client:
     def __init__(self, game_display):
         self.game_display = game_display
         self.socket = NetworkSocket()
-        self.socket.connect(('localhost', PORT))
+        self.socket.connect((SERVER_IP_ADDRESS, PORT))
 
         self.is_connected = True
 
@@ -32,8 +32,6 @@ class Client:
         self.receive_thread.run = self._receive_packet_from_server
         self.receive_thread.start()
 
-        # self.incoming_packets = queue.Queue()
-
     def run(self):
         if self.input_handler is not None:
             player_action = self.input_handler.handle_input()
@@ -41,7 +39,7 @@ class Client:
             self.send_player_action(player_action)
 
             if not self.players[0].is_alive():
-                self.send_player_action(Event.DIE + self.players[0].id)
+                self.send_player_action(Event.DIE + str(self.players[0].id))
 
             self.arena.draw(self.game_display)
 

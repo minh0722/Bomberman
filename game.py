@@ -19,7 +19,6 @@ class Game:
 
 
 
-
         # for index in range(MAX_PLAYERS):
         #     new_player = Player((22,0), self.arena)
         #     self.players.append(new_player)

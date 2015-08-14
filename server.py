@@ -8,13 +8,14 @@ from network_events import Event
 
 class Server:
     def __init__(self):
+        self.connected_sockets = list()
+
         self.socket = NetworkSocket()
-        self.socket.bind(('localhost', PORT))
+        self.socket.bind((SERVER_BIND_ADDRESS, PORT))
         self.socket.set_blocking(0)
 
         self.max_players = MAX_PLAYERS
 
-        self.connected_sockets = list()
 
         self.generated_id = 0
 
