@@ -63,6 +63,15 @@ class Client:
             except Exception as e:
                 pass
 
+    def _handle_events(self, events):
+        if events[0] == "start":
+            self._handle_start_event(events)
+
+    def _handle_start_event(self, events):
+        current_players_count = events[1]
+        player_id = events[2]
+
+
     def __del__(self):
         print("joining thread")
         self.receive_thread.join()

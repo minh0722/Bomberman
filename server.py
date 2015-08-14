@@ -66,8 +66,7 @@ class Server:
 
 
     def _handle_start_event(self, socket, player_id):
-        socket.sendall(
-            encode(self._get_start_message() + player_id + Event.DELIM))
+        socket.sendall(encode(self._get_start_message(player_id)))
 
         self._notify_other_sockets_except(
             socket,
@@ -101,10 +100,19 @@ class Server:
             if sock != socket:
                 sock.sendall(message)
 
-    def _get_start_message(self):
-        # return start_event + current players count
+    def _get_start_message(self, player_id):
+        message = Event.START
+
         connected_sockets_size = len(self.connected_sockets)
-        return Event.START + str(connected_sockets_size - 1) + Event.DELIM
+        message += (str(connected_sockets_size - 1) + Event.DELIM)
+
+        for socket, id in self.connected_sockets:
+            if id != player_id:
+                message += (player_id + Event.DELIM)
+
+        message += (player_id + Event.DELIM)
+
+        return message
 
     def _next_available_id(self):
         if self.generated_id + 1 > MAX_PLAYERS:
