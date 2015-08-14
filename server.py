@@ -108,7 +108,8 @@ class Server:
 
         for socket, id in self.connected_sockets:
             if id != player_id:
-                message += (player_id + Event.DELIM)
+                print("id != player_id: ", id, " != ", player_id)
+                message += (id + Event.DELIM)
 
         message += (player_id + Event.DELIM)
 

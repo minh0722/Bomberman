@@ -4,7 +4,6 @@ from pygame.sprite import Sprite
 from object import Object
 from game_settings import *
 from bomb import Bomb, BombState
-from client import Client
 from util import encode
 from sprite_create import *
 

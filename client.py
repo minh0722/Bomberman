@@ -6,8 +6,8 @@ from network_socket import NetworkSocket
 from threading import Thread
 from util import encode, decode
 from network_events import *
-# from arena import Arena
-# from player import Player
+from arena import Arena
+from player import Player
 
 
 class Client:
@@ -25,9 +25,9 @@ class Client:
 
         self.send_packet(encode(Event.START))
 
-        # self.arena = Arena()
-        # self.players = list()
-        # self.input_handler = None
+        self.arena = Arena()
+        self.players = list()
+        self.input_handler = None
 
         # self.incoming_packets = queue.Queue()
 
@@ -48,7 +48,10 @@ class Client:
             try:
                 packet = self.socket.recv()
                 # print(packet)
-                print(self._get_event_list(decode(packet)))
+                events = self._get_event_list(decode(packet))
+                print(events)
+
+                self._handle_events(events)
 
                 if decode(packet) == Event.EXIT:
                     break
@@ -68,9 +71,27 @@ class Client:
             self._handle_start_event(events)
 
     def _handle_start_event(self, events):
-        current_players_count = events[1]
-        player_id = events[2]
+        print("start handling")
+        event_index = 1
+        current_players_count = int(events[event_index])
 
+        event_index += 1
+
+        print("players count = ", current_players_count)
+
+        if current_players_count > 0:
+            for index in range(current_players_count):
+                print("creating other player")
+                self.players.append(Player((22,0), arena, int(events[event_index])))
+                event_index += 1
+
+        player_id = int(events[event_index])
+
+        print("player_id = ", player_id)
+
+        self.players.append(Player((22,0), arena, player_id))
+
+        print("players = ", self.players)
 
     def __del__(self):
         print("joining thread")
