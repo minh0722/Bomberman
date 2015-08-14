@@ -9,3 +9,5 @@ class Event:
 	DIE = "die"
 	START = "start"
 	OTHER_PLAYER_JOINED = "joined"
+	PLAYER = "player "
+	ACTION = "action "

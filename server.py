@@ -37,7 +37,8 @@ class Server:
                 connection_socket.setblocking(0)
                 player_id = self._next_available_id()
 
-                self.connected_sockets.append((connection_socket, str(player_id)))
+                self.connected_sockets.append(
+                    (connection_socket, str(player_id)))
             else:
                 try:
                     connection_socket.sendall(encode(Event.SERVER_FULL))
@@ -59,7 +60,7 @@ class Server:
                 if decode(data) == Event.START:
                     self._handle_start_event(socket, player_id)
                 else:
-                    self._handle_player_events(socket, player_id)
+                    self._handle_player_events(socket, player_id, data)
             else:
                 self._handle_exit_event(socket, player_id)
 
@@ -68,21 +69,22 @@ class Server:
         socket.sendall(encode(self._get_start_message() + " " + player_id))
 
         self._notify_other_sockets_except(
-            encode(Event.OTHER_PLAYER_JOINED) + " " + player_id,
-            socket)
+            socket,
+            encode(Event.OTHER_PLAYER_JOINED) + " " + player_id)
 
-    def _handle_player_events(self, socket, player_id):
+    def _handle_player_events(self, socket, player_id, data):
+        message = Event.PLAYER + player_id + " " + Event.ACTION + decode(data)
+
         self._notify_other_sockets_except(
-            encode("player: " + player_id + " moved"),
-            socket)
-        # socket.sendall(encode("player: ", player_id, " moved"))
+            socket,
+            encode(message))
 
     def _handle_exit_event(self, socket, player_id):
         # send confirm to the exited client
         socket.sendall(encode(Event.EXIT))
 
         message_to_other_clients = Event.EXIT + " " + str(player_id)
-        self._notify_other_sockets_except(message_to_other_clients, socket)
+        self._notify_other_sockets_except(socket, message_to_other_clients)
 
         for connection in self.connected_sockets:
             if connection[0] == socket:
@@ -91,7 +93,7 @@ class Server:
 
         print("removed socket")        
 
-    def _notify_other_sockets_except(self, message, socket):
+    def _notify_other_sockets_except(self, socket, message):
         # send message to all sockets except the given one
         for sock, player_id in self.connected_sockets:
             if sock != socket:
