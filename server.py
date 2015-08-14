@@ -59,8 +59,7 @@ class Server:
                 if decode(data) == Event.START:
                     self._handle_start_event(socket, player_id)
                 else:
-                    socket.sendall(encode("asdqwe"))
-
+                    self._handle_player_events(socket, player_id)
             else:
                 self._handle_exit_event(socket, player_id)
 
@@ -71,6 +70,12 @@ class Server:
         self._notify_other_sockets_except(
             encode(Event.OTHER_PLAYER_JOINED) + " " + player_id,
             socket)
+
+    def _handle_player_events(self, socket, player_id):
+        self._notify_other_sockets_except(
+            encode("player: " + player_id + " moved"),
+            socket)
+        # socket.sendall(encode("player: ", player_id, " moved"))
 
     def _handle_exit_event(self, socket, player_id):
         # send confirm to the exited client
