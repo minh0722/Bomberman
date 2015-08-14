@@ -40,9 +40,7 @@ class Client:
     def _get_event_list(self, packet):
         splitted_events = packet.split('.')
 
-        splitted_events = list(filter(('.').__ne__, splitted_events))
-        splitted_events = list(filter(('').__ne__, splitted_events))
-
+        splitted_events = [x for x in splitted_events if x != '.' and x != '']
         return splitted_events
 
     def _receive_packet_from_server(self):
@@ -50,7 +48,7 @@ class Client:
             try:
                 packet = self.socket.recv()
                 # print(packet)
-                print(self._get_event_list(packet))
+                print(self._get_event_list(decode(packet)))
 
                 if decode(packet) == Event.EXIT:
                     break
