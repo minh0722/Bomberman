@@ -31,12 +31,14 @@ class Game:
 
         # self.arena.add_player(self.first_player)
 
-        self.client = Client()
+        self.client = Client(game_display)
 
     def run(self):
         if self.client.connected() is False:
             pygame.quit()
             quit()
+
+        self.client.run()
 
         # player_action = self.input_handler.handle_input()
     

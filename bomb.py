@@ -3,6 +3,7 @@ from object import Object
 from game_settings import *
 from pyganim import PygAnimation, PygConductor
 from sprite_create import *
+from tile_types import TileType
 
 
 class BombState:
@@ -50,7 +51,7 @@ class Bomb(Object):
     def draw(self, game_display):
         x = self.normalize_position()[0]
         y = self.normalize_position()[1]
-        if self.arena.get_arena()[x][y] == arena.TileType.FLAME:
+        if self.arena.get_arena()[x][y] == TileType.FLAME:
             self.explode()
 
         if self.ticking_timer > 0:
