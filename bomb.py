@@ -3,7 +3,6 @@ from object import Object
 from game_settings import *
 from pyganim import PygAnimation, PygConductor
 from sprite_create import *
-import arena
 
 
 class BombState:

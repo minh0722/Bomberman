@@ -70,7 +70,7 @@ class Server:
 
         self._notify_other_sockets_except(
             socket,
-            encode(Event.OTHER_PLAYER_JOINED) + player_id)
+            encode(Event.OTHER_PLAYER_JOINED + player_id))
 
     def _handle_player_events(self, socket, player_id, data):
         message = Event.PLAYER + player_id + Event.DELIM + \

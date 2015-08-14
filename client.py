@@ -89,8 +89,11 @@ class Client:
 
         print("player_id = ", player_id)
 
-        self.players.append(Player((22,0), arena, player_id))
+        new_player = Player((22,0), arena, player_id)
+        print("new player created")
 
+        self.players.append(new_player)
+        print("appended")
         print("players = ", self.players)
 
     def __del__(self):
