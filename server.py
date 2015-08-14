@@ -53,12 +53,12 @@ class Server:
             except error:
                 continue
 
+            print("received ", data)
+
             if decode(data) != '' and decode(data) != Event.EXIT:
                 if decode(data) == Event.START:
-                    print("received ", data)
                     self._handle_start_event(socket, player_id)
                 else:
-                    print("received ", data)
                     socket.sendall(encode("asdqwe"))
 
             else:
@@ -66,19 +66,19 @@ class Server:
 
 
     def _handle_start_event(self, socket, player_id):
-        # try:
         socket.sendall(encode(self._get_start_message() + " " + player_id))
 
         self._notify_other_sockets_except(
             encode(Event.OTHER_PLAYER_JOINED) + " " + player_id,
             socket)
-        # except BrokenPipeError:
-        #     self.connected_sockets.remove(socket)
-        #     print("removed broken socket in START")
 
     def _handle_exit_event(self, socket, player_id):
-        # send confirm to client
+        # send confirm to the exited client
         socket.sendall(encode(Event.EXIT))
+
+        message_to_other_clients = Event.EXIT + " " + str(player_id)
+        self._notify_other_sockets_except(message_to_other_clients, socket)
+
         for connection in self.connected_sockets:
             if connection[0] == socket:
                 self.connected_sockets.remove(connection)
