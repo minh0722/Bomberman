@@ -5,6 +5,7 @@ from network_socket import NetworkSocket
 from util import decode, encode
 from network_events import Event
 
+
 class Server:
     def __init__(self):
         self.socket = NetworkSocket()
@@ -53,15 +54,7 @@ class Server:
             if decode(data) != '' and decode(data) != Event.EXIT:
                 if decode(data) == Event.START:
                     print("received ", data)
-                    # try:
-                    socket.sendall(encode(self._start_message()))
-                    self._notify_other_sockets_except(
-                        encode(Event.OTHER_PLAYER_JOINED),
-                        socket)
-                    # except BrokenPipeError:
-                    #     self.connected_sockets.remove(socket)
-                    #     print("removed broken socket in START")
-
+                    self._handle_start_event(socket)
                 else:
                     print("received ", data)
                     # try:
@@ -71,14 +64,26 @@ class Server:
                     #     print("removed broken socket")
 
             else:
-                # send confirm to client
-                socket.sendall(encode(Event.EXIT))
-                self.connected_sockets.remove(socket)
-                print("removed socket")
+                self._handle_exit_event(socket)
 
-    def _start_message(self):
-        connected_sockets_size = len(self.connected_sockets)
-        return Event.START + " " + str(connected_sockets_size - 1)
+
+    def _handle_start_event(self, socket):
+        # try:
+        player_id = str(self._next_available_id())
+
+        socket.sendall(encode(self._get_start_message() + " " + player_id))
+        self._notify_other_sockets_except(
+            encode(Event.OTHER_PLAYER_JOINED) + " " + player_id,
+            socket)
+        # except BrokenPipeError:
+        #     self.connected_sockets.remove(socket)
+        #     print("removed broken socket in START")
+
+    def _handle_exit_event(self, socket):
+        # send confirm to client
+        socket.sendall(encode(Event.EXIT))
+        self.connected_sockets.remove(socket)
+        print("removed socket")        
 
     def _notify_other_sockets_except(self, message, socket):
         # send message to all sockets except the given one
@@ -86,8 +91,13 @@ class Server:
             if sock != socket:
                 sock.sendall(message)
 
+    def _get_start_message(self):
+        # message = start_event + current players count
+        connected_sockets_size = len(self.connected_sockets)
+        return Event.START + " " + str(connected_sockets_size - 1)
+
     def _next_available_id(self):
-        if self.generated_id + 1 > len(self.connection_socket):
+        if self.generated_id + 1 > MAX_PLAYERS:
             self.generated_id = 1
             return self.generated_id
 
