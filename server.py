@@ -35,7 +35,9 @@ class Server:
             
             if len(self.connected_sockets) < self.max_players:
                 connection_socket.setblocking(0)
-                self.connected_sockets.append(connection_socket)
+                player_id = self._next_available_id()
+
+                self.connected_sockets.append((connection_socket, str(player_id)))
             else:
                 try:
                     connection_socket.sendall(encode(Event.SERVER_FULL))
@@ -45,7 +47,7 @@ class Server:
 
 
     def _serve_players(self):
-        for socket in self.connected_sockets:
+        for socket, player_id in self.connected_sockets:
             try:
                 data = socket.recv(MAX_DATA_LEN)
             except error:
@@ -54,24 +56,19 @@ class Server:
             if decode(data) != '' and decode(data) != Event.EXIT:
                 if decode(data) == Event.START:
                     print("received ", data)
-                    self._handle_start_event(socket)
+                    self._handle_start_event(socket, player_id)
                 else:
                     print("received ", data)
-                    # try:
                     socket.sendall(encode("asdqwe"))
-                    # except BrokenPipeError:
-                    #     self.connected_sockets.remove(socket)
-                    #     print("removed broken socket")
 
             else:
-                self._handle_exit_event(socket)
+                self._handle_exit_event(socket, player_id)
 
 
-    def _handle_start_event(self, socket):
+    def _handle_start_event(self, socket, player_id):
         # try:
-        player_id = str(self._next_available_id())
-
         socket.sendall(encode(self._get_start_message() + " " + player_id))
+
         self._notify_other_sockets_except(
             encode(Event.OTHER_PLAYER_JOINED) + " " + player_id,
             socket)
@@ -79,20 +76,24 @@ class Server:
         #     self.connected_sockets.remove(socket)
         #     print("removed broken socket in START")
 
-    def _handle_exit_event(self, socket):
+    def _handle_exit_event(self, socket, player_id):
         # send confirm to client
         socket.sendall(encode(Event.EXIT))
-        self.connected_sockets.remove(socket)
+        for connection in self.connected_sockets:
+            if connection[0] == socket:
+                self.connected_sockets.remove(connection)
+                break
+
         print("removed socket")        
 
     def _notify_other_sockets_except(self, message, socket):
         # send message to all sockets except the given one
-        for sock in self.connected_sockets:
+        for sock, player_id in self.connected_sockets:
             if sock != socket:
                 sock.sendall(message)
 
     def _get_start_message(self):
-        # message = start_event + current players count
+        # return start_event + current players count
         connected_sockets_size = len(self.connected_sockets)
         return Event.START + " " + str(connected_sockets_size - 1)
 
@@ -107,7 +108,7 @@ class Server:
     def __del__(self):
         self.socket.close_socket()
 
-        for socket in self.connected_sockets:
+        for socket, player_id in self.connected_sockets:
             socket.close()
             print("closing connected socket")
 
