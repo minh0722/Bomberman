@@ -23,7 +23,7 @@ class Direction:
 
 
 class Player(Object):
-    def __init__(self, position, arena):
+    def __init__(self, position, arena, id=1):
         Object.__init__(
             self,
             position,
@@ -36,6 +36,7 @@ class Player(Object):
         self.movement_speed = 3
         self.current_face_direction = Direction.DOWN
         self.state = PlayerState.ALIVE
+        self.id = id
         self.arena = arena
 
         self.player_down_sprite = create_player_down()

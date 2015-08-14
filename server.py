@@ -66,14 +66,16 @@ class Server:
 
 
     def _handle_start_event(self, socket, player_id):
-        socket.sendall(encode(self._get_start_message() + " " + player_id))
+        socket.sendall(
+            encode(self._get_start_message() + player_id + Event.DELIM))
 
         self._notify_other_sockets_except(
             socket,
-            encode(Event.OTHER_PLAYER_JOINED) + " " + player_id)
+            encode(Event.OTHER_PLAYER_JOINED) + player_id)
 
     def _handle_player_events(self, socket, player_id, data):
-        message = Event.PLAYER + player_id + " " + Event.ACTION + decode(data)
+        message = Event.PLAYER + player_id + Event.DELIM + \
+                Event.ACTION + decode(data)
 
         self._notify_other_sockets_except(
             socket,
@@ -83,7 +85,7 @@ class Server:
         # send confirm to the exited client
         socket.sendall(encode(Event.EXIT))
 
-        message_to_other_clients = Event.EXIT + " " + str(player_id)
+        message_to_other_clients = Event.EXIT + str(player_id) + Event.DELIM
         self._notify_other_sockets_except(socket, message_to_other_clients)
 
         for connection in self.connected_sockets:
@@ -102,7 +104,7 @@ class Server:
     def _get_start_message(self):
         # return start_event + current players count
         connected_sockets_size = len(self.connected_sockets)
-        return Event.START + " " + str(connected_sockets_size - 1)
+        return Event.START + str(connected_sockets_size - 1) + Event.DELIM
 
     def _next_available_id(self):
         if self.generated_id + 1 > MAX_PLAYERS:
