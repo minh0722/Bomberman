@@ -65,6 +65,11 @@ class Player(Object):
         self.set_position(
             (position[0] - TILE_OFFSET_X, position[1] - TILE_OFFSET_Y))
 
+    def set_player_position(self, position):
+        self.set_position(position)
+        self.tile_position.set_position(
+            (position[0] + TILE_OFFSET_X, position[1] * TILE_OFFSET_Y))
+
     def get_player_tile(self):
         return self.tile_position
 

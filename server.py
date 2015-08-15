@@ -83,14 +83,20 @@ class Server:
         if events[3] == "exit":
             self._handle_exit_event(socket, player_id)
         else:
-            self.players_position[player_id] = (events[1], events[2])
+            events_count = len(events) // 4
 
-            message = Event.PLAYER + player_id + Event.DELIM + \
-                    Event.ACTION + events[3] + Event.DELIM
+            for event_index in range(events_count):
+                self.players_position[player_id] = (
+                    events[event_index * 4 + 1],
+                    events[event_index * 4 + 2])
 
-            self._notify_other_sockets_except(
-                socket,
-                encode(message))
+                message = Event.PLAYER + player_id + Event.DELIM + \
+                        Event.ACTION + events[event_index * 4 + 3] + Event.DELIM
+
+                self._notify_other_sockets_except(
+                    socket,
+                    encode(message))
+                print("sent count: ", event_index)
 
     def _handle_exit_event(self, socket, player_id):
         # send confirm to the exited client
@@ -110,7 +116,10 @@ class Server:
         # send message to all sockets except the given one
         for sock, player_id in self.connected_sockets:
             if sock != socket:
-                sock.sendall(message)
+                try:
+                    sock.sendall(message)
+                except Exception as e:
+                    print(e)
 
     def _get_start_message(self, player_id):
         message = Event.START
