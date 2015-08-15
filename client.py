@@ -8,7 +8,7 @@ from threading import Thread
 from util import encode, decode, get_event_list
 from network_events import *
 from arena import Arena
-from player import Player
+from player import Player, Direction
 from input_handler import InputHandler
 
 
@@ -88,6 +88,21 @@ class Client:
     def _handle_events(self, events):
         if events[0] == "start":
             self._handle_start_event(events)
+        elif events[0] == "player":
+            self._handle_player_event(events)
+        elif events[0] == "joined":
+            self._handle_joined_player_event(events)
+
+    def _handle_joined_player_event(self, events):
+        id = int(events[1])
+        try:
+            new_player = Player((22, 0), self.arena, id)
+
+            self.players.append(new_player)
+            self.arena.add_player(new_player)
+        except Exception as e:
+            print(e)
+        print("added new player")
 
     def _handle_start_event(self, events):
         print("start handling")
@@ -120,20 +135,21 @@ class Client:
         
         print("start event handled...")
 
-    def _on_request_position(self):
-        my_x = self.players[0].get_x()
-        my_y = self.players[0].get_y()
-        my_id = self.players[0].id
+    def _handle_player_event(self, events):
+        player_id = int(events[1])
+        action = events[3]
 
-        # print("x, y: ", my_x, my_y)
-
-        my_position_packet = Event.REQUESTED_POS + \
-                            str(my_id) + Event.DELIM + \
-                            str(my_x) + Event.DELIM + \
-                            str(my_y) + Event.DELIM
-
-        self.send_packet(encode(my_position_packet))
-        print("on_request_position handled...")
+        for player in self.players:
+            if player.id == player_id:
+                if action == "up":
+                    player.move_up()
+                elif action == "left":
+                    player.move_left()
+                elif action == "down":
+                    player.move_down()
+                elif action == "right":
+                    player.move_right()
+                break
 
     def __del__(self):
         print("joining thread")

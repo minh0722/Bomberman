@@ -60,14 +60,6 @@ class Player(Object):
             PLAYER_RECTANGLE_WIDTH,
             PLAYER_RECTANGLE_WIDTH)
 
-        # self.client = Client()
-
-    # def send_exit(self):
-    #     self.client.send_packet("exit")
-
-    # def client_is_connected(self):
-    #     return self.client.connected()
-
     def set_player_tile_position(self, position):
         self.tile_position.set_position(position)
         self.set_position(

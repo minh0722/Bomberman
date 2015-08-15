@@ -4,6 +4,7 @@ from game_settings import *
 from network_socket import NetworkSocket
 from util import decode, encode, get_event_list
 from network_events import Event
+from player import Direction
 
 # Start event = Event.START + players connected count + their id + their pos + this player's id
 # player join = Event.OTHER_PLAYER_JOINED + that plsyer's id
