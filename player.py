@@ -56,7 +56,7 @@ class Player(Object):
         self.bombs = list()
 
         self.tile_position = Object(
-            (45, 45),
+            (position[0] + TILE_OFFSET_X, position[1] + TILE_OFFSET_Y),
             PLAYER_RECTANGLE_WIDTH,
             PLAYER_RECTANGLE_WIDTH)
 

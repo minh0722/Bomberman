@@ -86,7 +86,7 @@ class Server:
             self.players_position[player_id] = (events[1], events[2])
 
             message = Event.PLAYER + player_id + Event.DELIM + \
-                    Event.ACTION + events[3]
+                    Event.ACTION + events[3] + Event.DELIM
 
             self._notify_other_sockets_except(
                 socket,

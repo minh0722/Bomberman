@@ -54,7 +54,7 @@ class Client:
             message = Event.ACTION + \
                         str(self.players[0].get_x()) + Event.DELIM + \
                         str(self.players[0].get_y()) + Event.DELIM + \
-                        player_action
+                        player_action + Event.DELIM
 
             self.send_packet(encode(message))
 
@@ -121,6 +121,7 @@ class Client:
                 y = int(events[event_index + 2])
                 event_index += 3
                 new_player = Player((x, y), self.arena, id)
+                # new_player.set_player_tile_position((x, y))
 
                 self.players.append(new_player)
                 self.arena.add_player(new_player)
@@ -136,20 +137,28 @@ class Client:
         print("start event handled...")
 
     def _handle_player_event(self, events):
-        player_id = int(events[1])
-        action = events[3]
+        actions_count = len(events) // 4
 
-        for player in self.players:
-            if player.id == player_id:
-                if action == "up":
-                    player.move_up()
-                elif action == "left":
-                    player.move_left()
-                elif action == "down":
-                    player.move_down()
-                elif action == "right":
-                    player.move_right()
-                break
+        print(actions_count)
+
+        for action_index in range(actions_count):
+            player_id = int(events[action_index * 4 + 1])
+            action = events[action_index * 4 + 3]
+
+            for player in self.players:
+                if player.id == player_id:
+                    if action == "up":
+                        player.move_up()
+                    elif action == "left":
+                        player.move_left()
+                    elif action == "down":
+                        player.move_down()
+                    elif action == "right":
+                        player.move_right()
+
+                    print("player id == player_id: ", player.id, " ", player_id)
+                    print("player position: ", player.position())
+                    break
 
     def __del__(self):
         print("joining thread")
