@@ -101,11 +101,14 @@ class Client:
         if current_players_count > 0:
             for index in range(current_players_count):
                 print("creating other player")
-                new_player = Player((22,0), self.arena, int(events[event_index]))
+                id = int(events[event_index])
+                x = int(events[event_index + 1])
+                y = int(events[event_index + 2])
+                event_index += 3
+                new_player = Player((x, y), self.arena, id)
 
                 self.players.append(new_player)
                 self.arena.add_player(new_player)
-                event_index += 1
 
         player_id = int(events[event_index])
         print("id = ", player_id)

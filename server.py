@@ -70,10 +70,6 @@ class Server:
                     self._handle_start_event(socket, player_id)
                 elif events[0] == "action":
                     self._handle_player_action_events(socket, player_id, events)
-                # elif events[3] == "exit":
-                #     print("server handle exit")
-                #     self._handle_exit_event(socket, player_id)
-
 
     def _handle_start_event(self, socket, player_id):
         socket.sendall(encode(self._get_start_message(player_id)))
@@ -125,7 +121,7 @@ class Server:
             if id != player_id:
                 message += (id + Event.DELIM)
                 message += (str(self.players_position[id][0]) + Event.DELIM)
-                message += str(self.players_position[id][1])
+                message += (str(self.players_position[id][1]) + Event.DELIM)
 
         message += (player_id + Event.DELIM)
 
