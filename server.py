@@ -2,8 +2,13 @@ from socket import *
 import sys
 from game_settings import *
 from network_socket import NetworkSocket
-from util import decode, encode
+from util import decode, encode, get_event_list
 from network_events import Event
+
+# Start event = Event.START + players connected count + their id + their pos + this player's id
+# player join = Event.OTHER_PLAYER_JOINED + that plsyer's id
+# player action = Event.ACTION + the action that player took
+# notify player exit = EVENT.EXIT + id of the exited player
 
 
 class Server:
@@ -16,8 +21,9 @@ class Server:
 
         self.max_players = MAX_PLAYERS
 
-
         self.generated_id = 0
+
+        self.players_position = dict()
 
     def run(self):
         self.socket.listen(MAX_CONNECTION)
@@ -37,6 +43,7 @@ class Server:
             if len(self.connected_sockets) < self.max_players:
                 connection_socket.setblocking(0)
                 player_id = self._next_available_id()
+                self.players_position[str(player_id)] = (22, 0)
 
                 self.connected_sockets.append(
                     (connection_socket, str(player_id)))
@@ -55,15 +62,17 @@ class Server:
             except error:
                 continue
 
-            print("received ", data)
+            events = get_event_list(decode(data))
+            print("received ", events)
 
-            if decode(data) != '' and decode(data) != Event.EXIT:
-                if decode(data) == Event.START:
+            if decode(data) != '':
+                if events[0] == "start":
                     self._handle_start_event(socket, player_id)
-                else:
-                    self._handle_player_events(socket, player_id, data)
-            else:
-                self._handle_exit_event(socket, player_id)
+                elif events[0] == "action":
+                    self._handle_player_action_events(socket, player_id, events)
+                # elif events[3] == "exit":
+                #     print("server handle exit")
+                #     self._handle_exit_event(socket, player_id)
 
 
     def _handle_start_event(self, socket, player_id):
@@ -73,20 +82,25 @@ class Server:
             socket,
             encode(Event.OTHER_PLAYER_JOINED + player_id))
 
-    def _handle_player_events(self, socket, player_id, data):
-        message = Event.PLAYER + player_id + Event.DELIM + \
-                Event.ACTION + decode(data)
+    def _handle_player_action_events(self, socket, player_id, events):
+        if events[3] == "exit":
+            self._handle_exit_event(socket, player_id)
+        else:
+            self.players_position[player_id] = (events[1], events[2])
 
-        self._notify_other_sockets_except(
-            socket,
-            encode(message))
+            message = Event.PLAYER + player_id + Event.DELIM + \
+                    Event.ACTION + events[3]
+
+            self._notify_other_sockets_except(
+                socket,
+                encode(message))
 
     def _handle_exit_event(self, socket, player_id):
         # send confirm to the exited client
         socket.sendall(encode(Event.EXIT))
 
         message_to_other_clients = Event.EXIT + str(player_id) + Event.DELIM
-        self._notify_other_sockets_except(socket, message_to_other_clients)
+        self._notify_other_sockets_except(socket, encode(message_to_other_clients))
 
         for connection in self.connected_sockets:
             if connection[0] == socket:
@@ -109,8 +123,9 @@ class Server:
 
         for socket, id in self.connected_sockets:
             if id != player_id:
-                print("id != player_id: ", id, " != ", player_id)
                 message += (id + Event.DELIM)
+                message += (str(self.players_position[id][0]) + Event.DELIM)
+                message += str(self.players_position[id][1])
 
         message += (player_id + Event.DELIM)
 

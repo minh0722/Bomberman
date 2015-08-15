@@ -28,3 +28,8 @@ def encode(data):
 def decode(data):
     return data.decode('utf-8')
 
+def get_event_list(packet):
+    splitted_events = packet.split('.')
+
+    splitted_events = [x for x in splitted_events if x != '.' and x != '']
+    return splitted_events

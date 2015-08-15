@@ -4,18 +4,10 @@ from util import *
 from game_settings import *
 from pyganim import *
 from object import Object
-from bomb import Bomb, BombState
+from bomb import BombState
 from physics import Physics
 from destructible_wall import DestructibleWall, WallState
-
-
-class TileType:
-    GRASS = 0
-    NON_DESTRUCTIBLE = 1
-    BOMB = 2
-    DESTRUCTIBLE = 3
-    BORDER = 4
-    FLAME = 5
+from tile_types import TileType
 
 
 class Arena(Drawable):

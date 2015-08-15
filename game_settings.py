@@ -14,10 +14,10 @@ EXPLOSION_DURATION = 30
 PORT = 9004
 
 SERVER_BIND_ADDRESS = "0.0.0.0"
-SERVER_IP_ADDRESS = "192.168.1.103"
+SERVER_IP_ADDRESS = "localhost" #"192.168.1.103"
 
 # -----------------server client defines-----------------
-MAX_CONNECTION = 2
+MAX_CONNECTION = 5
 MAX_DATA_LEN = 64
 
 # -----------------internal defines-----------------

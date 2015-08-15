@@ -5,7 +5,7 @@ from socket import *
 from game_settings import *
 from network_socket import NetworkSocket
 from threading import Thread
-from util import encode, decode
+from util import encode, decode, get_event_list
 from network_events import *
 from arena import Arena
 from player import Player
@@ -51,24 +51,23 @@ class Client:
 
     def send_player_action(self, player_action):
         if player_action is not None:
-            self.send_packet(encode(player_action))
+            message = Event.ACTION + \
+                        str(self.players[0].get_x()) + Event.DELIM + \
+                        str(self.players[0].get_y()) + Event.DELIM + \
+                        player_action
+
+            self.send_packet(encode(message))
 
             if player_action == Event.EXIT:
                 pygame.quit()
                 quit()
-
-    def _get_event_list(self, packet):
-        splitted_events = packet.split('.')
-
-        splitted_events = [x for x in splitted_events if x != '.' and x != '']
-        return splitted_events
 
     def _receive_packet_from_server(self):
         while True:
             try:
                 packet = self.socket.recv()
                 # print(packet)
-                events = self._get_event_list(decode(packet))
+                events = get_event_list(decode(packet))
                 print("event list: ", events)
 
                 self._handle_events(events)
@@ -115,8 +114,23 @@ class Client:
         self.arena.add_player(this_player)
         self.players.insert(0, this_player)
         self.input_handler = InputHandler(this_player)
+        
+        print("start event handled...")
 
-        print("all is well")
+    def _on_request_position(self):
+        my_x = self.players[0].get_x()
+        my_y = self.players[0].get_y()
+        my_id = self.players[0].id
+
+        # print("x, y: ", my_x, my_y)
+
+        my_position_packet = Event.REQUESTED_POS + \
+                            str(my_id) + Event.DELIM + \
+                            str(my_x) + Event.DELIM + \
+                            str(my_y) + Event.DELIM
+
+        self.send_packet(encode(my_position_packet))
+        print("on_request_position handled...")
 
     def __del__(self):
         print("joining thread")
