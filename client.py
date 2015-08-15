@@ -71,7 +71,7 @@ class Client:
                 packet = self.socket.recv()
                 # print(packet)
                 events = get_event_list(decode(packet))
-                print("event list: ", events)
+                # print("event list: ", events)
 
                 self._handle_events(events)
 
@@ -108,13 +108,10 @@ class Client:
         print("added new player")
 
     def _handle_start_event(self, events):
-        print("start handling")
         event_index = 1
         current_players_count = int(events[event_index])
 
         event_index += 1
-
-        print("players count = ", current_players_count)
 
         if current_players_count > 0:
             for index in range(current_players_count):
@@ -142,8 +139,6 @@ class Client:
     def _handle_player_event(self, events):
         actions_count = len(events) // 4
 
-        print(actions_count)
-
         for action_index in range(actions_count):
             player_id = int(events[action_index * 4 + 1])
             action = events[action_index * 4 + 3]
@@ -158,9 +153,10 @@ class Client:
                         player.move_down()
                     elif action == "right":
                         player.move_right()
+                    elif action == "bomb":
+                        player.place_bomb()
 
-                    print("player id == player_id: ", player.id, " ", player_id)
-                    print("player position: ", player.position())
+                    # print("player position: ", player.position())
                     break
 
     def __del__(self):
