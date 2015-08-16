@@ -157,6 +157,8 @@ class Client:
                         player.move_right()
                     elif action == "bomb":
                         player.place_bomb()
+                    elif action == "released":
+                        player.pause_reset_sprite()
 
                     # print("player position: ", player.position())
                     break

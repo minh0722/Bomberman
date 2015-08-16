@@ -5,6 +5,7 @@ class Event:
 	MOVE_DOWN = "down."
 	MOVE_LEFT = "left."
 	MOVE_RIGHT = "right."
+	RELEASED = "released."
 	PLACE_BOMB = "bomb."
 	DIE = "die."
 	START = "start."

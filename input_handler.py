@@ -40,6 +40,7 @@ class InputHandler:
             if (event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or
                     event.key == pygame.K_UP or event.key == pygame.K_DOWN):
                 self.player.pause_reset_sprite()
+                return Event.RELEASED
 
         keys = pygame.key.get_pressed()
         if (keys[pygame.K_UP] and not keys[pygame.K_DOWN] and
