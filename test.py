@@ -5,6 +5,7 @@ from object import Object
 from player import Player, Direction, PlayerState
 from arena import Arena, TileType
 from bomb import Bomb, BombState
+from destructible_wall import DestructibleWall, WallState
 
 
 class TestObject(unittest.TestCase):
@@ -330,6 +331,18 @@ class TestArena(unittest.TestCase):
         arena._update_matrix_explosion_up(bomb, TileType.FLAME)
 
         self.assertEqual(arena.arena_matrix[1][3], TileType.FLAME)
+
+
+class TestDestructibleWall(unittest.TestCase):
+    def test_current_state(self):
+        wall = DestructibleWall((112, 45))
+        self.assertEqual(wall.state, WallState.INTACT)
+
+    def test_destroy(self):
+        wall = DestructibleWall((112, 45))
+        wall.destroy()
+
+        self.assertEqual(wall.state, WallState.DESTROYING)
 
 if __name__ == "__main__":
     unittest.main()
