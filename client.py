@@ -71,13 +71,12 @@ class Client:
                 packet = self.socket.recv()
                 # print(packet)
                 events = get_event_list(decode(packet))
-                # print("event list: ", events)
+                print("event list: ", events)
 
                 self._handle_events(events)
 
-                if decode(packet) == Event.EXIT:
+                if events[0] == "exit" and len(events) == 1:
                     break
-
                 elif decode(packet) == Event.SERVER_FULL:
                     print("Server full! Try again later!")
                     self.is_connected = False
@@ -95,6 +94,9 @@ class Client:
             self._handle_player_event(events)
         elif events[0] == "joined":
             self._handle_joined_player_event(events)
+        elif events[0] == "exit" and len(events) == 2:
+            print("handle other exit")
+            self._handle_player_exit(events)
 
     def _handle_joined_player_event(self, events):
         id = int(events[1])
@@ -158,6 +160,31 @@ class Client:
 
                     # print("player position: ", player.position())
                     break
+
+    def _handle_player_exit(self, events):
+        exited_player_id = int(events[1])
+        print("exited id: ", exited_player_id)
+
+        for player in self.players:
+            print(player.id)
+            if player.id == exited_player_id:
+                print("found 1")
+                try:
+                    self.players.remove(player)
+                except Exception as e:
+                    print(e)
+
+        for player in self.arena.players:
+            print(player.id)
+            if player.id == exited_player_id:
+                print("found 2")
+                try:
+                    self.arena.players.remove(player)
+                except Exception as e:
+                    print(e)
+
+        print(self.players)
+        print(self.arena.players)
 
     def __del__(self):
         print("joining thread")
