@@ -113,7 +113,6 @@ class Server:
         print("removed socket")        
 
     def _notify_other_sockets_except(self, socket, message):
-        # send message to all sockets except the given one
         for sock, player_id in self.connected_sockets:
             if sock != socket:
                 try:

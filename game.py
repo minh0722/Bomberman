@@ -13,23 +13,6 @@ class Game:
         self.game_display = game_display
         self.clock = pygame.time.Clock()
 
-        # self.arena = Arena()
-        # self.first_player = Player((22, 0), self.arena)
-        # self.input_handler = InputHandler(self.first_player)
-
-
-
-        # for index in range(MAX_PLAYERS):
-        #     new_player = Player((22,0), self.arena)
-        #     self.players.append(new_player)
-
-        # for player in self.players:
-        #     self.arena.add_player(player)
-
-        # self.input_handler = InputHandler(self.players[0])
-
-        # self.arena.add_player(self.first_player)
-
         self.client = Client(game_display)
 
     def run(self):
@@ -38,15 +21,6 @@ class Game:
             quit()
 
         self.client.run()
-
-        # player_action = self.input_handler.handle_input()
-    
-        # self.send_player_action(player_action)
-
-        # if not self.first_player.is_alive():
-        #     self.send_player_action(Event.DIE)
-
-        # self.arena.draw(self.game_display)
 
         pygame.display.update()
         self.clock.tick(FPS)

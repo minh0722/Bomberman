@@ -163,12 +163,10 @@ class Client:
 
     def _handle_player_exit(self, events):
         exited_player_id = int(events[1])
-        print("exited id: ", exited_player_id)
 
         for player in self.players:
             print(player.id)
             if player.id == exited_player_id:
-                print("found 1")
                 try:
                     self.players.remove(player)
                 except Exception as e:
@@ -177,14 +175,10 @@ class Client:
         for player in self.arena.players:
             print(player.id)
             if player.id == exited_player_id:
-                print("found 2")
                 try:
                     self.arena.players.remove(player)
                 except Exception as e:
                     print(e)
-
-        print(self.players)
-        print(self.arena.players)
 
     def __del__(self):
         print("joining thread")
