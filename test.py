@@ -344,5 +344,38 @@ class TestDestructibleWall(unittest.TestCase):
 
         self.assertEqual(wall.state, WallState.DESTROYING)
 
+
+class TestBomb(unittest.TestCase):
+    def test_current_state(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        bomb = Bomb((112, 45), 2, arena)
+
+        self.assertEqual(bomb.current_state(), BombState.TICKING)
+
+    def test_get_range(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        _range = 3
+        bomb = Bomb((112, 45), _range, arena)
+
+        self.assertEqual(bomb.get_range(), _range)
+
+    def test_set_state(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        bomb = Bomb((112, 45), 2, arena)
+        bomb._set_state(BombState.EXPLODING)
+
+        self.assertEqual(bomb.state, BombState.EXPLODING)
+
+    def test_explode(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        bomb = Bomb((112, 45), 2, arena)
+        bomb.explode()
+
+        self.assertEqual(bomb.state, BombState.EXPLODING)
+
 if __name__ == "__main__":
     unittest.main()
