@@ -1,4 +1,3 @@
-import sys
 import pygame
 from game_settings import *
 from socket import *
@@ -35,7 +34,7 @@ class Client:
     def run(self):
         if self.input_handler is not None:
             player_action = self.input_handler.handle_input()
-        
+
             self.send_player_action(player_action)
 
             if not self.players[0].is_alive():
@@ -131,11 +130,11 @@ class Client:
         player_id = int(events[event_index])
         print("id = ", player_id)
 
-        this_player = Player((22,0), self.arena, player_id)
+        this_player = Player((22, 0), self.arena, player_id)
         self.arena.add_player(this_player)
         self.players.insert(0, this_player)
         self.input_handler = InputHandler(this_player)
-        
+
         print("start event handled...")
 
     def _handle_player_event(self, events):
@@ -160,7 +159,6 @@ class Client:
                     elif action == "released":
                         player.pause_reset_sprite()
 
-                    # print("player position: ", player.position())
                     break
 
     def _handle_player_exit(self, events):

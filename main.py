@@ -2,9 +2,11 @@ import pygame
 from game_settings import *
 from game import Game
 
+
 def pygame_main():
     pygame.init()
     game_mainloop()
+
 
 def game_mainloop():
     game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))

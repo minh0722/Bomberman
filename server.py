@@ -6,7 +6,8 @@ from util import decode, encode, get_event_list
 from network_events import Event
 from player import Direction
 
-# Start event = Event.START + players connected count + their id + their pos + this player's id
+# Start event = Event.START + players connected count + their id + their pos +
+# this player's id
 # player join = Event.OTHER_PLAYER_JOINED + that plsyer's id
 # player action = Event.ACTION + the action that player took
 # notify player exit = EVENT.EXIT + id of the exited player
@@ -40,7 +41,7 @@ class Server:
                 continue
 
             print("connection established with ", client_address[0])
-            
+
             if len(self.connected_sockets) < self.max_players:
                 connection_socket.setblocking(0)
                 player_id = self._next_available_id()
@@ -54,7 +55,6 @@ class Server:
                     print("SERVER_FULL sent successful...")
                 except error as e:
                     print("Failed to send SERVER_FULL. exception raised: ", e)
-
 
     def _serve_players(self):
         for socket, player_id in self.connected_sockets:
@@ -70,7 +70,9 @@ class Server:
                 if events[0] == "start":
                     self._handle_start_event(socket, player_id)
                 elif events[0] == "action":
-                    self._handle_player_action_events(socket, player_id, events)
+                    self._handle_player_action_events(
+                        socket,
+                        player_id, events)
 
     def _handle_start_event(self, socket, player_id):
         socket.sendall(encode(self._get_start_message(player_id)))
@@ -91,7 +93,7 @@ class Server:
                     events[event_index * 4 + 2])
 
                 message = Event.PLAYER + player_id + Event.DELIM + \
-                        Event.ACTION + events[event_index * 4 + 3] + Event.DELIM
+                    Event.ACTION + events[event_index * 4 + 3] + Event.DELIM
 
                 self._notify_other_sockets_except(
                     socket,
@@ -103,14 +105,16 @@ class Server:
         socket.sendall(encode(Event.EXIT))
 
         message_to_other_clients = Event.EXIT + str(player_id) + Event.DELIM
-        self._notify_other_sockets_except(socket, encode(message_to_other_clients))
+        self._notify_other_sockets_except(
+            socket,
+            encode(message_to_other_clients))
 
         for connection in self.connected_sockets:
             if connection[0] == socket:
                 self.connected_sockets.remove(connection)
                 break
 
-        print("removed socket")        
+        print("removed socket")
 
     def _notify_other_sockets_except(self, socket, message):
         for sock, player_id in self.connected_sockets:

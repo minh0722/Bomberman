@@ -224,7 +224,7 @@ class Arena(Drawable):
         for x in range(0, ARENA_HEIGHT):
             for y in range(0, ARENA_WIDTH):
                 if (self.arena_matrix[x][y] == TileType.GRASS or
-                    self.arena_matrix[x][y] == TileType.DESTRUCTIBLE):
+                        self.arena_matrix[x][y] == TileType.DESTRUCTIBLE):
                     arena.blit(
                         self._create_tile(TileType.GRASS),
                         (y * TILE_HEIGHT, x * TILE_WIDTH))
