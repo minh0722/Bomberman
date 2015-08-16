@@ -209,14 +209,15 @@ class TestArena(unittest.TestCase):
         arena = Arena()
         non_destructible_walls = arena.non_destructible_walls
 
-        self.assertEqual(arena.get_non_destructible_walls(), non_destructible_walls)
+        self.assertEqual(
+            arena.get_non_destructible_walls(), non_destructible_walls)
 
     def test_get_destructible_walls(self):
         game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         arena = Arena()
         destructible_walls = arena.destructible_walls
 
-        self.assertEqual(arena.get_destructible_walls(), destructible_walls)    
+        self.assertEqual(arena.get_destructible_walls(), destructible_walls)
 
     def test_update_explosion_in_matrix(self):
         game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
