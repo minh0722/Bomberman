@@ -36,12 +36,6 @@ class Arena(Drawable):
         self.players = list()
         self.physics = Physics(self)
 
-    # TODO: remove this method
-    def print_arena(self):
-        for row in range(0, len(self.arena_matrix)):
-            print(self.arena_matrix[row])
-        print("\n")
-
     def draw(self, game_display):
         game_display.blit(self.arena_surface, (0, 0))
 
@@ -76,6 +70,7 @@ class Arena(Drawable):
         self._update_matrix_explosion_right(bomb, new_tile_type)
         self._update_matrix_explosion_up(bomb, new_tile_type)
         self._update_matrix_explosion_down(bomb, new_tile_type)
+
 
     def left_tiles_can_be_exploded(self, normalized_position):
         x = normalized_position[0]

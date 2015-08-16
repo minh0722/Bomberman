@@ -3,7 +3,8 @@ import pygame
 from game_settings import *
 from object import Object
 from player import Player, Direction, PlayerState
-from arena import Arena
+from arena import Arena, TileType
+from bomb import Bomb, BombState
 
 
 class TestObject(unittest.TestCase):
@@ -165,6 +166,170 @@ class TestPlayer(unittest.TestCase):
         player.place_bomb()
 
         self.assertEqual(player.placed_bomb, 1)
+
+
+class TestArena(unittest.TestCase):
+
+    def get_default_arena(self):
+        return [
+            [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 4],
+            [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+            [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]]
+
+    def test_add_player(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        player = Player((0, 0), arena)
+        arena.add_player(player)
+
+        self.assertEqual(len(arena.players), 1)
+
+    def test_get_arena(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena_matrix = arena.arena_matrix
+
+        self.assertEqual(arena.get_arena(), arena_matrix)
+
+    def test_get_non_destructible_walls(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        non_destructible_walls = arena.non_destructible_walls
+
+        self.assertEqual(arena.get_non_destructible_walls(), non_destructible_walls)
+
+    def test_get_destructible_walls(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        destructible_walls = arena.destructible_walls
+
+        self.assertEqual(arena.get_destructible_walls(), destructible_walls)    
+
+    def test_update_explosion_in_matrix(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+        bomb = Bomb((22, 0), 2, arena)
+        bomb.state = BombState.EXPLODING
+
+        arena.update_explosion_in_matrix(bomb)
+        matrix = arena.get_arena()
+
+        self.assertEqual(matrix[1][1], TileType.FLAME)
+
+    def test_left_tiles_can_be_exploded(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+
+        self.assertEqual(
+            arena.left_tiles_can_be_exploded((1, 1)), 0)
+
+    def test_right_tiles_can_be_exploded(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+
+        self.assertEqual(
+            arena.right_tiles_can_be_exploded((1, 1)), ARENA_WIDTH - 3)
+
+    def test_up_tiles_can_be_exploded(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+
+        self.assertEqual(
+            arena.up_tiles_can_be_exploded((1, 1)), 0)
+
+    def test_down_tiles_can_be_exploded(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+
+        self.assertEqual(
+            arena.down_tiles_can_be_exploded((1, 1)), ARENA_HEIGHT - 3)
+
+    def test_update_player_state(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        player = Player((0, 0), arena)
+        arena.add_player(player)
+        arena.arena_matrix[1][1] = TileType.FLAME
+
+        arena._update_players_state()
+
+        self.assertEqual(player.is_alive(), False)
+
+    def test_can_place_bomb(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+
+        self.assertEqual(arena._can_place_bomb(1, 1), True)
+        self.assertEqual(arena._can_place_bomb(2, 2), False)
+        self.assertEqual(arena._can_place_bomb(5, 1), True)
+
+    def test_update_matrix_explosion_center(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+        bomb = Bomb((67, 45), 2, arena)
+
+        arena._update_matrix_explosion_center(bomb, TileType.FLAME)
+
+        self.assertEqual(arena.arena_matrix[1][2], TileType.FLAME)
+
+    def test_update_matrix_explosion_left(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+        bomb = Bomb((67, 45), 2, arena)
+
+        arena._update_matrix_explosion_left(bomb, TileType.FLAME)
+
+        self.assertEqual(arena.arena_matrix[1][1], TileType.FLAME)
+
+    def test_update_matrix_explosion_right(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+        bomb = Bomb((67, 45), 2, arena)
+
+        arena._update_matrix_explosion_right(bomb, TileType.FLAME)
+
+        self.assertEqual(arena.arena_matrix[1][3], TileType.FLAME)
+
+    def test_update_matrix_explosion_down(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+        bomb = Bomb((112, 45), 2, arena)
+
+        arena._update_matrix_explosion_down(bomb, TileType.FLAME)
+
+        self.assertEqual(arena.arena_matrix[2][3], TileType.FLAME)
+
+    def test_update_matrix_explosion_up(self):
+        game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        arena = Arena()
+        arena.arena_matrix = self.get_default_arena()
+        bomb = Bomb((112, 90), 2, arena)
+
+        arena._update_matrix_explosion_up(bomb, TileType.FLAME)
+
+        self.assertEqual(arena.arena_matrix[1][3], TileType.FLAME)
 
 if __name__ == "__main__":
     unittest.main()
