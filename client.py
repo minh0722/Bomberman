@@ -70,7 +70,7 @@ class Client:
                 packet = self.socket.recv()
                 # print(packet)
                 events = get_event_list(decode(packet))
-                print("event list: ", events)
+                # print("event list: ", events)
 
                 self._handle_events(events)
 
@@ -94,7 +94,6 @@ class Client:
         elif events[0] == "joined":
             self._handle_joined_player_event(events)
         elif events[0] == "exit" and len(events) == 2:
-            print("handle other exit")
             self._handle_player_exit(events)
 
     def _handle_joined_player_event(self, events):
@@ -165,7 +164,6 @@ class Client:
         exited_player_id = int(events[1])
 
         for player in self.players:
-            print(player.id)
             if player.id == exited_player_id:
                 try:
                     self.players.remove(player)
@@ -173,7 +171,6 @@ class Client:
                     print(e)
 
         for player in self.arena.players:
-            print(player.id)
             if player.id == exited_player_id:
                 try:
                     self.arena.players.remove(player)

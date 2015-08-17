@@ -96,49 +96,158 @@ def create_down_explosion():
         loop=False)
 
 
-def create_player_down():
-    return PygAnimation([
-        ("resources/characters/bbm_front1.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_front2.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_front1.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_front3.png", PLAYER_FRAME_DURATION)
-        ])
+def create_player_down(id):
+    if id % 2 == 1:
+        return PygAnimation([
+            ("resources/characters/white/bbm_front1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_front2.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_front1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_front3.png",
+                PLAYER_FRAME_DURATION)
+            ])
+    else:
+        return PygAnimation([
+            ("resources/characters/black/bbm_front1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_front2.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_front1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_front3.png",
+                PLAYER_FRAME_DURATION)
+            ])
 
 
-def create_player_up():
-    return PygAnimation([
-        ("resources/characters/bbm_back1.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_back2.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_back1.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_back3.png", PLAYER_FRAME_DURATION),
-        ])
+def create_player_up(id):
+    if id % 2 == 1:
+        return PygAnimation([
+            ("resources/characters/white/bbm_back1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_back2.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_back1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_back3.png",
+                PLAYER_FRAME_DURATION),
+            ])
+    else:
+        return PygAnimation([
+            ("resources/characters/black/bbm_back1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_back2.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_back1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_back3.png",
+                PLAYER_FRAME_DURATION),
+            ])
+
+def create_player_left(id):
+    if id % 2 == 1:
+        return PygAnimation([
+            ("resources/characters/white/bbm_left1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_left2.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_left1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_left3.png",
+                PLAYER_FRAME_DURATION),
+            ])
+    else:
+        return PygAnimation([
+            ("resources/characters/black/bbm_left1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_left2.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_left1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_left3.png",
+                PLAYER_FRAME_DURATION),
+            ])
 
 
-def create_player_left():
-    return PygAnimation([
-        ("resources/characters/bbm_left1.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_left2.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_left1.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_left3.png", PLAYER_FRAME_DURATION),
-        ])
+def create_player_right(id):
+    if id % 2 == 1:
+        return PygAnimation([
+            ("resources/characters/white/bbm_right1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_right2.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_right1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_right3.png",
+                PLAYER_FRAME_DURATION),
+            ])
+    else:
+        return PygAnimation([
+            ("resources/characters/black/bbm_right1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_right2.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_right1.png",
+                PLAYER_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_right3.png",
+                PLAYER_FRAME_DURATION),
+            ])
 
 
-def create_player_right():
-    return PygAnimation([
-        ("resources/characters/bbm_right1.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_right2.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_right1.png", PLAYER_FRAME_DURATION),
-        ("resources/characters/bbm_right3.png", PLAYER_FRAME_DURATION),
-        ])
+def create_player_die(id):
+    if id % 2 == 1:
+        return PygAnimation([
+            ("resources/characters/white/bbm_die1.png",
+                PLAYER_DIE_FRAME_DURATION),
 
+            ("resources/characters/white/bbm_die2.png", 
+                PLAYER_DIE_FRAME_DURATION),
 
-def create_player_die():
-    return PygAnimation([
-        ("resources/characters/bbm_die1.png", PLAYER_DIE_FRAME_DURATION),
-        ("resources/characters/bbm_die2.png", PLAYER_DIE_FRAME_DURATION),
-        ("resources/characters/bbm_die3.png", PLAYER_DIE_FRAME_DURATION),
-        ("resources/characters/bbm_die4.png", PLAYER_DIE_FRAME_DURATION)],
-        loop=False)
+            ("resources/characters/white/bbm_die3.png",
+                PLAYER_DIE_FRAME_DURATION),
+
+            ("resources/characters/white/bbm_die4.png",
+                PLAYER_DIE_FRAME_DURATION)],
+            loop=False)
+    else:
+        return PygAnimation([
+            ("resources/characters/black/bbm_die1.png",
+                PLAYER_DIE_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_die2.png",
+                PLAYER_DIE_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_die3.png",
+                PLAYER_DIE_FRAME_DURATION),
+
+            ("resources/characters/black/bbm_die4.png",
+                PLAYER_DIE_FRAME_DURATION)],
+            loop=False)
 
 
 def create_destroying_wall_sprites():

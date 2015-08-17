@@ -64,7 +64,7 @@ class Server:
                 continue
 
             events = get_event_list(decode(data))
-            print("received ", events)
+            # print("received ", events)
 
             if decode(data) != '':
                 if events[0] == "start":
@@ -98,7 +98,6 @@ class Server:
                 self._notify_other_sockets_except(
                     socket,
                     encode(message))
-                print("sent count: ", event_index)
 
     def _handle_exit_event(self, socket, player_id):
         # send confirm to the exited client

@@ -38,12 +38,12 @@ class Player(Object):
         self.id = id
         self.arena = arena
 
-        self.player_down_sprite = create_player_down()
-        self.player_up_sprite = create_player_up()
-        self.player_left_sprite = create_player_left()
-        self.player_right_sprite = create_player_right()
+        self.player_down_sprite = create_player_down(self.id)
+        self.player_up_sprite = create_player_up(self.id)
+        self.player_left_sprite = create_player_left(self.id)
+        self.player_right_sprite = create_player_right(self.id)
 
-        self.player_die_sprite = create_player_die()
+        self.player_die_sprite = create_player_die(self.id)
 
         self.sprite_conductor = PygConductor(
             self.player_down_sprite,
