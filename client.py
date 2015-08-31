@@ -55,10 +55,7 @@ class Client:
                         str(self.players[0].get_y()) + Event.DELIM + \
                         player_action + Event.DELIM
 
-            try:
-                self.send_packet(encode(message))
-            except Exception as e:
-                print(e)
+            self.send_packet(encode(message))
 
             if player_action == Event.EXIT:
                 pygame.quit()

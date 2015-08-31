@@ -15,13 +15,6 @@ def load_image(file):
         raise SystemExit('Could not load image "%s"' % (file))
     return surface
 
-
-def load_images(*files):
-    imgs = []
-    for file in files:
-        imgs.append(load_image(file))
-    return imgs
-
 def encode(data):
     return data.encode('utf-8')
 

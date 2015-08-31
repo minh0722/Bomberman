@@ -24,11 +24,3 @@ class Game:
 
         pygame.display.update()
         self.clock.tick(FPS)
-
-    def send_player_action(self, player_action):
-        if player_action is not None:
-            self.client.send_packet(encode(player_action))
-
-            if player_action == Event.EXIT:
-                pygame.quit()
-                quit()
