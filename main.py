@@ -1,6 +1,6 @@
 import pygame
 from game_settings import *
-from game import Game
+from game import OnlineGame
 
 
 def pygame_main():
@@ -12,7 +12,8 @@ def game_mainloop():
     game_display = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption('BomberMin')
 
-    game = Game(game_display)
+    game = OnlineGame(game_display)
+
 
     while True:
         game.run()
