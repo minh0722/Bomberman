@@ -1,6 +1,6 @@
 import pygame
 from game_settings import *
-from game import OnlineGame
+from online_game import OnlineGame
 
 
 def pygame_main():
