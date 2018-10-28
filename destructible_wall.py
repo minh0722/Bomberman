@@ -22,10 +22,7 @@ class DestructibleWall(Object):
 
 
     def draw(self, game_display):
-        if self.state == WallState.DESTROYED:
-            return None
-
-        elif self.state == WallState.DESTROYING:
+        if self.state == WallState.DESTROYING:
             if self.destroying_wall_sprites.isFinished():
                 self.state = WallState.DESTROYED
 

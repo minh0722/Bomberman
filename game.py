@@ -16,6 +16,7 @@ class Game:
         pygame.display.update()
         self.clock.tick(FPS)
 
+
 class OnlineGame(Game):
     def __init__(self, game_display):
         Game.__init__(self, game_display)
@@ -27,7 +28,6 @@ class OnlineGame(Game):
             quit()
 
         self.client.run()
-
         Game.run(self)
 
     def send_player_action(self, player_action):
